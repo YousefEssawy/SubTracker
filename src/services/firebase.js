@@ -3,12 +3,13 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY || "",
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || "",
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID || "",
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "",
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "",
-  appId: import.meta.env.VITE_FIREBASE_APP_ID || "",
+  apiKey: "AIzaSyBPT2o13zlt1-lSAUs2V-MDqiA5xpmwM40",
+  authDomain: "subtraker-3dca8.firebaseapp.com",
+  projectId: "subtraker-3dca8",
+  storageBucket: "subtraker-3dca8.firebasestorage.app",
+  messagingSenderId: "311670475091",
+  appId: "1:311670475091:web:f3f86fe90fd2bf2fc379a6",
+  measurementId: "G-41XD9Z6MT4",
 };
 
 const app = initializeApp(firebaseConfig);

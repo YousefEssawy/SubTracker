@@ -2,6 +2,7 @@
   "name": "subtracker",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://yousefessawy.github.io/SubTracker/",
   "type": "module",
   "scripts": {
     "dev": "vite",
