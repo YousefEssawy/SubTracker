@@ -1,0 +1,49 @@
+// SCSS Variables for SubTracker
+// These complement Tailwind and are used in component-level SCSS modules
+
+// Color tokens
+$primary: #6366F1;
+$primary-light: #818CF8;
+$primary-dark: #4F46E5;
+$accent: #EC4899;
+$accent-light: #F472B6;
+$success: #10B981;
+$warning: #F59E0B;
+$danger: #EF4444;
+
+// Surfaces
+$bg-light: #F8FAFC;
+$bg-dark: #0F172A;
+$surface-light: #FFFFFF;
+$surface-dark: #1E293B;
+
+// Text
+$text-primary-light: #1E293B;
+$text-secondary-light: #64748B;
+$text-primary-dark: #F1F5F9;
+$text-secondary-dark: #94A3B8;
+
+// Spacing
+$sidebar-width: 260px;
+$sidebar-collapsed: 72px;
+$header-height: 64px;
+
+// Border radius
+$radius-sm: 0.5rem;
+$radius-md: 0.75rem;
+$radius-lg: 1rem;
+$radius-xl: 1.5rem;
+
+// Shadows
+$shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+$shadow-card: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+
+// Transitions
+$transition-base: all 0.2s ease-in-out;
+$transition-slow: all 0.3s ease-in-out;
+
+// Breakpoints (matching Tailwind)
+$bp-sm: 640px;
+$bp-md: 768px;
+$bp-lg: 1024px;
+$bp-xl: 1280px;
