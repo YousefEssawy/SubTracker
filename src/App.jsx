@@ -1,5 +1,5 @@
 import {
-  HashRouter as Router,
+  BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
@@ -40,7 +40,7 @@ const PublicRoute = ({ children }) => {
 const App = () => {
   return (
     <ThemeProvider>
-      <Router>
+      <Router basename="/SubTracker">
         <AuthProvider>
           <Routes>
             {/* Public Routes */}

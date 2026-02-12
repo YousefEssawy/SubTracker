@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-} from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { useAuth } from "./AuthContext";
 import { subscribeToSubscriptions } from "@/services/subscriptionService";
 import { subscribeToPayments } from "@/services/historyService";
