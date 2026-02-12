@@ -12,6 +12,10 @@ import {
   HiOutlineArrowRightOnRectangle,
 } from "react-icons/hi2";
 import { useState, useRef, useEffect } from "react";
+import { motion } from "framer-motion";
+
+import lightLogo from "@/assets/logo/light-mode.png";
+import darkLogo from "@/assets/logo/dark-mode.png";
 
 const Header = ({ onMenuToggle }) => {
   const { user } = useAuth();
@@ -53,8 +57,12 @@ const Header = ({ onMenuToggle }) => {
           >
             <HiOutlineBars3 className="w-5 h-5" />
           </button>
-          <Link to="/" className="text-xl font-bold gradient-text">
-            SubTracker
+          <Link to="/" className="flex items-center gap-2">
+            <img
+              src={theme === "light" ? lightLogo : darkLogo}
+              alt="SubTracker"
+              className="h-20"
+            />
           </Link>
         </div>
 

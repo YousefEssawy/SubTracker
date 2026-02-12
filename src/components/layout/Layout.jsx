@@ -11,6 +11,7 @@ import {
   HiOutlinePlusCircle,
 } from "react-icons/hi2";
 import Header from "./Header";
+import logo from "@/assets/logo/main-logo.png";
 
 const navItems = [
   { path: "/", label: "Dashboard", icon: HiOutlineHome },
@@ -81,9 +82,7 @@ const Layout = ({ children }) => {
               className="lg:hidden fixed left-0 top-0 bottom-0 w-72 bg-white dark:bg-surface-dark flex flex-col z-50 shadow-2xl"
             >
               <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">
-                <span className="text-xl font-bold gradient-text">
-                  SubTracker
-                </span>
+                <img src={logo} alt="SubTracker" className="h-8" />
                 <button
                   onClick={() => setSidebarOpen(false)}
                   className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"

@@ -1,7 +1,7 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { signInWithEmail, signInWithGoogle } from "@/services/authService";
-import { motion } from "framer-motion";
 import { FcGoogle } from "react-icons/fc";
 import {
   HiOutlineEnvelope,
@@ -10,7 +10,13 @@ import {
   HiOutlineEyeSlash,
 } from "react-icons/hi2";
 
+import lightLogo from "@/assets/logo/light-mode.png";
+import darkLogo from "@/assets/logo/dark-mode.png";
+
+import { useTheme } from "@/contexts/ThemeContext";
+
 const LoginPage = () => {
+  const { theme } = useTheme();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPwd, setShowPwd] = useState(false);
@@ -56,7 +62,12 @@ const LoginPage = () => {
       >
         {/* Logo */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold gradient-text mb-2">SubTracker</h1>
+          {/* use lightLogo if theme is light else use darkLogo */}
+          <img
+            src={theme === "light" ? lightLogo : darkLogo}
+            alt="SubTracker"
+            className="h-20 mx-auto mb-2"
+          />
           <p className="text-gray-500 dark:text-gray-400">
             Track all your subscriptions in one place
           </p>
