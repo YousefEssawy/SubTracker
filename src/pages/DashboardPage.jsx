@@ -171,7 +171,7 @@ const DashboardPage = () => {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           {
             label: "Monthly Spending",
@@ -298,9 +298,12 @@ const DashboardPage = () => {
           <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
             Monthly Spending Trend
           </h3>
-          <div className="h-64">
+          <div className="h-64 -ml-2 overflow-hidden">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={monthlyTrendData}>
+              <AreaChart
+                data={monthlyTrendData}
+                margin={{ top: 5, right: 10, left: -10, bottom: 5 }}
+              >
                 <defs>
                   <linearGradient
                     id="colorSpending"
@@ -323,7 +326,7 @@ const DashboardPage = () => {
                   tick={{ fontSize: 12 }}
                   stroke="#94a3b8"
                 />
-                <YAxis tick={{ fontSize: 12 }} stroke="#94a3b8" />
+                <YAxis tick={{ fontSize: 11 }} stroke="#94a3b8" width={40} />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: "#fff",
