@@ -179,6 +179,7 @@ const SubscriptionsPage = () => {
                   exit={{ opacity: 0, scale: 0.95 }}
                   className={`glass-card p-4 sm:p-5 hover:shadow-card-hover transition-all duration-300 ${sub.status !== "active" ? "opacity-60" : ""}`}
                 >
+                  {/* Row 1 + 2: Icon, name/status/details, and price+actions (sm+) */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
                       <div
@@ -193,7 +194,7 @@ const SubscriptionsPage = () => {
                             {sub.name}
                           </h3>
                           <span
-                            className={`px-2 py-0.5 text-[10px] font-semibold rounded-full uppercase
+                            className={`px-2 py-0.5 text-[10px] font-semibold rounded-full uppercase flex-shrink-0
                             ${sub.status === "active" ? "bg-success/10 text-success" : ""}
                             ${sub.status === "paused" ? "bg-warning/10 text-warning" : ""}
                             ${sub.status === "cancelled" ? "bg-danger/10 text-danger" : ""}
@@ -208,8 +209,9 @@ const SubscriptionsPage = () => {
                         </p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0 ml-2">
-                      <div className="text-right hidden sm:block">
+                    {/* Price + actions — visible only on sm+ inline */}
+                    <div className="hidden sm:flex items-center gap-4 flex-shrink-0 ml-2">
+                      <div className="text-right">
                         <p className="font-bold text-gray-900 dark:text-white">
                           {formatCurrency(sub.price, sub.currency)}
                         </p>
@@ -242,6 +244,40 @@ const SubscriptionsPage = () => {
                           <HiOutlineTrash className="w-4 h-4" />
                         </button>
                       </div>
+                    </div>
+                  </div>
+                  {/* Row 3: Action buttons — visible only on mobile */}
+                  <div className="flex sm:hidden items-center justify-between mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
+                    <p className="font-semibold text-gray-900 dark:text-white text-sm">
+                      {formatCurrency(sub.price, sub.currency)}
+                      <span className="text-xs text-gray-400 font-normal ml-1">
+                        /{sub.billingCycle}
+                      </span>
+                    </p>
+                    <div className="flex items-center gap-1">
+                      <button
+                        onClick={() => handleToggleStatus(sub)}
+                        className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 transition-colors"
+                        title={sub.status === "active" ? "Pause" : "Resume"}
+                      >
+                        {sub.status === "active" ? (
+                          <HiOutlinePause className="w-4 h-4" />
+                        ) : (
+                          <HiOutlinePlay className="w-4 h-4" />
+                        )}
+                      </button>
+                      <Link
+                        to={`/subscriptions/${sub.id}`}
+                        className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 transition-colors"
+                      >
+                        <HiOutlinePencilSquare className="w-4 h-4" />
+                      </Link>
+                      <button
+                        onClick={() => handleDelete(sub.id)}
+                        className="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-gray-500 hover:text-danger transition-colors"
+                      >
+                        <HiOutlineTrash className="w-4 h-4" />
+                      </button>
                     </div>
                   </div>
                 </motion.div>
