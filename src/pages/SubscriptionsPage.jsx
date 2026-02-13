@@ -23,6 +23,7 @@ import {
   HiOutlineFunnel,
   HiOutlineMagnifyingGlass,
 } from "react-icons/hi2";
+import ConfirmDialog from "@/components/ui/ConfirmDialog";
 
 const SubscriptionsPage = () => {
   const { user } = useAuth();
@@ -31,6 +32,7 @@ const SubscriptionsPage = () => {
   const [filterCat, setFilterCat] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
   const [showFilters, setShowFilters] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
 
   const filtered = useMemo(() => {
     return subscriptions.filter((sub) => {
@@ -41,9 +43,10 @@ const SubscriptionsPage = () => {
     });
   }, [subscriptions, search, filterCat, filterStatus]);
 
-  const handleDelete = async (subId) => {
-    if (window.confirm("Are you sure you want to delete this subscription?")) {
-      await deleteSubscription(user.uid, subId);
+  const handleDelete = async () => {
+    if (deleteTarget) {
+      await deleteSubscription(user.uid, deleteTarget);
+      setDeleteTarget(null);
     }
   };
 
@@ -239,7 +242,7 @@ const SubscriptionsPage = () => {
                           <HiOutlinePencilSquare className="w-4 h-4" />
                         </Link>
                         <button
-                          onClick={() => handleDelete(sub.id)}
+                          onClick={() => setDeleteTarget(sub.id)}
                           className="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-gray-500 hover:text-danger transition-colors"
                         >
                           <HiOutlineTrash className="w-4 h-4" />
@@ -274,7 +277,7 @@ const SubscriptionsPage = () => {
                         <HiOutlinePencilSquare className="w-4 h-4" />
                       </Link>
                       <button
-                        onClick={() => handleDelete(sub.id)}
+                        onClick={() => setDeleteTarget(sub.id)}
                         className="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-gray-500 hover:text-danger transition-colors"
                       >
                         <HiOutlineTrash className="w-4 h-4" />
@@ -287,6 +290,15 @@ const SubscriptionsPage = () => {
           </AnimatePresence>
         </div>
       )}
+      <ConfirmDialog
+        isOpen={!!deleteTarget}
+        onClose={() => setDeleteTarget(null)}
+        onConfirm={handleDelete}
+        title="Delete Subscription"
+        message="Are you sure you want to delete this subscription? This action cannot be undone."
+        confirmText="Delete"
+        variant="danger"
+      />
     </div>
   );
 };
