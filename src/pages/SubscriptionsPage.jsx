@@ -204,8 +204,9 @@ const SubscriptionsPage = () => {
                           </span>
                         </div>
                         <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                          {cat.name} · {sub.billingCycle} · Renews{" "}
-                          {formatDate(sub.renewalDate)}
+                          {cat.name} · {sub.billingCycle}
+                          <br />
+                          Renews {formatDate(sub.renewalDate)}
                         </p>
                       </div>
                     </div>
