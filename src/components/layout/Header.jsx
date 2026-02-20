@@ -12,7 +12,7 @@ import {
   HiOutlineArrowRightOnRectangle,
 } from "react-icons/hi2";
 import { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 import lightLogo from "@/assets/logo/light-mode.png";
 import darkLogo from "@/assets/logo/dark-mode.png";
@@ -21,6 +21,7 @@ const Header = ({ onMenuToggle }) => {
   const { user } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const { activeSubscriptions } = useSubscriptions();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [showNotif, setShowNotif] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
@@ -67,6 +68,17 @@ const Header = ({ onMenuToggle }) => {
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Language Toggle */}
+          <button
+            onClick={() =>
+              i18n.changeLanguage(i18n.language === "ar" ? "en" : "ar")
+            }
+            className="px-3 py-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 text-sm font-medium text-gray-700 dark:text-gray-300"
+            title="Toggle Language"
+          >
+            {i18n.language === "ar" ? "EN" : "عربي"}
+          </button>
+
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
@@ -85,7 +97,7 @@ const Header = ({ onMenuToggle }) => {
               to="/login"
               className="ml-2 px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary-dark rounded-xl transition-colors"
             >
-              Sign In
+              {t("header.signIn", "Sign In")}
             </Link>
           ) : (
             <>
@@ -104,13 +116,13 @@ const Header = ({ onMenuToggle }) => {
                   <div className="absolute right-0 top-12 w-80 bg-white dark:bg-surface-dark rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden animate-scale-in">
                     <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
                       <h3 className="font-semibold text-sm">
-                        Upcoming Renewals
+                        {t("header.upcomingRenewals", "Upcoming Renewals")}
                       </h3>
                     </div>
                     <div className="max-h-64 overflow-y-auto">
                       {upcomingRenewals.length === 0 ? (
                         <p className="text-gray-500 text-sm text-center py-6">
-                          No upcoming renewals 🎉
+                          {t("header.noRenewals", "No upcoming renewals 🎉")}
                         </p>
                       ) : (
                         upcomingRenewals.map((sub) => (
@@ -129,8 +141,10 @@ const Header = ({ onMenuToggle }) => {
                                       (1000 * 60 * 60 * 24),
                                   );
                                   return days <= 0
-                                    ? "Today!"
-                                    : `in ${days} day${days > 1 ? "s" : ""}`;
+                                    ? t("header.today", "Today!")
+                                    : t("header.inDays", "in {{count}} day", {
+                                        count: days,
+                                      });
                                 })()}
                               </span>
                             </div>
@@ -180,7 +194,7 @@ const Header = ({ onMenuToggle }) => {
                       className="w-full flex items-center gap-2 px-4 py-3 text-sm text-danger hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                     >
                       <HiOutlineArrowRightOnRectangle className="w-4 h-4" />
-                      Sign Out
+                      {t("header.signOut", "Sign Out")}
                     </button>
                   </div>
                 )}

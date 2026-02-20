@@ -1,0 +1,31 @@
+{
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "subscriptions": "Subscriptions",
+    "history": "History",
+    "settings": "Settings",
+    "comingSoon": "Coming Soon",
+    "howToUse": "How to Use",
+    "about": "About",
+    "addSubscription": "Add Subscription"
+  },
+  "header": {
+    "upcomingRenewals": "Upcoming Renewals",
+    "noRenewals": "No upcoming renewals 🎉",
+    "today": "Today!",
+    "inDays": "in {{count}} day",
+    "inDays_plural": "in {{count}} days",
+    "signIn": "Sign In",
+    "signOut": "Sign Out"
+  },
+  "comingSoon": {
+    "title": "More Power is Coming Soon!",
+    "subtitle": "We are working hard behind the scenes to bring you the ultimate financial tracking experience. Here is a sneak peek at what's next.",
+    "expenseTracking": "Comprehensive Expense Tracking",
+    "expenseTrackingDesc": "Go beyond subscriptions. Soon, you'll be able to track all your daily expenses, bills, and one-off purchases in one unified dashboard.",
+    "customCategories": "Custom Categories & Subcategories",
+    "customCategoriesDesc": "Organize your spending exactly how you want. Create infinite custom categories and granular subcategories to see exactly where your money goes.",
+    "muchMore": "And much more...",
+    "stayTuned": "Stay tuned for updates!"
+  }
+}

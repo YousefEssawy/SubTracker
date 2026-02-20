@@ -13,29 +13,60 @@ import {
   HiOutlineBookOpen,
   HiOutlineSparkles,
 } from "react-icons/hi2";
+import { useTranslation } from "react-i18next";
 import Header from "./Header";
 import logo from "@/assets/logo/main-logo.png";
-
-const navItems = [
-  { path: "/", label: "Dashboard", icon: HiOutlineHome },
-  { path: "/subscriptions", label: "Subscriptions", icon: HiOutlineCreditCard },
-  { path: "/history", label: "History", icon: HiOutlineClock },
-  { path: "/settings", label: "Settings", icon: HiOutlineCog6Tooth },
-  { path: "/coming-soon", label: "Coming Soon", icon: HiOutlineSparkles },
-  { path: "/how-to", label: "How to Use", icon: HiOutlineBookOpen },
-  { path: "/about", label: "About", icon: HiOutlineInformationCircle },
-];
 
 const Layout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
+  const { t, i18n } = useTranslation();
+  const isRtl = i18n.language === "ar";
+
+  const navItems = [
+    {
+      path: "/",
+      label: t("sidebar.dashboard", "Dashboard"),
+      icon: HiOutlineHome,
+    },
+    {
+      path: "/subscriptions",
+      label: t("sidebar.subscriptions", "Subscriptions"),
+      icon: HiOutlineCreditCard,
+    },
+    {
+      path: "/history",
+      label: t("sidebar.history", "History"),
+      icon: HiOutlineClock,
+    },
+    {
+      path: "/settings",
+      label: t("sidebar.settings", "Settings"),
+      icon: HiOutlineCog6Tooth,
+    },
+    {
+      path: "/coming-soon",
+      label: t("sidebar.comingSoon", "Coming Soon"),
+      icon: HiOutlineSparkles,
+    },
+    {
+      path: "/how-to",
+      label: t("sidebar.howToUse", "How to Use"),
+      icon: HiOutlineBookOpen,
+    },
+    {
+      path: "/about",
+      label: t("sidebar.about", "About"),
+      icon: HiOutlineInformationCircle,
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark">
       <Header onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
 
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex fixed left-0 top-16 bottom-0 w-64 flex-col bg-white dark:bg-surface-dark border-r border-gray-200 dark:border-gray-800 z-30">
+      <aside className="hidden lg:flex fixed start-0 top-16 bottom-0 w-64 flex-col bg-white dark:bg-surface-dark border-e border-gray-200 dark:border-gray-800 z-30">
         <nav className="flex-1 py-6 px-3 space-y-1">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
@@ -64,7 +95,7 @@ const Layout = ({ children }) => {
             className="flex items-center justify-center gap-2 w-full btn-primary"
           >
             <HiOutlinePlusCircle className="w-5 h-5" />
-            Add Subscription
+            {t("sidebar.addSubscription", "Add Subscription")}
           </Link>
         </div>
       </aside>
@@ -81,11 +112,11 @@ const Layout = ({ children }) => {
               onClick={() => setSidebarOpen(false)}
             />
             <motion.aside
-              initial={{ x: -280 }}
+              initial={{ x: isRtl ? 280 : -280 }}
               animate={{ x: 0 }}
-              exit={{ x: -280 }}
+              exit={{ x: isRtl ? 280 : -280 }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="lg:hidden fixed left-0 top-0 bottom-0 w-72 bg-white dark:bg-surface-dark flex flex-col z-50 shadow-2xl"
+              className="lg:hidden fixed start-0 top-0 bottom-0 w-72 bg-white dark:bg-surface-dark flex flex-col z-50 shadow-2xl"
             >
               <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">
                 <img src={logo} alt="SubTracker" className="h-8" />
@@ -126,7 +157,7 @@ const Layout = ({ children }) => {
                   className="flex items-center justify-center gap-2 w-full btn-primary"
                 >
                   <HiOutlinePlusCircle className="w-5 h-5" />
-                  Add Subscription
+                  {t("sidebar.addSubscription", "Add Subscription")}
                 </Link>
               </div>
             </motion.aside>
@@ -135,7 +166,7 @@ const Layout = ({ children }) => {
       </AnimatePresence>
 
       {/* Main Content */}
-      <main className="lg:ml-64 pt-16 min-h-screen">
+      <main className="lg:ms-64 pt-16 min-h-screen">
         <div className="page-container">
           <motion.div
             key={location.pathname}
