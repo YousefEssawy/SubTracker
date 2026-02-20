@@ -113,7 +113,7 @@ const Header = ({ onMenuToggle }) => {
                   )}
                 </button>
                 {showNotif && (
-                  <div className="absolute right-0 top-12 w-80 bg-white dark:bg-surface-dark rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden animate-scale-in">
+                  <div className="absolute end-0 top-12 w-80 bg-white dark:bg-surface-dark rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden animate-scale-in">
                     <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
                       <h3 className="font-semibold text-sm">
                         {t("header.upcomingRenewals", "Upcoming Renewals")}
@@ -180,7 +180,7 @@ const Header = ({ onMenuToggle }) => {
                   )}
                 </button>
                 {showProfile && (
-                  <div className="absolute right-0 top-12 w-56 bg-white dark:bg-surface-dark rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden animate-scale-in">
+                  <div className="absolute end-0 top-12 w-56 bg-white dark:bg-surface-dark rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden animate-scale-in">
                     <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
                       <p className="font-semibold text-sm truncate">
                         {user?.displayName || "User"}
