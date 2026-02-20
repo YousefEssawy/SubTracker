@@ -24,10 +24,12 @@ import {
   HiOutlineMagnifyingGlass,
 } from "react-icons/hi2";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
+import { useTranslation } from "react-i18next";
 
 const SubscriptionsPage = () => {
   const { user } = useAuth();
   const { subscriptions, loading } = useSubscriptions();
+  const { t } = useTranslation();
   const [search, setSearch] = useState("");
   const [filterCat, setFilterCat] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
@@ -55,6 +57,19 @@ const SubscriptionsPage = () => {
     await updateSubscription(user.uid, sub.id, { status: newStatus });
   };
 
+  const getStatusLabel = (status) => {
+    switch (status) {
+      case "active":
+        return t("subscriptions.active");
+      case "paused":
+        return t("subscriptions.paused");
+      case "cancelled":
+        return t("subscriptions.cancelled");
+      default:
+        return status;
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -66,13 +81,13 @@ const SubscriptionsPage = () => {
   return (
     <div className="space-y-6 pb-20 lg:pb-6">
       <div className="flex items-center justify-between">
-        <h1 className="page-title">Subscriptions</h1>
+        <h1 className="page-title">{t("subscriptions.title")}</h1>
         <Link
           to="/subscriptions/add"
           className="btn-primary flex items-center gap-2 text-sm"
         >
           <HiOutlinePlusCircle className="w-4 h-4" />
-          <span className="hidden sm:inline">Add New</span>
+          <span className="hidden sm:inline">{t("subscriptions.addNew")}</span>
         </Link>
       </div>
 
@@ -83,7 +98,7 @@ const SubscriptionsPage = () => {
             <HiOutlineMagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
-              placeholder="Search subscriptions..."
+              placeholder={t("subscriptions.searchPlaceholder")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="input-field pl-9 text-sm"
@@ -107,14 +122,16 @@ const SubscriptionsPage = () => {
               <div className="flex flex-wrap gap-3 mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
                 <div>
                   <label className="text-xs text-gray-500 mb-1 block">
-                    Category
+                    {t("subscriptions.category")}
                   </label>
                   <select
                     value={filterCat}
                     onChange={(e) => setFilterCat(e.target.value)}
                     className="select-field text-sm py-2"
                   >
-                    <option value="all">All Categories</option>
+                    <option value="all">
+                      {t("subscriptions.allCategories")}
+                    </option>
                     {CATEGORIES.map((c) => (
                       <option key={c.id} value={c.id}>
                         {c.icon} {c.name}
@@ -124,17 +141,21 @@ const SubscriptionsPage = () => {
                 </div>
                 <div>
                   <label className="text-xs text-gray-500 mb-1 block">
-                    Status
+                    {t("subscriptions.status")}
                   </label>
                   <select
                     value={filterStatus}
                     onChange={(e) => setFilterStatus(e.target.value)}
                     className="select-field text-sm py-2"
                   >
-                    <option value="all">All Statuses</option>
-                    <option value="active">Active</option>
-                    <option value="paused">Paused</option>
-                    <option value="cancelled">Cancelled</option>
+                    <option value="all">
+                      {t("subscriptions.allStatuses")}
+                    </option>
+                    <option value="active">{t("subscriptions.active")}</option>
+                    <option value="paused">{t("subscriptions.paused")}</option>
+                    <option value="cancelled">
+                      {t("subscriptions.cancelled")}
+                    </option>
                   </select>
                 </div>
               </div>
@@ -149,8 +170,8 @@ const SubscriptionsPage = () => {
           <p className="text-4xl mb-3">📋</p>
           <p className="text-gray-500 dark:text-gray-400 mb-4">
             {subscriptions.length === 0
-              ? "You haven't added any subscriptions yet"
-              : "No subscriptions match your filters"}
+              ? t("subscriptions.noSubscriptionsYet")
+              : t("subscriptions.noMatchingFilters")}
           </p>
           {subscriptions.length === 0 && (
             <Link
@@ -158,7 +179,7 @@ const SubscriptionsPage = () => {
               className="btn-primary inline-flex items-center gap-2"
             >
               <HiOutlinePlusCircle className="w-4 h-4" />
-              Add Your First Subscription
+              {t("subscriptions.addFirstSubscription")}
             </Link>
           )}
         </div>
@@ -203,13 +224,14 @@ const SubscriptionsPage = () => {
                             ${sub.status === "cancelled" ? "bg-danger/10 text-danger" : ""}
                           `}
                           >
-                            {sub.status}
+                            {getStatusLabel(sub.status)}
                           </span>
                         </div>
                         <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                           {cat.name} · {sub.billingCycle}
                           <br />
-                          Renews {formatDate(sub.renewalDate)}
+                          {t("subscriptions.renews")}{" "}
+                          {formatDate(sub.renewalDate)}
                         </p>
                       </div>
                     </div>
@@ -227,7 +249,11 @@ const SubscriptionsPage = () => {
                         <button
                           onClick={() => handleToggleStatus(sub)}
                           className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 transition-colors"
-                          title={sub.status === "active" ? "Pause" : "Resume"}
+                          title={
+                            sub.status === "active"
+                              ? t("subscriptions.pause")
+                              : t("subscriptions.resume")
+                          }
                         >
                           {sub.status === "active" ? (
                             <HiOutlinePause className="w-4 h-4" />
@@ -262,7 +288,11 @@ const SubscriptionsPage = () => {
                       <button
                         onClick={() => handleToggleStatus(sub)}
                         className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 transition-colors"
-                        title={sub.status === "active" ? "Pause" : "Resume"}
+                        title={
+                          sub.status === "active"
+                            ? t("subscriptions.pause")
+                            : t("subscriptions.resume")
+                        }
                       >
                         {sub.status === "active" ? (
                           <HiOutlinePause className="w-4 h-4" />
@@ -294,9 +324,10 @@ const SubscriptionsPage = () => {
         isOpen={!!deleteTarget}
         onClose={() => setDeleteTarget(null)}
         onConfirm={handleDelete}
-        title="Delete Subscription"
-        message="Are you sure you want to delete this subscription? This action cannot be undone."
-        confirmText="Delete"
+        title={t("subscriptions.deleteTitle")}
+        message={t("subscriptions.deleteMessage")}
+        confirmText={t("subscriptions.delete")}
+        cancelText={t("subscriptions.cancel")}
         variant="danger"
       />
     </div>

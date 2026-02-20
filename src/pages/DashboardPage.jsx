@@ -31,6 +31,7 @@ import {
   BarChart,
   Bar,
 } from "recharts";
+import { useTranslation } from "react-i18next";
 
 const CHART_COLORS = [
   "#6366F1",
@@ -48,6 +49,7 @@ const CHART_COLORS = [
 const DashboardPage = () => {
   const { activeSubscriptions, subscriptions, payments, loading } =
     useSubscriptions();
+  const { t } = useTranslation();
   const displayCurrency = "EGP";
 
   const stats = useMemo(() => {
@@ -160,13 +162,15 @@ const DashboardPage = () => {
       className="space-y-6 pb-20 lg:pb-6"
     >
       <div className="flex items-center justify-between">
-        <h1 className="page-title">Dashboard</h1>
+        <h1 className="page-title">{t("dashboard.title")}</h1>
         <Link
           to="/subscriptions/add"
           className="btn-primary flex items-center gap-2 text-sm"
         >
           <HiOutlinePlusCircle className="w-4 h-4" />
-          <span className="hidden sm:inline">Add Subscription</span>
+          <span className="hidden sm:inline">
+            {t("dashboard.addSubscription")}
+          </span>
         </Link>
       </div>
 
@@ -174,25 +178,29 @@ const DashboardPage = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           {
-            label: "Monthly Spending",
+            id: "monthly",
+            label: t("dashboard.monthlySpending"),
             value: formatCurrency(stats.totalMonthly, displayCurrency),
             icon: HiOutlineBanknotes,
             color: "from-primary to-indigo-400",
           },
           {
-            label: "Yearly Spending",
+            id: "yearly",
+            label: t("dashboard.yearlySpending"),
             value: formatCurrency(stats.totalYearly, displayCurrency),
             icon: HiOutlineArrowTrendingUp,
             color: "from-accent to-pink-400",
           },
           {
-            label: "Active Subs",
+            id: "active",
+            label: t("dashboard.activeSubs"),
             value: stats.activeCount,
             icon: HiOutlineCreditCard,
             color: "from-success to-emerald-400",
           },
           {
-            label: "Next Renewal",
+            id: "renewal",
+            label: t("dashboard.nextRenewal"),
             value: stats.nextRenewal ? `${stats.nextRenewal.daysUntil}d` : "—",
             subtext: stats.nextRenewal?.name,
             icon: HiOutlineCalendarDays,
@@ -200,7 +208,7 @@ const DashboardPage = () => {
           },
         ].map((card, i) => (
           <motion.div
-            key={card.label}
+            key={card.id}
             variants={itemAnim}
             className="glass-card p-4 sm:p-5 relative overflow-hidden group hover:shadow-card-hover transition-shadow duration-300"
           >
@@ -232,11 +240,11 @@ const DashboardPage = () => {
         {/* Spending by Category */}
         <motion.div variants={itemAnim} className="glass-card p-5">
           <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
-            Spending by Category
+            {t("dashboard.spendingByCategory")}
           </h3>
           {categoryData.length === 0 ? (
             <p className="text-gray-400 text-sm text-center py-10">
-              No subscriptions yet
+              {t("dashboard.noSubscriptionsYet")}
             </p>
           ) : (
             <div className="h-64">
@@ -296,7 +304,7 @@ const DashboardPage = () => {
         {/* Monthly Trend */}
         <motion.div variants={itemAnim} className="glass-card p-5">
           <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
-            Monthly Spending Trend
+            {t("dashboard.monthlySpendingTrend")}
           </h3>
           <div className="h-64 -ml-2 overflow-hidden">
             <ResponsiveContainer width="100%" height="100%">
@@ -353,18 +361,18 @@ const DashboardPage = () => {
       <motion.div variants={itemAnim} className="glass-card p-5">
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-semibold text-gray-900 dark:text-white">
-            Upcoming Renewals
+            {t("dashboard.upcomingRenewals")}
           </h3>
           <Link
             to="/subscriptions"
             className="text-sm text-primary hover:underline"
           >
-            View all
+            {t("dashboard.viewAll")}
           </Link>
         </div>
         {stats.upcomingSorted.length === 0 ? (
           <p className="text-gray-400 text-sm text-center py-6">
-            No upcoming renewals
+            {t("dashboard.noUpcomingRenewals")}
           </p>
         ) : (
           <div className="space-y-3">
@@ -398,7 +406,9 @@ const DashboardPage = () => {
                     <p
                       className={`text-xs font-medium ${sub.daysUntil <= 3 ? "text-danger" : "text-warning"}`}
                     >
-                      {sub.daysUntil === 0 ? "Today" : `${sub.daysUntil} days`}
+                      {sub.daysUntil === 0
+                        ? t("dashboard.today")
+                        : t("dashboard.days", { count: sub.daysUntil })}
                     </p>
                   </div>
                 </div>

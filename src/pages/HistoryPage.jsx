@@ -4,9 +4,11 @@ import { useSubscriptions } from "@/contexts/SubscriptionContext";
 import { formatCurrency } from "@/utils/currencies";
 import { formatDate } from "@/utils/dateUtils";
 import { HiOutlineMagnifyingGlass } from "react-icons/hi2";
+import { useTranslation } from "react-i18next";
 
 const HistoryPage = () => {
   const { payments, loading } = useSubscriptions();
+  const { t } = useTranslation();
   const [search, setSearch] = useState("");
 
   const filtered = useMemo(() => {
@@ -29,7 +31,7 @@ const HistoryPage = () => {
       animate={{ opacity: 1, y: 0 }}
       className="space-y-6 pb-20 lg:pb-6"
     >
-      <h1 className="page-title">Payment History</h1>
+      <h1 className="page-title">{t("history.title")}</h1>
 
       {/* Search */}
       <div className="glass-card p-4">
@@ -37,7 +39,7 @@ const HistoryPage = () => {
           <HiOutlineMagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             type="text"
-            placeholder="Search payments..."
+            placeholder={t("history.searchPlaceholder")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="input-field pl-9 text-sm"
@@ -51,11 +53,11 @@ const HistoryPage = () => {
           <p className="text-4xl mb-3">📄</p>
           <p className="text-gray-500 dark:text-gray-400">
             {payments.length === 0
-              ? "No payment history yet"
-              : "No payments match your search"}
+              ? t("history.noHistoryYet")
+              : t("history.noMatchingSearch")}
           </p>
           <p className="text-xs text-gray-400 mt-2">
-            Payments are logged automatically when renewal dates pass
+            {t("history.autoLogNote")}
           </p>
         </div>
       ) : (
@@ -65,16 +67,16 @@ const HistoryPage = () => {
               <thead>
                 <tr className="border-b border-gray-200 dark:border-gray-700">
                   <th className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">
-                    Subscription
+                    {t("history.subscription")}
                   </th>
                   <th className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">
-                    Date
+                    {t("history.date")}
                   </th>
                   <th className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">
-                    Amount
+                    {t("history.amount")}
                   </th>
                   <th className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3 hidden sm:table-cell">
-                    Payment Method
+                    {t("history.paymentMethod")}
                   </th>
                 </tr>
               </thead>

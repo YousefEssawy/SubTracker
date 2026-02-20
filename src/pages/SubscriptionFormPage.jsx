@@ -11,12 +11,14 @@ import { CATEGORIES } from "@/utils/categories";
 import { CURRENCIES, DEFAULT_CURRENCY } from "@/utils/currencies";
 import { BILLING_CYCLES, toDateInputValue } from "@/utils/dateUtils";
 import { HiOutlineArrowLeft } from "react-icons/hi2";
+import { useTranslation } from "react-i18next";
 
 const SubscriptionFormPage = () => {
   const { id } = useParams();
   const isEdit = Boolean(id);
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(isEdit);
 
@@ -105,11 +107,13 @@ const SubscriptionFormPage = () => {
           className="flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 mb-4 transition-colors"
         >
           <HiOutlineArrowLeft className="w-4 h-4" />
-          Back
+          {t("subscriptionForm.back")}
         </button>
 
         <h1 className="page-title mb-6">
-          {isEdit ? "Edit Subscription" : "Add Subscription"}
+          {isEdit
+            ? t("subscriptionForm.editTitle")
+            : t("subscriptionForm.addTitle")}
         </h1>
 
         <form
@@ -118,12 +122,12 @@ const SubscriptionFormPage = () => {
         >
           {/* Name */}
           <div>
-            <label className="label-text">Subscription Name *</label>
+            <label className="label-text">{t("subscriptionForm.name")}</label>
             <input
               name="name"
               value={form.name}
               onChange={handleChange}
-              placeholder="e.g. Netflix, ChatGPT Plus"
+              placeholder={t("subscriptionForm.namePlaceholder")}
               className="input-field"
               required
             />
@@ -132,7 +136,9 @@ const SubscriptionFormPage = () => {
           {/* Price & Currency */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="label-text">Price *</label>
+              <label className="label-text">
+                {t("subscriptionForm.price")}
+              </label>
               <input
                 name="price"
                 type="number"
@@ -146,7 +152,9 @@ const SubscriptionFormPage = () => {
               />
             </div>
             <div>
-              <label className="label-text">Currency</label>
+              <label className="label-text">
+                {t("subscriptionForm.currency")}
+              </label>
               <select
                 name="currency"
                 value={form.currency}
@@ -164,7 +172,9 @@ const SubscriptionFormPage = () => {
 
           {/* Category */}
           <div>
-            <label className="label-text">Category</label>
+            <label className="label-text">
+              {t("subscriptionForm.category")}
+            </label>
             <select
               name="category"
               value={form.category}
@@ -182,7 +192,9 @@ const SubscriptionFormPage = () => {
           {/* Billing Cycle */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="label-text">Billing Cycle</label>
+              <label className="label-text">
+                {t("subscriptionForm.billingCycle")}
+              </label>
               <select
                 name="billingCycle"
                 value={form.billingCycle}
@@ -198,14 +210,16 @@ const SubscriptionFormPage = () => {
             </div>
             {form.billingCycle === "custom" && (
               <div>
-                <label className="label-text">Cycle Days</label>
+                <label className="label-text">
+                  {t("subscriptionForm.cycleDays")}
+                </label>
                 <input
                   name="customCycleDays"
                   type="number"
                   min="1"
                   value={form.customCycleDays}
                   onChange={handleChange}
-                  placeholder="e.g. 14"
+                  placeholder={t("subscriptionForm.cycleDaysPlaceholder")}
                   className="input-field"
                   required
                 />
@@ -215,7 +229,9 @@ const SubscriptionFormPage = () => {
 
           {/* Renewal Date */}
           <div>
-            <label className="label-text">Next Renewal Date *</label>
+            <label className="label-text">
+              {t("subscriptionForm.renewalDate")}
+            </label>
             <input
               name="renewalDate"
               type="date"
@@ -228,12 +244,14 @@ const SubscriptionFormPage = () => {
 
           {/* Payment Method */}
           <div>
-            <label className="label-text">Payment Method (Card Name)</label>
+            <label className="label-text">
+              {t("subscriptionForm.paymentMethod")}
+            </label>
             <input
               name="paymentMethod"
               value={form.paymentMethod}
               onChange={handleChange}
-              placeholder="e.g. CIB Visa, QNB Mastercard"
+              placeholder={t("subscriptionForm.paymentMethodPlaceholder")}
               className="input-field"
             />
           </div>
@@ -241,29 +259,33 @@ const SubscriptionFormPage = () => {
           {/* Status (only for edit) */}
           {isEdit && (
             <div>
-              <label className="label-text">Status</label>
+              <label className="label-text">
+                {t("subscriptionForm.status")}
+              </label>
               <select
                 name="status"
                 value={form.status}
                 onChange={handleChange}
                 className="select-field"
               >
-                <option value="active">Active</option>
-                <option value="paused">Paused</option>
-                <option value="cancelled">Cancelled</option>
+                <option value="active">{t("subscriptionForm.active")}</option>
+                <option value="paused">{t("subscriptionForm.paused")}</option>
+                <option value="cancelled">
+                  {t("subscriptionForm.cancelled")}
+                </option>
               </select>
             </div>
           )}
 
           {/* Notes */}
           <div>
-            <label className="label-text">Notes</label>
+            <label className="label-text">{t("subscriptionForm.notes")}</label>
             <textarea
               name="notes"
               value={form.notes}
               onChange={handleChange}
               rows="3"
-              placeholder="Any additional notes..."
+              placeholder={t("subscriptionForm.notesPlaceholder")}
               className="input-field resize-none"
             />
           </div>
@@ -276,17 +298,17 @@ const SubscriptionFormPage = () => {
               className="btn-primary flex-1 py-3 disabled:opacity-50"
             >
               {loading
-                ? "Saving..."
+                ? t("subscriptionForm.saving")
                 : isEdit
-                  ? "Update Subscription"
-                  : "Add Subscription"}
+                  ? t("subscriptionForm.updateSubscription")
+                  : t("subscriptionForm.addSubscription")}
             </button>
             <button
               type="button"
               onClick={() => navigate(-1)}
               className="btn-secondary px-6"
             >
-              Cancel
+              {t("subscriptionForm.cancelBtn")}
             </button>
           </div>
         </form>

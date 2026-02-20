@@ -6,10 +6,12 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/services/firebase";
 import { CURRENCIES, DEFAULT_CURRENCY } from "@/utils/currencies";
 import { HiOutlineSun, HiOutlineMoon, HiOutlineCheck } from "react-icons/hi2";
+import { useTranslation } from "react-i18next";
 
 const SettingsPage = () => {
   const { user } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { t } = useTranslation();
   const [settings, setSettings] = useState({
     preferredCurrency: DEFAULT_CURRENCY,
     reminderDays: 3,
@@ -55,12 +57,12 @@ const SettingsPage = () => {
       animate={{ opacity: 1, y: 0 }}
       className="max-w-2xl mx-auto space-y-6 pb-20 lg:pb-6"
     >
-      <h1 className="page-title">Settings</h1>
+      <h1 className="page-title">{t("settings.title")}</h1>
 
       {/* Profile */}
       <div className="glass-card p-6">
         <h2 className="font-semibold text-lg text-gray-900 dark:text-white mb-4">
-          Profile
+          {t("settings.profile")}
         </h2>
         <div className="flex items-center gap-4">
           {user?.photoURL ? (
@@ -82,7 +84,7 @@ const SettingsPage = () => {
       {/* Appearance */}
       <div className="glass-card p-6">
         <h2 className="font-semibold text-lg text-gray-900 dark:text-white mb-4">
-          Appearance
+          {t("settings.appearance")}
         </h2>
         <div className="flex gap-3">
           <button
@@ -91,7 +93,7 @@ const SettingsPage = () => {
               ${theme === "light" ? "border-primary bg-primary/5 text-primary" : "border-gray-200 dark:border-gray-700 text-gray-500"}`}
           >
             <HiOutlineSun className="w-5 h-5" />
-            Light
+            {t("settings.light")}
           </button>
           <button
             onClick={() => theme !== "dark" && toggleTheme()}
@@ -99,7 +101,7 @@ const SettingsPage = () => {
               ${theme === "dark" ? "border-primary bg-primary/5 text-primary" : "border-gray-200 dark:border-gray-700 text-gray-500"}`}
           >
             <HiOutlineMoon className="w-5 h-5" />
-            Dark
+            {t("settings.dark")}
           </button>
         </div>
       </div>
@@ -107,10 +109,10 @@ const SettingsPage = () => {
       {/* Preferences */}
       <div className="glass-card p-6 space-y-5">
         <h2 className="font-semibold text-lg text-gray-900 dark:text-white">
-          Preferences
+          {t("settings.preferences")}
         </h2>
         <div>
-          <label className="label-text">Display Currency</label>
+          <label className="label-text">{t("settings.displayCurrency")}</label>
           <select
             value={settings.preferredCurrency}
             onChange={(e) =>
@@ -129,7 +131,7 @@ const SettingsPage = () => {
           </select>
         </div>
         <div>
-          <label className="label-text">Reminder Days Before Renewal</label>
+          <label className="label-text">{t("settings.reminderDays")}</label>
           <select
             value={settings.reminderDays}
             onChange={(e) =>
@@ -140,9 +142,9 @@ const SettingsPage = () => {
             }
             className="select-field"
           >
-            <option value={1}>1 day before</option>
-            <option value={3}>3 days before</option>
-            <option value={7}>7 days before</option>
+            <option value={1}>{t("settings.dayBefore", { count: 1 })}</option>
+            <option value={3}>{t("settings.daysBefore", { count: 3 })}</option>
+            <option value={7}>{t("settings.daysBefore", { count: 7 })}</option>
           </select>
         </div>
         <button
@@ -151,10 +153,10 @@ const SettingsPage = () => {
         >
           {saved ? (
             <>
-              <HiOutlineCheck className="w-4 h-4" /> Saved!
+              <HiOutlineCheck className="w-4 h-4" /> {t("settings.saved")}
             </>
           ) : (
-            "Save Preferences"
+            t("settings.savePreferences")
           )}
         </button>
       </div>

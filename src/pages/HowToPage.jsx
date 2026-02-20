@@ -5,34 +5,33 @@ import {
   HiOutlineChartPie,
   HiOutlineBell,
 } from "react-icons/hi2";
+import { useTranslation } from "react-i18next";
 
 const HowToPage = () => {
+  const { t } = useTranslation();
+
   const steps = [
     {
-      title: "1. Add a Subscription",
-      description:
-        "Click the 'Add Subscription' button from the sidebar or dashboard. Enter the subscription details including name, price, billing cycle (monthly, yearly, or custom), and the next renewal date.",
+      title: t("howTo.step1Title"),
+      description: t("howTo.step1Desc"),
       icon: HiOutlinePlusCircle,
       color: "text-blue-500 bg-blue-50 dark:bg-blue-500/10",
     },
     {
-      title: "2. Track Your Expenses",
-      description:
-        "Head over to the Dashboard to see an overview of your active subscriptions. You'll get visual charts of your monthly spending, upcoming bills, and a complete breakdown by category or service.",
+      title: t("howTo.step2Title"),
+      description: t("howTo.step2Desc"),
       icon: HiOutlineChartPie,
       color: "text-green-500 bg-green-50 dark:bg-green-500/10",
     },
     {
-      title: "3. Never Miss a Payment",
-      description:
-        "SubTracker will automatically calculate your next renewal date. Check the notification icon in the header to see what subscriptions are renewing soon.",
+      title: t("howTo.step3Title"),
+      description: t("howTo.step3Desc"),
       icon: HiOutlineBell,
       color: "text-red-500 bg-red-50 dark:bg-red-500/10",
     },
     {
-      title: "4. Payment History",
-      description:
-        "As subscriptions renew, they are recorded in your History tab. You can mark payments as paid or cancelled, allowing you to maintain an accurate ledger of all your past subscription costs.",
+      title: t("howTo.step4Title"),
+      description: t("howTo.step4Desc"),
       icon: HiOutlineClock,
       color: "text-purple-500 bg-purple-50 dark:bg-purple-500/10",
     },
@@ -56,10 +55,10 @@ const HowToPage = () => {
         className="text-center mb-12"
       >
         <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent mb-4">
-          How to Use SubTracker
+          {t("howTo.title")}
         </h1>
         <p className="text-xl text-gray-600 dark:text-gray-400">
-          A quick guide to effectively managing your subscriptions
+          {t("howTo.subtitle")}
         </p>
       </motion.div>
 
@@ -98,10 +97,9 @@ const HowToPage = () => {
         transition={{ delay: 0.6 }}
         className="mt-12 text-center p-8 bg-primary/5 rounded-2xl border border-primary/20"
       >
-        <h2 className="text-2xl font-bold mb-4">Ready to take control?</h2>
+        <h2 className="text-2xl font-bold mb-4">{t("howTo.ctaTitle")}</h2>
         <p className="text-gray-600 dark:text-gray-400 mb-6">
-          Start by adding your first subscription and see where your money goes
-          every month.
+          {t("howTo.ctaText")}
         </p>
       </motion.div>
     </div>

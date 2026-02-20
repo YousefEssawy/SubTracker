@@ -10,8 +10,10 @@ import {
   HiOutlineEye,
   HiOutlineEyeSlash,
 } from "react-icons/hi2";
+import { useTranslation } from "react-i18next";
 
 const SignupPage = () => {
+  const { t } = useTranslation();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,11 +27,11 @@ const SignupPage = () => {
     e.preventDefault();
     setError("");
     if (password !== confirmPwd) {
-      setError("Passwords do not match");
+      setError(t("signup.passwordsMismatch"));
       return;
     }
     if (password.length < 6) {
-      setError("Password must be at least 6 characters");
+      setError(t("signup.passwordTooShort"));
       return;
     }
     setLoading(true);
@@ -68,13 +70,13 @@ const SignupPage = () => {
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold gradient-text mb-2">SubTracker</h1>
           <p className="text-gray-500 dark:text-gray-400">
-            Start tracking your subscriptions today
+            {t("signup.subtitle")}
           </p>
         </div>
 
         <div className="glass-card p-8">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-            Create account
+            {t("signup.createAccount")}
           </h2>
 
           {error && (
@@ -89,7 +91,7 @@ const SignupPage = () => {
             className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-750 transition-all duration-200 mb-6"
           >
             <FcGoogle className="w-5 h-5" />
-            Continue with Google
+            {t("signup.continueWithGoogle")}
           </button>
 
           <div className="relative mb-6">
@@ -98,14 +100,14 @@ const SignupPage = () => {
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="px-4 bg-white dark:bg-surface-dark text-gray-500">
-                or
+                {t("signup.or")}
               </span>
             </div>
           </div>
 
           <form onSubmit={handleSignup} className="space-y-4">
             <div>
-              <label className="label-text">Full Name</label>
+              <label className="label-text">{t("signup.fullName")}</label>
               <div className="relative">
                 <HiOutlineUser className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
@@ -119,7 +121,7 @@ const SignupPage = () => {
               </div>
             </div>
             <div>
-              <label className="label-text">Email</label>
+              <label className="label-text">{t("signup.email")}</label>
               <div className="relative">
                 <HiOutlineEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
@@ -133,7 +135,7 @@ const SignupPage = () => {
               </div>
             </div>
             <div>
-              <label className="label-text">Password</label>
+              <label className="label-text">{t("signup.password")}</label>
               <div className="relative">
                 <HiOutlineLockClosed className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
@@ -158,7 +160,9 @@ const SignupPage = () => {
               </div>
             </div>
             <div>
-              <label className="label-text">Confirm Password</label>
+              <label className="label-text">
+                {t("signup.confirmPassword")}
+              </label>
               <div className="relative">
                 <HiOutlineLockClosed className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
@@ -176,17 +180,19 @@ const SignupPage = () => {
               disabled={loading}
               className="w-full btn-primary py-3 disabled:opacity-50"
             >
-              {loading ? "Creating account..." : "Create Account"}
+              {loading
+                ? t("signup.creatingAccount")
+                : t("signup.createAccountBtn")}
             </button>
           </form>
 
           <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
-            Already have an account?{" "}
+            {t("signup.hasAccount")}{" "}
             <Link
               to="/login"
               className="text-primary hover:underline font-medium"
             >
-              Sign in
+              {t("signup.signIn")}
             </Link>
           </p>
         </div>

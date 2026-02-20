@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
 import { FaGithub, FaLinkedin, FaInstagram, FaCode } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 const AboutPage = () => {
+  const { t } = useTranslation();
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -49,45 +52,40 @@ const AboutPage = () => {
             <FaCode className="w-8 h-8 text-primary" />
           </div>
           <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
-            About SubTracker
+            {t("about.title")}
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-400">
-            A seamless way to manage all your subscriptions in one place.
+            {t("about.subtitle")}
           </p>
         </motion.div>
 
         <motion.div variants={itemVariants} className="card p-8">
-          <h2 className="text-2xl font-bold mb-4">Our Mission</h2>
+          <h2 className="text-2xl font-bold mb-4">{t("about.missionTitle")}</h2>
           <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6">
-            SubTracker was built with a simple goal: to give users complete
-            control over their recurring expenses. In a world where everything
-            is moving to a subscription model, it's easy to lose track of what
-            you're paying for. SubTracker helps you monitor, manage, and
-            optimize your subscriptions so you never pay for a service you don't
-            use.
+            {t("about.missionText")}
           </p>
           <div className="bg-primary/5 rounded-xl p-6 border border-primary/10">
             <h3 className="font-semibold text-lg mb-2 text-primary">
-              Key Features:
+              {t("about.keyFeatures")}
             </h3>
             <ul className="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-400">
-              <li>Track all subscription costs automatically</li>
-              <li>Get reminded of upcoming renewals</li>
-              <li>Support for multiple currencies</li>
-              <li>Detailed analytics and expense history</li>
+              <li>{t("about.feature1")}</li>
+              <li>{t("about.feature2")}</li>
+              <li>{t("about.feature3")}</li>
+              <li>{t("about.feature4")}</li>
             </ul>
           </div>
         </motion.div>
 
         <motion.div variants={itemVariants} className="card p-8 text-center">
-          <h2 className="text-2xl font-bold mb-6">Meet the Developer</h2>
+          <h2 className="text-2xl font-bold mb-6">
+            {t("about.meetDeveloper")}
+          </h2>
           <div className="w-24 h-24 mx-auto bg-gradient-to-br from-primary to-accent rounded-full mb-4 flex items-center justify-center shadow-lg">
             <span className="text-3xl font-bold text-white">YE</span>
           </div>
           <h3 className="text-xl font-bold mb-2">Yousef Essawy</h3>
-          <p className="text-gray-500 mb-6">
-            Software Engineer & Creator of SubTracker
-          </p>
+          <p className="text-gray-500 mb-6">{t("about.developerRole")}</p>
 
           <div className="flex items-center justify-center gap-6">
             {socialLinks.map((link) => (

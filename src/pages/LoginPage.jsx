@@ -14,9 +14,11 @@ import lightLogo from "@/assets/logo/light-mode.png";
 import darkLogo from "@/assets/logo/dark-mode.png";
 
 import { useTheme } from "@/contexts/ThemeContext";
+import { useTranslation } from "react-i18next";
 
 const LoginPage = () => {
   const { theme } = useTheme();
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPwd, setShowPwd] = useState(false);
@@ -62,21 +64,20 @@ const LoginPage = () => {
       >
         {/* Logo */}
         <div className="text-center mb-8">
-          {/* use lightLogo if theme is light else use darkLogo */}
           <img
             src={theme === "light" ? lightLogo : darkLogo}
             alt="SubTracker"
             className="h-20 mx-auto mb-2"
           />
           <p className="text-gray-500 dark:text-gray-400">
-            Track all your subscriptions in one place
+            {t("login.subtitle")}
           </p>
         </div>
 
         {/* Card */}
         <div className="glass-card p-8">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-            Welcome back
+            {t("login.welcomeBack")}
           </h2>
 
           {error && (
@@ -92,7 +93,7 @@ const LoginPage = () => {
             className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-750 transition-all duration-200 mb-6"
           >
             <FcGoogle className="w-5 h-5" />
-            Continue with Google
+            {t("login.continueWithGoogle")}
           </button>
 
           <div className="relative mb-6">
@@ -101,7 +102,7 @@ const LoginPage = () => {
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="px-4 bg-white dark:bg-surface-dark text-gray-500">
-                or
+                {t("login.or")}
               </span>
             </div>
           </div>
@@ -109,7 +110,7 @@ const LoginPage = () => {
           {/* Email Form */}
           <form onSubmit={handleEmailLogin} className="space-y-4">
             <div>
-              <label className="label-text">Email</label>
+              <label className="label-text">{t("login.email")}</label>
               <div className="relative">
                 <HiOutlineEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
@@ -123,7 +124,7 @@ const LoginPage = () => {
               </div>
             </div>
             <div>
-              <label className="label-text">Password</label>
+              <label className="label-text">{t("login.password")}</label>
               <div className="relative">
                 <HiOutlineLockClosed className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
@@ -152,17 +153,17 @@ const LoginPage = () => {
               disabled={loading}
               className="w-full btn-primary py-3 disabled:opacity-50"
             >
-              {loading ? "Signing in..." : "Sign In"}
+              {loading ? t("login.signingIn") : t("login.signIn")}
             </button>
           </form>
 
           <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
-            Don't have an account?{" "}
+            {t("login.noAccount")}{" "}
             <Link
               to="/signup"
               className="text-primary hover:underline font-medium"
             >
-              Sign up
+              {t("login.signUp")}
             </Link>
           </p>
         </div>
