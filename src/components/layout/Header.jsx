@@ -80,98 +80,113 @@ const Header = ({ onMenuToggle }) => {
             )}
           </button>
 
-          {/* Notifications */}
-          <div ref={notifRef} className="relative">
-            <button
-              onClick={() => setShowNotif(!showNotif)}
-              className="relative p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
+          {!user ? (
+            <Link
+              to="/login"
+              className="ml-2 px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary-dark rounded-xl transition-colors"
             >
-              <HiOutlineBell className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-              {upcomingRenewals.length > 0 && (
-                <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-danger rounded-full animate-pulse" />
-              )}
-            </button>
-            {showNotif && (
-              <div className="absolute right-0 top-12 w-80 bg-white dark:bg-surface-dark rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden animate-scale-in">
-                <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
-                  <h3 className="font-semibold text-sm">Upcoming Renewals</h3>
-                </div>
-                <div className="max-h-64 overflow-y-auto">
-                  {upcomingRenewals.length === 0 ? (
-                    <p className="text-gray-500 text-sm text-center py-6">
-                      No upcoming renewals 🎉
-                    </p>
-                  ) : (
-                    upcomingRenewals.map((sub) => (
-                      <div
-                        key={sub.id}
-                        className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-100 dark:border-gray-800 last:border-b-0"
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="font-medium text-sm">
-                            {sub.name}
-                          </span>
-                          <span className="text-xs text-warning font-medium">
-                            {(() => {
-                              const days = Math.ceil(
-                                (new Date(sub.renewalDate) - new Date()) /
-                                  (1000 * 60 * 60 * 24),
-                              );
-                              return days <= 0
-                                ? "Today!"
-                                : `in ${days} day${days > 1 ? "s" : ""}`;
-                            })()}
-                          </span>
-                        </div>
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
-                          {sub.currency} {sub.price}
-                        </span>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Profile */}
-          <div ref={profileRef} className="relative">
-            <button
-              onClick={() => setShowProfile(!showProfile)}
-              className="flex items-center gap-2 p-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
-            >
-              {user?.photoURL ? (
-                <img
-                  src={user.photoURL}
-                  alt=""
-                  className="w-8 h-8 rounded-full"
-                />
-              ) : (
-                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-sm font-bold">
-                  {(user?.displayName || user?.email || "?")[0].toUpperCase()}
-                </div>
-              )}
-            </button>
-            {showProfile && (
-              <div className="absolute right-0 top-12 w-56 bg-white dark:bg-surface-dark rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden animate-scale-in">
-                <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
-                  <p className="font-semibold text-sm truncate">
-                    {user?.displayName || "User"}
-                  </p>
-                  <p className="text-xs text-gray-500 truncate">
-                    {user?.email}
-                  </p>
-                </div>
+              Sign In
+            </Link>
+          ) : (
+            <>
+              {/* Notifications */}
+              <div ref={notifRef} className="relative">
                 <button
-                  onClick={handleLogout}
-                  className="w-full flex items-center gap-2 px-4 py-3 text-sm text-danger hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                  onClick={() => setShowNotif(!showNotif)}
+                  className="relative p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
                 >
-                  <HiOutlineArrowRightOnRectangle className="w-4 h-4" />
-                  Sign Out
+                  <HiOutlineBell className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                  {upcomingRenewals.length > 0 && (
+                    <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-danger rounded-full animate-pulse" />
+                  )}
                 </button>
+                {showNotif && (
+                  <div className="absolute right-0 top-12 w-80 bg-white dark:bg-surface-dark rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden animate-scale-in">
+                    <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+                      <h3 className="font-semibold text-sm">
+                        Upcoming Renewals
+                      </h3>
+                    </div>
+                    <div className="max-h-64 overflow-y-auto">
+                      {upcomingRenewals.length === 0 ? (
+                        <p className="text-gray-500 text-sm text-center py-6">
+                          No upcoming renewals 🎉
+                        </p>
+                      ) : (
+                        upcomingRenewals.map((sub) => (
+                          <div
+                            key={sub.id}
+                            className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors border-b border-gray-100 dark:border-gray-800 last:border-b-0"
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-medium text-sm">
+                                {sub.name}
+                              </span>
+                              <span className="text-xs text-warning font-medium">
+                                {(() => {
+                                  const days = Math.ceil(
+                                    (new Date(sub.renewalDate) - new Date()) /
+                                      (1000 * 60 * 60 * 24),
+                                  );
+                                  return days <= 0
+                                    ? "Today!"
+                                    : `in ${days} day${days > 1 ? "s" : ""}`;
+                                })()}
+                              </span>
+                            </div>
+                            <span className="text-xs text-gray-500 dark:text-gray-400">
+                              {sub.currency} {sub.price}
+                            </span>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
+
+              {/* Profile */}
+              <div ref={profileRef} className="relative">
+                <button
+                  onClick={() => setShowProfile(!showProfile)}
+                  className="flex items-center gap-2 p-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
+                >
+                  {user?.photoURL ? (
+                    <img
+                      src={user.photoURL}
+                      alt=""
+                      className="w-8 h-8 rounded-full"
+                    />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-sm font-bold">
+                      {(user?.displayName ||
+                        user?.email ||
+                        "?")[0].toUpperCase()}
+                    </div>
+                  )}
+                </button>
+                {showProfile && (
+                  <div className="absolute right-0 top-12 w-56 bg-white dark:bg-surface-dark rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden animate-scale-in">
+                    <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+                      <p className="font-semibold text-sm truncate">
+                        {user?.displayName || "User"}
+                      </p>
+                      <p className="text-xs text-gray-500 truncate">
+                        {user?.email}
+                      </p>
+                    </div>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-2 px-4 py-3 text-sm text-danger hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                    >
+                      <HiOutlineArrowRightOnRectangle className="w-4 h-4" />
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </header>

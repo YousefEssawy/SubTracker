@@ -9,6 +9,9 @@ import {
   HiOutlineBars3,
   HiOutlineXMark,
   HiOutlinePlusCircle,
+  HiOutlineInformationCircle,
+  HiOutlineBookOpen,
+  HiOutlineSparkles,
 } from "react-icons/hi2";
 import Header from "./Header";
 import logo from "@/assets/logo/main-logo.png";
@@ -18,6 +21,9 @@ const navItems = [
   { path: "/subscriptions", label: "Subscriptions", icon: HiOutlineCreditCard },
   { path: "/history", label: "History", icon: HiOutlineClock },
   { path: "/settings", label: "Settings", icon: HiOutlineCog6Tooth },
+  { path: "/coming-soon", label: "Coming Soon", icon: HiOutlineSparkles },
+  { path: "/how-to", label: "How to Use", icon: HiOutlineBookOpen },
+  { path: "/about", label: "About", icon: HiOutlineInformationCircle },
 ];
 
 const Layout = ({ children }) => {

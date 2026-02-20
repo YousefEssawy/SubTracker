@@ -15,6 +15,9 @@ import SubscriptionsPage from "@/pages/SubscriptionsPage";
 import SubscriptionFormPage from "@/pages/SubscriptionFormPage";
 import HistoryPage from "@/pages/HistoryPage";
 import SettingsPage from "@/pages/SettingsPage";
+import AboutPage from "@/pages/AboutPage";
+import HowToPage from "@/pages/HowToPage";
+import ComingSoonPage from "@/pages/ComingSoonPage";
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
@@ -43,7 +46,7 @@ const App = () => {
       <Router basename="/SubTracker">
         <AuthProvider>
           <Routes>
-            {/* Public Routes */}
+            {/* Public Auth Routes */}
             <Route
               path="/login"
               element={
@@ -61,33 +64,70 @@ const App = () => {
               }
             />
 
-            {/* Protected Routes */}
+            {/* Layout Routes (Public & Protected mixed) */}
             <Route
               path="/*"
               element={
-                <ProtectedRoute>
-                  <SubscriptionProvider>
-                    <Layout>
-                      <Routes>
-                        <Route path="/" element={<DashboardPage />} />
-                        <Route
-                          path="/subscriptions"
-                          element={<SubscriptionsPage />}
-                        />
-                        <Route
-                          path="/subscriptions/add"
-                          element={<SubscriptionFormPage />}
-                        />
-                        <Route
-                          path="/subscriptions/:id"
-                          element={<SubscriptionFormPage />}
-                        />
-                        <Route path="/history" element={<HistoryPage />} />
-                        <Route path="/settings" element={<SettingsPage />} />
-                      </Routes>
-                    </Layout>
-                  </SubscriptionProvider>
-                </ProtectedRoute>
+                <SubscriptionProvider>
+                  <Layout>
+                    <Routes>
+                      {/* Protected Routes */}
+                      <Route
+                        path="/"
+                        element={
+                          <ProtectedRoute>
+                            <DashboardPage />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="/subscriptions"
+                        element={
+                          <ProtectedRoute>
+                            <SubscriptionsPage />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="/subscriptions/add"
+                        element={
+                          <ProtectedRoute>
+                            <SubscriptionFormPage />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="/subscriptions/:id"
+                        element={
+                          <ProtectedRoute>
+                            <SubscriptionFormPage />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="/history"
+                        element={
+                          <ProtectedRoute>
+                            <HistoryPage />
+                          </ProtectedRoute>
+                        }
+                      />
+                      <Route
+                        path="/settings"
+                        element={
+                          <ProtectedRoute>
+                            <SettingsPage />
+                          </ProtectedRoute>
+                        }
+                      />
+
+                      {/* Public Layout Routes */}
+                      <Route path="/about" element={<AboutPage />} />
+                      <Route path="/how-to" element={<HowToPage />} />
+                      <Route path="/coming-soon" element={<ComingSoonPage />} />
+                    </Routes>
+                  </Layout>
+                </SubscriptionProvider>
               }
             />
           </Routes>
