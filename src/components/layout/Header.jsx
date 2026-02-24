@@ -52,12 +52,12 @@ const Header = ({ onMenuToggle }) => {
     <header className="fixed top-0 left-0 right-0 h-16 bg-white/80 dark:bg-surface-dark/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-800/50 z-40">
       <div className="flex items-center justify-between h-full px-4 lg:px-6">
         <div className="flex items-center gap-3">
-          {/* <button
+          <button
             onClick={onMenuToggle}
             className="lg:hidden p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           >
-            <HiOutlineBars3 className="w-5 h-5" />
-          </button> */}
+            <HiOutlineBars3 className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+          </button>
           <Link to="/" className="flex items-center gap-2">
             <img
               src={theme === "light" ? lightLogo : darkLogo}

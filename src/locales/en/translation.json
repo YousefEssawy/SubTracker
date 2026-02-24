@@ -171,5 +171,99 @@
     "date": "Date",
     "amount": "Amount",
     "paymentMethod": "Payment Method"
+  },
+  "landing": {
+    "nav": {
+      "signIn": "Sign In",
+      "signUp": "Sign Up Free"
+    },
+    "hero": {
+      "tag": "Take control of your subscriptions",
+      "title1": "Stop Losing Money",
+      "title2": "to Forgotten Subs",
+      "desc": "SubTracker helps you track every subscription, visualize your spending, and get reminded before renewals — so you're always in control of your budget.",
+      "startBtn": "Get Started Free",
+      "loginBtn": "Already have an account?"
+    },
+    "about": {
+      "tag": "About SubTracker",
+      "title": "Your personal subscription command center",
+      "desc1": "SubTracker was built to solve a universal problem: subscription creep. With streaming services, SaaS tools, and digital products multiplying, it's easy to lose track of what you're paying for.",
+      "desc2": "We give you a single, beautiful dashboard to monitor every subscription, understand your spending patterns, and take back control of your financial life."
+    },
+    "features": {
+      "1": {
+        "title": "All Subs in One Place",
+        "desc": "Netflix, Spotify, SaaS tools — manage every subscription you have in a single, clean interface."
+      },
+      "2": {
+        "title": "Spending Insights",
+        "desc": "Beautiful charts break down your spending by category and show your monthly trends."
+      },
+      "3": {
+        "title": "Renewal Reminders",
+        "desc": "Never miss a renewal date again. Get notified before you're charged."
+      },
+      "4": {
+        "title": "More Coming Soon",
+        "desc": "Expense tracking, custom categories, and more features are in the pipeline."
+      }
+    },
+    "howTo": {
+      "tag": "Simple as 1-2-3",
+      "title": "How to Use SubTracker",
+      "desc": "Get up and running in minutes. No complex setup required.",
+      "1": {
+        "title": "Add Your Subscriptions",
+        "desc": "Enter each subscription's name, price, billing cycle, and renewal date in seconds.",
+        "color": "from-primary to-indigo-400"
+      },
+      "2": {
+        "title": "View Your Dashboard",
+        "desc": "Get a clear overview of your monthly and yearly spending broken down by category.",
+        "color": "from-accent to-pink-400"
+      },
+      "3": {
+        "title": "Stay Ahead of Renewals",
+        "desc": "Receive timely notifications before any subscription renews so you're never caught off-guard.",
+        "color": "from-warning to-amber-400"
+      },
+      "4": {
+        "title": "Track History",
+        "desc": "Review your complete payment history and spending trends over time.",
+        "color": "from-success to-emerald-400"
+      }
+    },
+    "comingSoon": {
+      "title": "More Power Coming Soon",
+      "desc": "We're constantly building. Here's a sneak peek at what's next for SubTracker users.",
+      "1": {
+        "title": "Comprehensive Expense Tracking",
+        "desc": "Track all your daily expenses, bills, and one-off purchases beyond subscriptions."
+      },
+      "2": {
+        "title": "Custom Categories",
+        "desc": "Create your own categories and subcategories to organize spending exactly how you want."
+      },
+      "3": {
+        "title": "Data Export",
+        "desc": "Export your subscription and payment data to CSV or PDF for your records."
+      },
+      "4": {
+        "title": "Shared Subscriptions",
+        "desc": "Split and track subscriptions shared with family or friends."
+      }
+    },
+    "cta": {
+      "title": "Ready to take control?",
+      "desc": "Join SubTracker today — it's free to get started and takes less than a minute to set up.",
+      "btn": "Sign Up — It's Free"
+    },
+    "footer": {
+      "copyright": "© 2026 SubTracker. Built by Yousef Essawy.",
+      "about": "About",
+      "howTo": "How to Use",
+      "comingSoon": "Coming Soon"
+    }
   }
 }

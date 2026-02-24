@@ -10,6 +10,7 @@ import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import Layout from "@/components/layout/Layout";
 import LoginPage from "@/pages/LoginPage";
 import SignupPage from "@/pages/SignupPage";
+import LandingPage from "@/pages/LandingPage";
 import DashboardPage from "@/pages/DashboardPage";
 import SubscriptionsPage from "@/pages/SubscriptionsPage";
 import SubscriptionFormPage from "@/pages/SubscriptionFormPage";
@@ -19,6 +20,14 @@ import AboutPage from "@/pages/AboutPage";
 import HowToPage from "@/pages/HowToPage";
 import ComingSoonPage from "@/pages/ComingSoonPage";
 
+// Redirect authenticated users away from auth-only pages (login/signup)
+const PublicAuthRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+  if (loading) return null;
+  return user ? <Navigate to="/dashboard" replace /> : children;
+};
+
+// Redirect unauthenticated users away from protected pages
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
   if (loading) {
@@ -31,13 +40,20 @@ const ProtectedRoute = ({ children }) => {
       </div>
     );
   }
-  return user ? children : <Navigate to="/login" />;
+  return user ? children : <Navigate to="/login" replace />;
 };
 
-const PublicRoute = ({ children }) => {
+// Public landing root: authenticated users go to dashboard, unauthenticated see LandingPage
+const RootRoute = () => {
   const { user, loading } = useAuth();
-  if (loading) return null;
-  return user ? <Navigate to="/" /> : children;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background-light dark:bg-background-dark">
+        <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+      </div>
+    );
+  }
+  return user ? <Navigate to="/dashboard" replace /> : <LandingPage />;
 };
 
 const App = () => {
@@ -46,25 +62,28 @@ const App = () => {
       <Router basename="/SubTracker">
         <AuthProvider>
           <Routes>
-            {/* Public Auth Routes */}
+            {/* Public root – landing page for guests, redirect to dashboard for users */}
+            <Route path="/" element={<RootRoute />} />
+
+            {/* Auth Routes */}
             <Route
               path="/login"
               element={
-                <PublicRoute>
+                <PublicAuthRoute>
                   <LoginPage />
-                </PublicRoute>
+                </PublicAuthRoute>
               }
             />
             <Route
               path="/signup"
               element={
-                <PublicRoute>
+                <PublicAuthRoute>
                   <SignupPage />
-                </PublicRoute>
+                </PublicAuthRoute>
               }
             />
 
-            {/* Layout Routes (Public & Protected mixed) */}
+            {/* App shell with sidebar layout for all authenticated & public sub-pages */}
             <Route
               path="/*"
               element={
@@ -73,7 +92,7 @@ const App = () => {
                     <Routes>
                       {/* Protected Routes */}
                       <Route
-                        path="/"
+                        path="/dashboard"
                         element={
                           <ProtectedRoute>
                             <DashboardPage />

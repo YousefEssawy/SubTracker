@@ -236,9 +236,12 @@ const DashboardPage = () => {
       </div>
 
       {/* Charts Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 min-w-0">
         {/* Spending by Category */}
-        <motion.div variants={itemAnim} className="glass-card p-5">
+        <motion.div
+          variants={itemAnim}
+          className="glass-card p-5 w-full min-w-0 overflow-hidden"
+        >
           <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
             {t("dashboard.spendingByCategory")}
           </h3>
@@ -302,7 +305,10 @@ const DashboardPage = () => {
         </motion.div>
 
         {/* Monthly Trend */}
-        <motion.div variants={itemAnim} className="glass-card p-5">
+        <motion.div
+          variants={itemAnim}
+          className="glass-card p-5 w-full min-w-0 overflow-hidden"
+        >
           <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
             {t("dashboard.monthlySpendingTrend")}
           </h3>
