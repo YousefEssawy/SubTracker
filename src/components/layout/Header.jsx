@@ -25,6 +25,7 @@ const Header = ({ onMenuToggle }) => {
   const navigate = useNavigate();
   const [showNotif, setShowNotif] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const notifRef = useRef(null);
   const profileRef = useRef(null);
 
@@ -165,11 +166,12 @@ const Header = ({ onMenuToggle }) => {
                   onClick={() => setShowProfile(!showProfile)}
                   className="flex items-center gap-2 p-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
                 >
-                  {user?.photoURL ? (
+                  {user?.photoURL && !imageError ? (
                     <img
                       src={user.photoURL}
                       alt=""
-                      className="w-8 h-8 rounded-full"
+                      className="w-8 h-8 rounded-full object-cover"
+                      onError={() => setImageError(true)}
                     />
                   ) : (
                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-sm font-bold">
