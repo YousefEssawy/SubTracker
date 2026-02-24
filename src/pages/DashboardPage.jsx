@@ -2,11 +2,12 @@ import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useSubscriptions } from "@/contexts/SubscriptionContext";
+import { useTransactions } from "@/contexts/TransactionContext";
+import BalanceCard from "@/components/finance/BalanceCard";
 import { getCategoryById } from "@/utils/categories";
 import { formatCurrency, convertCurrency } from "@/utils/currencies";
 import {
   getMonthlyEquivalent,
-  getYearlyEquivalent,
   getDaysUntilRenewal,
   formatDate,
 } from "@/utils/dateUtils";
@@ -46,9 +47,43 @@ const CHART_COLORS = [
   "#64748B",
 ];
 
+// Financial Overview widget — reads from TransactionContext
+const FinancialOverview = () => {
+  const { balances } = useTransactions();
+  const hasTx = Object.keys(balances).length > 0;
+  return (
+    <motion.div
+      variants={{ hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } }}
+      className="glass-card p-5"
+    >
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="font-semibold text-gray-900 dark:text-white">
+          Financial Overview
+        </h3>
+        <Link
+          to="/transactions"
+          className="text-sm text-primary hover:underline"
+        >
+          View Transactions
+        </Link>
+      </div>
+      {hasTx ? (
+        <BalanceCard variant="summary" balances={balances} />
+      ) : (
+        <p className="text-sm text-gray-400 text-center py-6">
+          No income or expense transactions yet.{" "}
+          <Link to="/transactions/add" className="text-primary hover:underline">
+            Add one
+          </Link>
+          .
+        </p>
+      )}
+    </motion.div>
+  );
+};
+
 const DashboardPage = () => {
-  const { activeSubscriptions, subscriptions, payments, loading } =
-    useSubscriptions();
+  const { activeSubscriptions, payments, loading } = useSubscriptions();
   const { t } = useTranslation();
   const displayCurrency = "EGP";
 
@@ -206,7 +241,7 @@ const DashboardPage = () => {
             icon: HiOutlineCalendarDays,
             color: "from-warning to-amber-400",
           },
-        ].map((card, i) => (
+        ].map((card) => (
           <motion.div
             key={card.id}
             variants={itemAnim}
@@ -234,6 +269,9 @@ const DashboardPage = () => {
           </motion.div>
         ))}
       </div>
+
+      {/* Financial Overview */}
+      <FinancialOverview />
 
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 min-w-0">

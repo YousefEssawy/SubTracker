@@ -7,6 +7,10 @@ import {
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
+import { SpaceProvider } from "@/contexts/SpaceContext";
+import { CategoryProvider } from "@/contexts/CategoryContext";
+import { TransactionProvider } from "@/contexts/TransactionContext";
+import { RecurrenceProvider } from "@/contexts/RecurrenceContext";
 import Layout from "@/components/layout/Layout";
 import LoginPage from "@/pages/LoginPage";
 import SignupPage from "@/pages/SignupPage";
@@ -19,6 +23,12 @@ import SettingsPage from "@/pages/SettingsPage";
 import AboutPage from "@/pages/AboutPage";
 import HowToPage from "@/pages/HowToPage";
 import ComingSoonPage from "@/pages/ComingSoonPage";
+import SpacesPage from "@/pages/SpacesPage";
+import CategoriesPage from "@/pages/CategoriesPage";
+import TransactionsPage from "@/pages/TransactionsPage";
+import TransactionFormPage from "@/pages/TransactionFormPage";
+import TransactionDetailPage from "@/pages/TransactionDetailPage";
+import RecurrencesPage from "@/pages/RecurrencesPage";
 
 // Redirect authenticated users away from auth-only pages (login/signup)
 const PublicAuthRoute = ({ children }) => {
@@ -83,69 +93,140 @@ const App = () => {
               }
             />
 
-            {/* App shell with sidebar layout for all authenticated & public sub-pages */}
+            {/* App shell with sidebar layout */}
             <Route
               path="/*"
               element={
                 <SubscriptionProvider>
-                  <Layout>
-                    <Routes>
-                      {/* Protected Routes */}
-                      <Route
-                        path="/dashboard"
-                        element={
-                          <ProtectedRoute>
-                            <DashboardPage />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/subscriptions"
-                        element={
-                          <ProtectedRoute>
-                            <SubscriptionsPage />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/subscriptions/add"
-                        element={
-                          <ProtectedRoute>
-                            <SubscriptionFormPage />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/subscriptions/:id"
-                        element={
-                          <ProtectedRoute>
-                            <SubscriptionFormPage />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/history"
-                        element={
-                          <ProtectedRoute>
-                            <HistoryPage />
-                          </ProtectedRoute>
-                        }
-                      />
-                      <Route
-                        path="/settings"
-                        element={
-                          <ProtectedRoute>
-                            <SettingsPage />
-                          </ProtectedRoute>
-                        }
-                      />
+                  <SpaceProvider>
+                    <CategoryProvider>
+                      <TransactionProvider>
+                        <RecurrenceProvider>
+                          <Layout>
+                            <Routes>
+                              {/* Dashboard */}
+                              <Route
+                                path="/dashboard"
+                                element={
+                                  <ProtectedRoute>
+                                    <DashboardPage />
+                                  </ProtectedRoute>
+                                }
+                              />
 
-                      {/* Public Layout Routes */}
-                      <Route path="/about" element={<AboutPage />} />
-                      <Route path="/how-to" element={<HowToPage />} />
-                      <Route path="/coming-soon" element={<ComingSoonPage />} />
-                    </Routes>
-                  </Layout>
+                              {/* Subscriptions */}
+                              <Route
+                                path="/subscriptions"
+                                element={
+                                  <ProtectedRoute>
+                                    <SubscriptionsPage />
+                                  </ProtectedRoute>
+                                }
+                              />
+                              <Route
+                                path="/subscriptions/add"
+                                element={
+                                  <ProtectedRoute>
+                                    <SubscriptionFormPage />
+                                  </ProtectedRoute>
+                                }
+                              />
+                              <Route
+                                path="/subscriptions/:id"
+                                element={
+                                  <ProtectedRoute>
+                                    <SubscriptionFormPage />
+                                  </ProtectedRoute>
+                                }
+                              />
+                              <Route
+                                path="/history"
+                                element={
+                                  <ProtectedRoute>
+                                    <HistoryPage />
+                                  </ProtectedRoute>
+                                }
+                              />
+                              <Route
+                                path="/settings"
+                                element={
+                                  <ProtectedRoute>
+                                    <SettingsPage />
+                                  </ProtectedRoute>
+                                }
+                              />
+
+                              {/* ── Finance Routes ── */}
+                              <Route
+                                path="/spaces"
+                                element={
+                                  <ProtectedRoute>
+                                    <SpacesPage />
+                                  </ProtectedRoute>
+                                }
+                              />
+                              <Route
+                                path="/categories"
+                                element={
+                                  <ProtectedRoute>
+                                    <CategoriesPage />
+                                  </ProtectedRoute>
+                                }
+                              />
+                              <Route
+                                path="/transactions"
+                                element={
+                                  <ProtectedRoute>
+                                    <TransactionsPage />
+                                  </ProtectedRoute>
+                                }
+                              />
+                              <Route
+                                path="/transactions/add"
+                                element={
+                                  <ProtectedRoute>
+                                    <TransactionFormPage />
+                                  </ProtectedRoute>
+                                }
+                              />
+                              <Route
+                                path="/transactions/:id/edit"
+                                element={
+                                  <ProtectedRoute>
+                                    <TransactionFormPage />
+                                  </ProtectedRoute>
+                                }
+                              />
+                              <Route
+                                path="/transactions/:id"
+                                element={
+                                  <ProtectedRoute>
+                                    <TransactionDetailPage />
+                                  </ProtectedRoute>
+                                }
+                              />
+                              <Route
+                                path="/recurrences"
+                                element={
+                                  <ProtectedRoute>
+                                    <RecurrencesPage />
+                                  </ProtectedRoute>
+                                }
+                              />
+
+                              {/* Public Layout Routes */}
+                              <Route path="/about" element={<AboutPage />} />
+                              <Route path="/how-to" element={<HowToPage />} />
+                              <Route
+                                path="/coming-soon"
+                                element={<ComingSoonPage />}
+                              />
+                            </Routes>
+                          </Layout>
+                        </RecurrenceProvider>
+                      </TransactionProvider>
+                    </CategoryProvider>
+                  </SpaceProvider>
                 </SubscriptionProvider>
               }
             />

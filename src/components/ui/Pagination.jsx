@@ -1,0 +1,49 @@
+const Pagination = ({
+  hasNext,
+  hasPrev,
+  goNext,
+  goPrev,
+  pageSize,
+  setPageSize,
+  pageSizeOptions = [10, 25, 50],
+}) => {
+  return (
+    <div className="flex items-center justify-between px-1 py-3 border-t border-gray-200 dark:border-gray-800">
+      {/* Page size selector */}
+      <div className="flex items-center gap-2">
+        <span className="text-xs text-gray-500 dark:text-gray-400">Rows:</span>
+        <select
+          value={pageSize}
+          onChange={(e) => setPageSize(Number(e.target.value))}
+          className="text-xs px-2 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/40"
+        >
+          {pageSizeOptions.map((s) => (
+            <option key={s} value={s}>
+              {s}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Navigation */}
+      <div className="flex items-center gap-2">
+        <button
+          onClick={goPrev}
+          disabled={!hasPrev}
+          className="px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        >
+          ← Prev
+        </button>
+        <button
+          onClick={goNext}
+          disabled={!hasNext}
+          className="px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        >
+          Next →
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default Pagination;

@@ -7,7 +7,12 @@
     "comingSoon": "Coming Soon",
     "howToUse": "How to Use",
     "about": "About",
-    "addSubscription": "Add Subscription"
+    "addSubscription": "Add Subscription",
+    "spaces": "Spaces",
+    "categories": "Categories",
+    "transactions": "Transactions",
+    "recurrences": "Recurrences",
+    "finance": "Finance"
   },
   "header": {
     "upcomingRenewals": "Upcoming Renewals",
@@ -264,6 +269,88 @@
       "about": "About",
       "howTo": "How to Use",
       "comingSoon": "Coming Soon"
+    }
+  },
+  "finance": {
+    "spaces": {
+      "title": "Spaces",
+      "addSpace": "Add Space",
+      "editSpace": "Edit Space",
+      "noSpaces": "No spaces yet",
+      "createFirst": "Create your first space",
+      "deleteConfirm": "Delete this space?",
+      "deleteBlocked": "Cannot delete — transactions are linked to this space.",
+      "name": "Name",
+      "icon": "Icon",
+      "color": "Color"
+    },
+    "categories": {
+      "title": "Categories",
+      "addCategory": "Add Category",
+      "editCategory": "Edit Category",
+      "noCategories": "No categories yet",
+      "createFirst": "Create your first category",
+      "income": "Income",
+      "expense": "Expense",
+      "deleteBlocked": "Cannot delete — transactions are linked to this category.",
+      "typeImmutable": "Category type cannot be changed after creation."
+    },
+    "transactions": {
+      "title": "Transactions",
+      "addTransaction": "Add Transaction",
+      "editTransaction": "Edit Transaction",
+      "noTransactions": "No transactions yet",
+      "noMatchingFilters": "No transactions match the current filters.",
+      "createFirst": "Record your first income or expense",
+      "amount": "Amount",
+      "currency": "Currency",
+      "date": "Date",
+      "type": "Type",
+      "space": "Space",
+      "category": "Category",
+      "notes": "Notes",
+      "tags": "Tags",
+      "attachment": "Attachment",
+      "saving": "Saving…",
+      "backToList": "Back to Transactions"
+    },
+    "recurrences": {
+      "title": "Recurrences",
+      "addRecurrence": "Add Recurrence",
+      "noRecurrences": "No recurrences yet",
+      "createFirst": "Set up recurring transactions to automate tracking.",
+      "pattern": "Pattern",
+      "interval": "Every",
+      "startDate": "Start Date",
+      "endDate": "End Date",
+      "active": "Active",
+      "paused": "Paused",
+      "pause": "Pause",
+      "reactivate": "Reactivate",
+      "deleteConfirm": "Delete Recurrence?",
+      "deleteNote": "Existing generated transactions will be preserved."
+    },
+    "balance": {
+      "title": "Balance",
+      "financialOverview": "Financial Overview",
+      "viewTransactions": "View Transactions",
+      "noData": "No financial data yet.",
+      "income": "Income",
+      "expenses": "Expenses"
+    },
+    "filters": {
+      "allSpaces": "All Spaces",
+      "allCurrencies": "All Currencies",
+      "all": "All",
+      "income": "Income",
+      "expense": "Expense",
+      "clear": "Clear",
+      "more": "More",
+      "less": "Less",
+      "tag": "Tag",
+      "tagPlaceholder": "Filter by tag…",
+      "from": "From",
+      "to": "To"
     }
   }
 }

@@ -108,3 +108,74 @@ export const getYearlyEquivalent = (
 ) => {
   return getMonthlyEquivalent(price, billingCycle, customCycleDays) * 12;
 };
+
+// ── Recurrence Helpers ──
+
+/**
+ * Advance a date by the given recurrence pattern and interval.
+ * @param {string|Date} currentDate
+ * @param {"Weekly"|"Monthly"|"Yearly"|"Custom"} pattern
+ * @param {number} interval  e.g. 2 → "every 2 weeks"
+ * @returns {Date}
+ */
+export const calculateNextExecutionDate = (
+  currentDate,
+  pattern,
+  interval = 1,
+) => {
+  const d =
+    typeof currentDate === "string" ? parseISO(currentDate) : currentDate;
+  switch (pattern) {
+    case "Weekly":
+      return addDays(d, 7 * interval);
+    case "Monthly":
+      return addMonths(d, interval);
+    case "Yearly":
+      return addYears(d, interval);
+    case "Custom":
+      return addDays(d, interval);
+    default:
+      return addMonths(d, interval);
+  }
+};
+
+/**
+ * Count how many occurrences would have happened between startDate and today.
+ */
+export const countRetroactiveOccurrences = (
+  startDate,
+  pattern,
+  interval = 1,
+) => {
+  const start = typeof startDate === "string" ? parseISO(startDate) : startDate;
+  const today = new Date();
+  today.setHours(23, 59, 59, 999);
+  let count = 0;
+  let cursor = start;
+  while (isBefore(cursor, today) && count < 500) {
+    count++;
+    cursor = calculateNextExecutionDate(cursor, pattern, interval);
+  }
+  return count;
+};
+
+/**
+ * Generate an array of retroactive dates from startDate up to today.
+ */
+export const generateRetroactiveDates = (
+  startDate,
+  pattern,
+  interval = 1,
+  maxCount = 120,
+) => {
+  const start = typeof startDate === "string" ? parseISO(startDate) : startDate;
+  const today = new Date();
+  today.setHours(23, 59, 59, 999);
+  const dates = [];
+  let cursor = start;
+  while (isBefore(cursor, today) && dates.length < maxCount) {
+    dates.push(format(cursor, "yyyy-MM-dd"));
+    cursor = calculateNextExecutionDate(cursor, pattern, interval);
+  }
+  return dates;
+};

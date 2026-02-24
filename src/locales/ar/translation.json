@@ -7,7 +7,12 @@
     "comingSoon": "قريباً",
     "howToUse": "كيفية الاستخدام",
     "about": "حول التطبيق",
-    "addSubscription": "إضافة اشتراك"
+    "addSubscription": "إضافة اشتراك",
+    "spaces": "المساحات",
+    "categories": "الفئات",
+    "transactions": "المعاملات",
+    "recurrences": "المتكررة",
+    "finance": "المالية"
   },
   "header": {
     "upcomingRenewals": "التجديدات القادمة",
@@ -260,6 +265,88 @@
       "about": "حول",
       "howTo": "كيفية الاستخدام",
       "comingSoon": "قريباً"
+    }
+  },
+  "finance": {
+    "spaces": {
+      "title": "المساحات",
+      "addSpace": "إضافة مساحة",
+      "editSpace": "تعديل المساحة",
+      "noSpaces": "لا توجد مساحات بعد",
+      "createFirst": "أنشئ مساحتك الأولى",
+      "deleteConfirm": "حذف هذه المساحة؟",
+      "deleteBlocked": "لا يمكن الحذف — توجد معاملات مرتبطة بهذه المساحة.",
+      "name": "الاسم",
+      "icon": "الأيقونة",
+      "color": "اللون"
+    },
+    "categories": {
+      "title": "الفئات",
+      "addCategory": "إضافة فئة",
+      "editCategory": "تعديل الفئة",
+      "noCategories": "لا توجد فئات بعد",
+      "createFirst": "أنشئ فئتك الأولى",
+      "income": "دخل",
+      "expense": "مصروف",
+      "deleteBlocked": "لا يمكن الحذف — توجد معاملات مرتبطة بهذه الفئة.",
+      "typeImmutable": "لا يمكن تغيير نوع الفئة بعد الإنشاء."
+    },
+    "transactions": {
+      "title": "المعاملات",
+      "addTransaction": "إضافة معاملة",
+      "editTransaction": "تعديل المعاملة",
+      "noTransactions": "لا توجد معاملات بعد",
+      "noMatchingFilters": "لا توجد معاملات تطابق الفلاتر الحالية.",
+      "createFirst": "سجّل أول دخل أو مصروف",
+      "amount": "المبلغ",
+      "currency": "العملة",
+      "date": "التاريخ",
+      "type": "النوع",
+      "space": "المساحة",
+      "category": "الفئة",
+      "notes": "ملاحظات",
+      "tags": "العلامات",
+      "attachment": "المرفق",
+      "saving": "جارٍ الحفظ…",
+      "backToList": "العودة إلى المعاملات"
+    },
+    "recurrences": {
+      "title": "المتكررة",
+      "addRecurrence": "إضافة تكرار",
+      "noRecurrences": "لا توجد معاملات متكررة بعد",
+      "createFirst": "قم بإعداد معاملات متكررة لأتمتة التتبع.",
+      "pattern": "النمط",
+      "interval": "كل",
+      "startDate": "تاريخ البدء",
+      "endDate": "تاريخ الانتهاء",
+      "active": "نشط",
+      "paused": "متوقف",
+      "pause": "إيقاف",
+      "reactivate": "إعادة تفعيل",
+      "deleteConfirm": "حذف التكرار؟",
+      "deleteNote": "المعاملات المُنشأة سابقاً ستبقى محفوظة."
+    },
+    "balance": {
+      "title": "الرصيد",
+      "financialOverview": "النظرة المالية العامة",
+      "viewTransactions": "عرض المعاملات",
+      "noData": "لا توجد بيانات مالية بعد.",
+      "income": "الدخل",
+      "expenses": "المصروفات"
+    },
+    "filters": {
+      "allSpaces": "جميع المساحات",
+      "allCurrencies": "جميع العملات",
+      "all": "الكل",
+      "income": "دخل",
+      "expense": "مصروف",
+      "clear": "مسح",
+      "more": "المزيد",
+      "less": "أقل",
+      "tag": "العلامة",
+      "tagPlaceholder": "تصفية حسب العلامة…",
+      "from": "من",
+      "to": "إلى"
     }
   }
 }

@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   HiOutlineHome,
   HiOutlineCreditCard,
@@ -8,18 +8,19 @@ import {
   HiOutlinePlusCircle,
   HiOutlineInformationCircle,
   HiOutlineBookOpen,
-  HiOutlineSparkles,
   HiOutlineXMark,
+  HiOutlineRectangleGroup,
+  HiOutlineTag,
+  HiOutlineBanknotes,
+  HiOutlineArrowPath,
 } from "react-icons/hi2";
 import { useTranslation } from "react-i18next";
 import logo from "@/assets/logo/main-logo.png";
 
-const Sidebar = ({ isOpen, onClose }) => {
-  const location = useLocation();
-  const { t, i18n } = useTranslation();
-  const isRtl = i18n.language === "ar";
+// ─── Nav items defined outside the component to avoid re-creation on render ──
 
-  const navItems = [
+const makeNavItems = (t) => ({
+  main: [
     {
       path: "/dashboard",
       label: t("sidebar.dashboard", "Dashboard"),
@@ -35,15 +36,34 @@ const Sidebar = ({ isOpen, onClose }) => {
       label: t("sidebar.history", "History"),
       icon: HiOutlineClock,
     },
+  ],
+  finance: [
+    {
+      path: "/transactions",
+      label: t("sidebar.transactions", "Transactions"),
+      icon: HiOutlineBanknotes,
+    },
+    {
+      path: "/spaces",
+      label: t("sidebar.spaces", "Spaces"),
+      icon: HiOutlineRectangleGroup,
+    },
+    {
+      path: "/categories",
+      label: t("sidebar.categories", "Categories"),
+      icon: HiOutlineTag,
+    },
+    {
+      path: "/recurrences",
+      label: t("sidebar.recurrences", "Recurrences"),
+      icon: HiOutlineArrowPath,
+    },
+  ],
+  meta: [
     {
       path: "/settings",
       label: t("sidebar.settings", "Settings"),
       icon: HiOutlineCog6Tooth,
-    },
-    {
-      path: "/coming-soon",
-      label: t("sidebar.comingSoon", "Coming Soon"),
-      icon: HiOutlineSparkles,
     },
     {
       path: "/how-to",
@@ -55,52 +75,102 @@ const Sidebar = ({ isOpen, onClose }) => {
       label: t("sidebar.about", "About"),
       icon: HiOutlineInformationCircle,
     },
-  ];
+  ],
+});
 
-  const NavLinks = ({ onClick }) =>
-    navItems.map((item) => {
-      const isActive = location.pathname === item.path;
-      return (
-        <Link
-          key={item.path}
-          to={item.path}
-          onClick={onClick}
-          className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200
-            ${
-              isActive
-                ? "bg-primary/10 text-primary dark:text-primary-light"
-                : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-200"
-            }`}
-        >
-          <item.icon
-            className={`w-5 h-5 flex-shrink-0 ${isActive ? "text-primary" : ""}`}
-          />
-          <span className="truncate">{item.label}</span>
-        </Link>
-      );
-    });
+// ─── Individual nav link ──────────────────────────────────────────────────────
+const NavLink = ({ item, onClick, isActive }) => (
+  <Link
+    to={item.path}
+    onClick={onClick}
+    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200
+      ${
+        isActive
+          ? "bg-primary/10 text-primary dark:text-primary-light"
+          : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-200"
+      }`}
+  >
+    <item.icon
+      className={`w-5 h-5 flex-shrink-0 ${isActive ? "text-primary" : ""}`}
+    />
+    <span className="truncate">{item.label}</span>
+  </Link>
+);
 
-  const AddButton = ({ onClick }) => (
-    <div className="p-4 border-t border-gray-200 dark:border-gray-800">
-      <Link
-        to="/subscriptions/add"
+// ─── Section of nav links ─────────────────────────────────────────────────────
+const NavSection = ({ title, items, onClick, pathname }) => (
+  <div className="mb-2">
+    {title && (
+      <p className="px-4 pt-4 pb-1 text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
+        {title}
+      </p>
+    )}
+    {items.map((item) => (
+      <NavLink
+        key={item.path}
+        item={item}
         onClick={onClick}
-        className="flex items-center justify-center gap-2 w-full btn-primary"
-      >
-        <HiOutlinePlusCircle className="w-5 h-5" />
-        {t("sidebar.addSubscription", "Add Subscription")}
-      </Link>
-    </div>
+        isActive={
+          pathname === item.path ||
+          (item.path !== "/dashboard" && pathname.startsWith(item.path))
+        }
+      />
+    ))}
+  </div>
+);
+
+// ─── Add Subscription button ──────────────────────────────────────────────────
+const AddButton = ({ onClick, label }) => (
+  <div className="p-4 border-t border-gray-200 dark:border-gray-800">
+    <Link
+      to="/subscriptions/add"
+      onClick={onClick}
+      className="flex items-center justify-center gap-2 w-full btn-primary"
+    >
+      <HiOutlinePlusCircle className="w-5 h-5" />
+      {label}
+    </Link>
+  </div>
+);
+
+// ─── Sidebar component ────────────────────────────────────────────────────────
+const Sidebar = ({ isOpen, onClose }) => {
+  const location = useLocation();
+  const { t, i18n } = useTranslation();
+  const isRtl = i18n.language === "ar";
+
+  const navItems = makeNavItems(t);
+  const addLabel = t("sidebar.addSubscription", "Add Subscription");
+
+  const NavContent = ({ onClick }) => (
+    <>
+      <NavSection
+        items={navItems.main}
+        onClick={onClick}
+        pathname={location.pathname}
+      />
+      <NavSection
+        title={t("sidebar.finance", "Finance")}
+        items={navItems.finance}
+        onClick={onClick}
+        pathname={location.pathname}
+      />
+      <NavSection
+        items={navItems.meta}
+        onClick={onClick}
+        pathname={location.pathname}
+      />
+    </>
   );
 
   return (
     <>
       {/* Desktop Sidebar — docked, always visible on lg+ */}
       <aside className="hidden lg:flex fixed start-0 top-16 bottom-0 w-64 flex-col bg-white dark:bg-surface-dark border-e border-gray-200 dark:border-gray-800 z-30">
-        <nav className="flex-1 py-6 px-3 space-y-1 overflow-y-auto">
-          <NavLinks onClick={undefined} />
+        <nav className="flex-1 py-4 px-3 overflow-y-auto">
+          <NavContent onClick={undefined} />
         </nav>
-        <AddButton onClick={undefined} />
+        <AddButton onClick={undefined} label={addLabel} />
       </aside>
 
       {/* Mobile Sidebar — slide-out drawer overlay */}
@@ -139,11 +209,11 @@ const Sidebar = ({ isOpen, onClose }) => {
                 </button>
               </div>
 
-              <nav className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
-                <NavLinks onClick={onClose} />
+              <nav className="flex-1 py-4 px-3 overflow-y-auto">
+                <NavContent onClick={onClose} />
               </nav>
 
-              <AddButton onClick={onClose} />
+              <AddButton onClick={onClose} label={addLabel} />
             </motion.aside>
           </>
         )}
