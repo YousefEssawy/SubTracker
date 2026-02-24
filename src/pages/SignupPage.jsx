@@ -12,8 +12,13 @@ import {
 } from "react-icons/hi2";
 import { useTranslation } from "react-i18next";
 
+import lightLogo from "@/assets/logo/light-mode.png";
+import darkLogo from "@/assets/logo/dark-mode.png";
+import { useTheme } from "@/contexts/ThemeContext";
+
 const SignupPage = () => {
   const { t } = useTranslation();
+  const { theme } = useTheme();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -67,8 +72,13 @@ const SignupPage = () => {
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-md"
       >
+        {/* Logo */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold gradient-text mb-2">SubTracker</h1>
+          <img
+            src={theme === "light" ? lightLogo : darkLogo}
+            alt="SubTracker"
+            className="h-20 mx-auto mb-2"
+          />
           <p className="text-gray-500 dark:text-gray-400">
             {t("signup.subtitle")}
           </p>

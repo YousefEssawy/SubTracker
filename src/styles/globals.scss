@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 @layer base {
   * {
@@ -22,6 +22,10 @@
     overflow-x: hidden;
     @apply bg-background-light text-gray-900 dark:bg-background-dark dark:text-gray-100;
     transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  html[lang="ar"] body {
+    font-family: 'Cairo', 'Inter', system-ui, sans-serif;
   }
 
   ::-webkit-scrollbar {
