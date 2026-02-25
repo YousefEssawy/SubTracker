@@ -8,6 +8,7 @@ import {
   isBefore,
   parseISO,
 } from "date-fns";
+import i18n from "@/i18n";
 
 export const BILLING_CYCLES = [
   { id: "weekly", name: "Weekly", days: 7 },
@@ -65,13 +66,22 @@ export const isPastDue = (renewalDate) => {
 export const formatDate = (date) => {
   if (!date) return "";
   const d = typeof date === "string" ? parseISO(date) : date;
-  return format(d, "MMM dd, yyyy");
+  const locale = i18n.language || "en-US";
+  return new Intl.DateTimeFormat(locale, {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(d);
 };
 
 export const formatDateShort = (date) => {
   if (!date) return "";
   const d = typeof date === "string" ? parseISO(date) : date;
-  return format(d, "MMM dd");
+  const locale = i18n.language || "en-US";
+  return new Intl.DateTimeFormat(locale, {
+    month: "short",
+    day: "numeric",
+  }).format(d);
 };
 
 export const toDateInputValue = (date) => {

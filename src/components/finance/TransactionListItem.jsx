@@ -1,21 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { formatDate } from "@/utils/dateUtils";
+import { formatCurrency } from "@/utils/currencies";
 import { useSpaces } from "@/contexts/SpaceContext";
 import { useCategories } from "@/contexts/CategoryContext";
-
-const formatAmount = (amount, currency) => {
-  try {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency,
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(amount);
-  } catch {
-    return `${currency} ${amount.toFixed(2)}`;
-  }
-};
 
 const TransactionListItem = ({ transaction }) => {
   const navigate = useNavigate();
@@ -77,10 +65,7 @@ const TransactionListItem = ({ transaction }) => {
           }`}
         >
           {isIncome ? "+" : "-"}
-          {formatAmount(transaction.amount, transaction.currency)}{" "}
-          <span className="text-xs text-gray-400 font-normal">
-            {transaction.currency}
-          </span>
+          {formatCurrency(transaction.amount, transaction.currency)}
         </p>
         <span
           className={`inline-block mt-0.5 text-xs px-2 py-0.5 rounded-full font-medium ${

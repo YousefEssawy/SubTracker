@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useSpaces } from "@/contexts/SpaceContext";
 import { CURRENCIES } from "@/utils/currencies";
 import { HiOutlineXMark, HiOutlineFunnel } from "react-icons/hi2";
@@ -18,6 +19,7 @@ const TypeButton = ({ label, active, onClick, color }) => (
 
 const FilterBar = ({ filters, setFilters }) => {
   const { spaces } = useSpaces();
+  const { t } = useTranslation();
   const [showMore, setShowMore] = useState(false);
 
   const hasActiveFilters =
@@ -58,7 +60,9 @@ const FilterBar = ({ filters, setFilters }) => {
           onChange={(e) => updateFilter("spaceId", e.target.value || undefined)}
           className="text-sm px-3 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/40"
         >
-          <option value="">All Spaces</option>
+          <option value="">
+            {t("finance.filters.allSpaces", "All Spaces")}
+          </option>
           {spaces.map((s) => (
             <option key={s.id} value={s.id}>
               {s.icon} {s.name}
@@ -69,26 +73,25 @@ const FilterBar = ({ filters, setFilters }) => {
         {/* Type toggle */}
         <div className="flex gap-1.5">
           <TypeButton
-            label="All"
+            label={t("finance.filters.all", "All")}
             active={!filters.type}
             onClick={() => updateFilter("type", undefined)}
             color="bg-primary"
           />
           <TypeButton
-            label="Income"
+            label={t("finance.categories.income", "Income")}
             active={filters.type === "Income"}
             onClick={() => updateFilter("type", "Income")}
             color="bg-emerald-500"
           />
           <TypeButton
-            label="Expense"
+            label={t("finance.categories.expense", "Expense")}
             active={filters.type === "Expense"}
             onClick={() => updateFilter("type", "Expense")}
             color="bg-red-500"
           />
         </div>
 
-        {/* Currency dropdown */}
         <select
           value={filters.currency || ""}
           onChange={(e) =>
@@ -96,7 +99,9 @@ const FilterBar = ({ filters, setFilters }) => {
           }
           className="text-sm px-3 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/40"
         >
-          <option value="">All Currencies</option>
+          <option value="">
+            {t("finance.filters.allCurrencies", "All Currencies")}
+          </option>
           {CURRENCIES.map((c) => (
             <option key={c.code} value={c.code}>
               {c.symbol} {c.code}
@@ -109,7 +114,9 @@ const FilterBar = ({ filters, setFilters }) => {
           onClick={() => setShowMore(!showMore)}
           className="text-xs text-primary hover:underline ml-auto"
         >
-          {showMore ? "Less ▲" : "More ▼"}
+          {showMore
+            ? t("finance.filters.less", "Less ▲")
+            : t("finance.filters.more", "More ▼")}
         </button>
 
         {/* Clear */}
@@ -118,7 +125,8 @@ const FilterBar = ({ filters, setFilters }) => {
             onClick={clearAll}
             className="flex items-center gap-1 text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
           >
-            <HiOutlineXMark className="w-3.5 h-3.5" /> Clear
+            <HiOutlineXMark className="w-3.5 h-3.5" />{" "}
+            {t("finance.filters.clear", "Clear")}
           </button>
         )}
       </div>
@@ -129,13 +137,16 @@ const FilterBar = ({ filters, setFilters }) => {
           {/* Tag filter */}
           <div className="flex-1 min-w-[140px]">
             <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
-              Tag
+              {t("finance.filters.tag", "Tag")}
             </label>
             <input
               type="text"
               value={filters.tag || ""}
               onChange={(e) => updateFilter("tag", e.target.value || undefined)}
-              placeholder="Filter by tag…"
+              placeholder={t(
+                "finance.filters.tagPlaceholder",
+                "Filter by tag…",
+              )}
               className="w-full text-sm px-3 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/40"
             />
           </div>
@@ -143,7 +154,7 @@ const FilterBar = ({ filters, setFilters }) => {
           {/* Date range */}
           <div className="min-w-[140px]">
             <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
-              From
+              {t("finance.filters.from", "From")}
             </label>
             <input
               type="date"
@@ -154,7 +165,7 @@ const FilterBar = ({ filters, setFilters }) => {
           </div>
           <div className="min-w-[140px]">
             <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
-              To
+              {t("finance.filters.to", "To")}
             </label>
             <input
               type="date"

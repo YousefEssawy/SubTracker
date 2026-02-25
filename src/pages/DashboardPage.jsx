@@ -50,6 +50,7 @@ const CHART_COLORS = [
 // Financial Overview widget — reads from TransactionContext
 const FinancialOverview = () => {
   const { balances } = useTransactions();
+  const { t } = useTranslation();
   const hasTx = Object.keys(balances).length > 0;
   return (
     <motion.div
@@ -58,22 +59,25 @@ const FinancialOverview = () => {
     >
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-semibold text-gray-900 dark:text-white">
-          Financial Overview
+          {t("finance.balance.financialOverview", "Financial Overview")}
         </h3>
         <Link
           to="/transactions"
           className="text-sm text-primary hover:underline"
         >
-          View Transactions
+          {t("finance.balance.viewTransactions", "View Transactions")}
         </Link>
       </div>
       {hasTx ? (
         <BalanceCard variant="summary" balances={balances} />
       ) : (
         <p className="text-sm text-gray-400 text-center py-6">
-          No income or expense transactions yet.{" "}
+          {t(
+            "dashboard.noTransactionsStats",
+            "No income or expense transactions yet.",
+          )}{" "}
           <Link to="/transactions/add" className="text-primary hover:underline">
-            Add one
+            {t("finance.transactions.addTransaction", "Add one")}
           </Link>
           .
         </p>
@@ -84,7 +88,7 @@ const FinancialOverview = () => {
 
 const DashboardPage = () => {
   const { activeSubscriptions, payments, loading } = useSubscriptions();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const displayCurrency = "EGP";
 
   const stats = useMemo(() => {
@@ -143,16 +147,17 @@ const DashboardPage = () => {
   const monthlyTrendData = useMemo(() => {
     const months = [];
     const now = new Date();
+    const currentLang = i18n.language || "en";
     for (let i = 11; i >= 0; i--) {
       const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
       months.push({
-        month: d.toLocaleDateString("en-US", { month: "short" }),
+        month: d.toLocaleDateString(currentLang, { month: "short" }),
         spending: 0,
       });
     }
     payments.forEach((p) => {
       const pd = new Date(p.paidDate);
-      const monthLabel = pd.toLocaleDateString("en-US", { month: "short" });
+      const monthLabel = pd.toLocaleDateString(currentLang, { month: "short" });
       const item = months.find((m) => m.month === monthLabel);
       if (item) {
         item.spending += convertCurrency(
@@ -170,7 +175,13 @@ const DashboardPage = () => {
       });
     }
     return months;
-  }, [payments, activeSubscriptions, displayCurrency, stats.totalMonthly]);
+  }, [
+    payments,
+    activeSubscriptions,
+    displayCurrency,
+    stats.totalMonthly,
+    i18n.language,
+  ]);
 
   if (loading) {
     return (

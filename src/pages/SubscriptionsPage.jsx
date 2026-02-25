@@ -228,7 +228,11 @@ const SubscriptionsPage = () => {
                           </span>
                         </div>
                         <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                          {cat.name} · {sub.billingCycle}
+                          {cat.name} ·{" "}
+                          {t(
+                            `billingCycle.${sub.billingCycle}`,
+                            sub.billingCycle,
+                          )}
                           <br />
                           {t("subscriptions.renews")}{" "}
                           {formatDate(sub.renewalDate)}
@@ -242,7 +246,8 @@ const SubscriptionsPage = () => {
                           {formatCurrency(sub.price, sub.currency)}
                         </p>
                         <p className="text-xs text-gray-400">
-                          {formatCurrency(monthly, sub.currency)}/mo
+                          {formatCurrency(monthly, sub.currency)}/
+                          {t("common.mo", "mo")}
                         </p>
                       </div>
                       <div className="flex items-center gap-1">

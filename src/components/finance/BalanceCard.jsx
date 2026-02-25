@@ -1,5 +1,6 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
 import { HiOutlineBanknotes } from "react-icons/hi2";
+import { useTranslation } from "react-i18next";
 
 const currencySymbolMap = {
   EGP: "E£",
@@ -36,6 +37,7 @@ const fmt = (value) => {
 const CurrencyBlock = ({ currency, data, compact }) => {
   const symbol = currencySymbolMap[currency] || currency;
   const isPositive = data.balance >= 0;
+  const { t } = useTranslation();
 
   if (compact) {
     return (
@@ -76,7 +78,7 @@ const CurrencyBlock = ({ currency, data, compact }) => {
       <div className="grid grid-cols-2 gap-3">
         <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl p-3">
           <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mb-0.5">
-            Income
+            {t("finance.balance.income", "Income")}
           </p>
           <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">
             {symbol} {fmt(data.income, currency)}
@@ -84,7 +86,7 @@ const CurrencyBlock = ({ currency, data, compact }) => {
         </div>
         <div className="bg-red-50 dark:bg-red-900/20 rounded-xl p-3">
           <p className="text-xs text-red-500 dark:text-red-400 font-medium mb-0.5">
-            Expenses
+            {t("finance.balance.expenses", "Expense")}
           </p>
           <p className="text-sm font-semibold text-red-600 dark:text-red-300">
             {symbol} {fmt(data.expense, currency)}
@@ -104,12 +106,15 @@ const CurrencyBlock = ({ currency, data, compact }) => {
  */
 const BalanceCard = ({ variant = "summary", balances = {} }) => {
   const currencies = Object.keys(balances);
+  const { t } = useTranslation();
 
   if (currencies.length === 0) {
     if (variant === "contextual") return null;
     return (
       <div className="bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-gray-800 p-5 mb-5 text-center">
-        <p className="text-sm text-gray-400">No financial data yet.</p>
+        <p className="text-sm text-gray-400">
+          {t("finance.balance.noData", "No financial data yet.")}
+        </p>
       </div>
     );
   }
@@ -118,7 +123,7 @@ const BalanceCard = ({ variant = "summary", balances = {} }) => {
     return (
       <div className="bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-gray-800 px-5 py-4 mb-4 shadow-sm">
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
-          Balance
+          {t("finance.balance.title", "Balance")}
         </p>
         <AnimatePresence mode="wait">
           {currencies.map((cur) => (

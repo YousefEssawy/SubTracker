@@ -1,3 +1,4 @@
+import i18n from "@/i18n";
 export const CURRENCIES = [
   { code: "EGP", name: "Egyptian Pound", symbol: "E£" },
   { code: "USD", name: "US Dollar", symbol: "$" },
@@ -26,7 +27,9 @@ export const convertCurrency = (amount, fromCurrency, toCurrency) => {
 };
 
 export const formatCurrency = (amount, currencyCode = "EGP") => {
-  const currency = CURRENCIES.find((c) => c.code === currencyCode);
-  const symbol = currency ? currency.symbol : currencyCode;
-  return `${symbol} ${amount.toFixed(2)}`;
+  const locale = i18n.language || "en-US";
+  return new Intl.NumberFormat(locale, {
+    style: "currency",
+    currency: currencyCode,
+  }).format(amount);
 };

@@ -12,6 +12,7 @@ import { CURRENCIES } from "@/utils/currencies";
 import { toDateInputValue } from "@/utils/dateUtils";
 import TagInput from "@/components/finance/TagInput";
 import FileUpload from "@/components/finance/FileUpload";
+import { useTranslation } from "react-i18next";
 
 const TransactionFormPage = () => {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ const TransactionFormPage = () => {
   const { addTransaction, updateTransaction } = useTransactions();
   const { spaces } = useSpaces();
   const { incomeCategories, expenseCategories } = useCategories();
+  const { t } = useTranslation();
 
   const isEditMode = Boolean(id) && location.pathname.includes("/edit");
 
@@ -72,7 +74,9 @@ const TransactionFormPage = () => {
         }
       })
       .catch(() => {
-        toast.error("Failed to load transaction.");
+        toast.error(
+          t("finance.transactions.loadError", "Failed to load transaction."),
+        );
         navigate("/transactions");
       })
       .finally(() => setFetchLoading(false));
@@ -133,7 +137,9 @@ const TransactionFormPage = () => {
           data.attachmentMeta = meta;
         }
         await updateTransaction(id, data);
-        toast.success("Transaction updated!");
+        toast.success(
+          t("finance.transactions.updated", "Transaction updated!"),
+        );
       } else {
         // Create first, then upload if file selected
         const result = await addTransaction(data);
@@ -151,15 +157,21 @@ const TransactionFormPage = () => {
             });
           } catch {
             toast.error(
-              "Transaction saved but attachment upload failed. You can attach it later.",
+              t(
+                "finance.transactions.attachmentError",
+                "Transaction saved but attachment upload failed. You can attach it later.",
+              ),
             );
           }
         }
-        toast.success("Transaction added!");
+        toast.success(t("finance.transactions.added", "Transaction added!"));
       }
       navigate("/transactions");
     } catch (err) {
-      toast.error(err.message || "Failed to save transaction.");
+      toast.error(
+        err.message ||
+          t("finance.transactions.saveError", "Failed to save transaction."),
+      );
     } finally {
       setLoading(false);
     }
@@ -191,7 +203,11 @@ const TransactionFormPage = () => {
       </button>
 
       <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-7">
-        {isEditMode ? "Edit Transaction" : "Add Transaction"}
+        {isEditMode
+          ? t("finance.transactions.editTransaction", "Edit Transaction")
+          : type === "Income"
+            ? t("finance.transactions.addIncome", "Add Income")
+            : t("finance.transactions.addExpense", "Add Expense")}
       </h1>
 
       <form onSubmit={handleSubmit} className="space-y-5">
@@ -378,10 +394,12 @@ const TransactionFormPage = () => {
           className="w-full py-3 rounded-xl btn-primary font-medium disabled:opacity-50 mt-2"
         >
           {loading
-            ? "Saving…"
+            ? t("finance.transactions.saving", "Saving…")
             : isEditMode
-              ? "Save Changes"
-              : "Add Transaction"}
+              ? t("finance.transactions.saveChanges", "Save Changes")
+              : type === "Income"
+                ? t("finance.transactions.addIncome", "Add Income")
+                : t("finance.transactions.addExpense", "Add Expense")}
         </button>
       </form>
     </div>
