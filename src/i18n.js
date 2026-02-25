@@ -32,17 +32,7 @@ i18n
     },
   });
 
-// Override plural rules to use a simplified 3-form for Arabic (_zero, _few, _many)
-if (i18n.services && i18n.services.pluralResolver) {
-  i18n.services.pluralResolver.addRule("ar", {
-    numbers: [0, 1, 2],
-    plurals: function (n) {
-      if (n === 0 || n === 1) return 0; // mapped to _zero / _one
-      if (n >= 2 && n <= 10) return 1; // mapped to _few
-      return 2; // mapped to _many / _other
-    },
-  });
-}
+// Custom pluralizer removed since standard i18next v21+ JSONv4 handles Arabic natively
 
 // Handle RTL/LTR document direction dynamically
 i18n.on("languageChanged", (lng) => {

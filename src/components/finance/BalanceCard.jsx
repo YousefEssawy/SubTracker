@@ -1,4 +1,4 @@
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { HiOutlineBanknotes } from "react-icons/hi2";
 import { useTranslation } from "react-i18next";
 

@@ -47,7 +47,10 @@
     "viewAll": "عرض الكل",
     "noUpcomingRenewals": "لا توجد تجديدات قادمة",
     "today": "اليوم",
-    "days_zero": "٠ أيام",`n    "days_few": "{{count}} أيام",`n    "days_many": "{{count}} يوماً",`n    "days_other": "{{count}} أيام"
+    "days_zero": "٠ أيام",
+    "days_few": "{{count}} أيام",
+    "days_many": "{{count}} يوماً",
+    "days_other": "{{count}} أيام"
   },
   "about": {
     "title": "حول SubTracker",
@@ -350,4 +353,3 @@
     }
   }
 }
-

@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { formatDate } from "@/utils/dateUtils";
 import { formatCurrency } from "@/utils/currencies";
 import { useSpaces } from "@/contexts/SpaceContext";
