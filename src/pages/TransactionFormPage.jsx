@@ -198,8 +198,8 @@ const TransactionFormPage = () => {
         onClick={() => navigate("/transactions")}
         className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 hover:text-primary transition-colors mb-6"
       >
-        <HiOutlineArrowLeft className="w-4 h-4" />
-        Back to Transactions
+        <HiOutlineArrowLeft className="w-4 h-4 rtl:-scale-x-100" />
+        {t("finance.transactions.backToList", "Back to Transactions")}
       </button>
 
       <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-7">
@@ -214,23 +214,25 @@ const TransactionFormPage = () => {
         {/* Type toggle */}
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Type
+            {t("finance.transactions.type", "Type")}
           </label>
           <div className="flex rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
-            {["Income", "Expense"].map((t) => (
+            {["Income", "Expense"].map((txType) => (
               <button
-                key={t}
+                key={txType}
                 type="button"
-                onClick={() => handleTypeChange(t)}
+                onClick={() => handleTypeChange(txType)}
                 className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
-                  type === t
-                    ? t === "Income"
+                  type === txType
+                    ? txType === "Income"
                       ? "bg-emerald-500 text-white"
                       : "bg-red-500 text-white"
                     : "bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400"
                 }`}
               >
-                {t}
+                {txType === "Income"
+                  ? t("finance.categories.income", "Income")
+                  : t("finance.categories.expense", "Expense")}
               </button>
             ))}
           </div>
@@ -239,14 +241,16 @@ const TransactionFormPage = () => {
         {/* Space */}
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-            Space
+            {t("finance.transactions.space", "Space")}
           </label>
           <select
             value={spaceId}
             onChange={(e) => setSpaceId(e.target.value)}
             className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
           >
-            <option value="">Select a space…</option>
+            <option value="">
+              {t("finance.transactions.selectSpace", "Select a space…")}
+            </option>
             {spaces.map((s) => (
               <option key={s.id} value={s.id}>
                 {s.icon} {s.name}
@@ -261,14 +265,16 @@ const TransactionFormPage = () => {
         {/* Category */}
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-            Category
+            {t("finance.transactions.category", "Category")}
           </label>
           <select
             value={categoryId}
             onChange={(e) => setCategoryId(e.target.value)}
             className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
           >
-            <option value="">Select a category…</option>
+            <option value="">
+              {t("finance.transactions.selectCategory", "Select a category…")}
+            </option>
             {availableCategories.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name}
@@ -280,8 +286,11 @@ const TransactionFormPage = () => {
           )}
           {availableCategories.length === 0 && (
             <p className="mt-1 text-xs text-amber-500">
-              No {type.toLowerCase()} categories yet. Create one in Categories
-              first.
+              {t(
+                "finance.transactions.noCategoryYet",
+                "No {{type}} categories yet. Create one in Categories first.",
+                { type: type.toLowerCase() },
+              )}
             </p>
           )}
         </div>
@@ -290,7 +299,7 @@ const TransactionFormPage = () => {
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-3">
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-              Amount
+              {t("finance.transactions.amount", "Amount")}
             </label>
             <input
               type="number"
@@ -307,7 +316,7 @@ const TransactionFormPage = () => {
           </div>
           <div className="w-full sm:w-28">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-              Currency
+              {t("finance.transactions.currency", "Currency")}
             </label>
             <select
               value={currency}
@@ -326,7 +335,7 @@ const TransactionFormPage = () => {
         {/* Date */}
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-            Date
+            {t("finance.transactions.date", "Date")}
           </label>
           <input
             type="date"
@@ -344,20 +353,23 @@ const TransactionFormPage = () => {
         {/* ── Enrichment Section ── */}
         <div className="pt-4 border-t border-gray-200 dark:border-gray-700 space-y-5">
           <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
-            Optional Details
+            {t("finance.transactions.optionalDetails", "Optional Details")}
           </p>
 
           {/* Notes */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-              Notes
+              {t("finance.transactions.notes", "Notes")}
             </label>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               maxLength={500}
               rows={3}
-              placeholder="Add any notes about this transaction…"
+              placeholder={t(
+                "finance.transactions.notesPlaceholder",
+                "Add any notes about this transaction…",
+              )}
               className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm resize-none"
             />
             <p className="mt-1 text-xs text-gray-400 text-right">
@@ -368,7 +380,7 @@ const TransactionFormPage = () => {
           {/* Tags */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-              Tags
+              {t("finance.transactions.tags", "Tags")}
             </label>
             <TagInput tags={tags} onChange={setTags} />
           </div>
@@ -376,7 +388,7 @@ const TransactionFormPage = () => {
           {/* File Upload */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-              Attachment
+              {t("finance.transactions.attachment", "Attachment")}
             </label>
             <FileUpload
               file={attachmentFile}

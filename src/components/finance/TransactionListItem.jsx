@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { formatDate } from "@/utils/dateUtils";
 import { formatCurrency } from "@/utils/currencies";
 import { useSpaces } from "@/contexts/SpaceContext";
@@ -7,6 +8,7 @@ import { useCategories } from "@/contexts/CategoryContext";
 
 const TransactionListItem = ({ transaction }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { getSpaceById } = useSpaces();
   const { getCategoryById } = useCategories();
 
@@ -75,7 +77,9 @@ const TransactionListItem = ({ transaction }) => {
               : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
           }`}
         >
-          {transaction.type}
+          {isIncome
+            ? t("finance.categories.income", "Income")
+            : t("finance.categories.expense", "Expense")}
         </span>
       </div>
     </motion.div>

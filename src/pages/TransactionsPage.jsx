@@ -2,46 +2,61 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { HiOutlinePlus, HiOutlineBanknotes } from "react-icons/hi2";
 import { useTransactions } from "@/contexts/TransactionContext";
+import { useTranslation } from "react-i18next";
 import TransactionListItem from "@/components/finance/TransactionListItem";
 import FilterBar from "@/components/finance/FilterBar";
 import Pagination from "@/components/ui/Pagination";
 import BalanceCard from "@/components/finance/BalanceCard";
 
-const EmptyNoData = ({ onAdd }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 24 }}
-    animate={{ opacity: 1, y: 0 }}
-    className="flex flex-col items-center justify-center py-20 text-center"
-  >
-    <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-5">
-      <HiOutlineBanknotes className="w-10 h-10 text-primary" />
-    </div>
-    <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
-      No transactions yet
-    </h3>
-    <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xs mb-6">
-      Record your first income or expense transaction to get started.
-    </p>
-    <button onClick={onAdd} className="btn-primary flex items-center gap-2">
-      <HiOutlinePlus className="w-4 h-4" /> Add Transaction
-    </button>
-  </motion.div>
-);
+const EmptyNoData = ({ onAdd }) => {
+  const { t } = useTranslation();
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="flex flex-col items-center justify-center py-20 text-center"
+    >
+      <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-5">
+        <HiOutlineBanknotes className="w-10 h-10 text-primary" />
+      </div>
+      <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
+        {t("finance.transactions.noTransactions", "No transactions yet")}
+      </h3>
+      <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xs mb-6">
+        {t(
+          "finance.transactions.noTransactionsDesc",
+          "Record your first income or expense transaction to get started.",
+        )}
+      </p>
+      <button onClick={onAdd} className="btn-primary flex items-center gap-2">
+        <HiOutlinePlus className="w-4 h-4" />
+        {t("finance.transactions.addTransaction", "Add Transaction")}
+      </button>
+    </motion.div>
+  );
+};
 
-const EmptyFiltered = () => (
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    className="flex flex-col items-center justify-center py-16 text-center"
-  >
-    <p className="text-sm text-gray-400">
-      No transactions match the current filters.
-    </p>
-  </motion.div>
-);
+const EmptyFiltered = () => {
+  const { t } = useTranslation();
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="flex flex-col items-center justify-center py-16 text-center"
+    >
+      <p className="text-sm text-gray-400">
+        {t(
+          "finance.transactions.noMatchingFilters",
+          "No transactions match the current filters.",
+        )}
+      </p>
+    </motion.div>
+  );
+};
 
 const TransactionsPage = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { transactions, loading, filters, setFilters, balances, pagination } =
     useTransactions();
   const hasFilters = Object.keys(filters).some((k) => filters[k]);
@@ -51,13 +66,14 @@ const TransactionsPage = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-          Transactions
+          {t("finance.transactions.title", "Transactions")}
         </h1>
         <button
           onClick={() => navigate("/transactions/add")}
           className="btn-primary flex items-center gap-2"
         >
-          <HiOutlinePlus className="w-4 h-4" /> Add
+          <HiOutlinePlus className="w-4 h-4" />
+          {t("finance.transactions.add", "Add")}
         </button>
       </div>
 

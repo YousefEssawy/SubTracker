@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 const Pagination = ({
   hasNext,
   hasPrev,
@@ -7,11 +9,15 @@ const Pagination = ({
   setPageSize,
   pageSizeOptions = [10, 25, 50],
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div className="flex items-center justify-between px-1 py-3 border-t border-gray-200 dark:border-gray-800">
       {/* Page size selector */}
       <div className="flex items-center gap-2">
-        <span className="text-xs text-gray-500 dark:text-gray-400">Rows:</span>
+        <span className="text-xs text-gray-500 dark:text-gray-400">
+          {t("finance.pagination.rows", "Rows:")}
+        </span>
         <select
           value={pageSize}
           onChange={(e) => setPageSize(Number(e.target.value))}
@@ -32,14 +38,14 @@ const Pagination = ({
           disabled={!hasPrev}
           className="px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
-          ← Prev
+          {t("finance.pagination.prev", "← Prev")}
         </button>
         <button
           onClick={goNext}
           disabled={!hasNext}
           className="px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
-          Next →
+          {t("finance.pagination.next", "Next →")}
         </button>
       </div>
     </div>

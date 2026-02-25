@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import {
   HiOutlineCloudArrowUp,
   HiOutlineDocumentText,
@@ -22,6 +23,7 @@ const formatSize = (bytes) => {
 };
 
 const FileUpload = ({ file, existingMeta, onFileSelect, onRemove }) => {
+  const { t } = useTranslation();
   const inputRef = useRef(null);
   const [error, setError] = useState("");
   const [dragOver, setDragOver] = useState(false);
@@ -29,11 +31,24 @@ const FileUpload = ({ file, existingMeta, onFileSelect, onRemove }) => {
   const validateAndSet = (selectedFile) => {
     setError("");
     if (!ALLOWED_TYPES.includes(selectedFile.type)) {
-      setError("Only JPEG, PNG, and PDF files are allowed.");
+      setError(
+        t(
+          "finance.fileUpload.invalidType",
+          "Only JPEG, PNG, and PDF files are allowed.",
+        ),
+      );
       return;
     }
     if (selectedFile.size > MAX_SIZE) {
-      setError(`File exceeds 5 MB limit (${formatSize(selectedFile.size)}).`);
+      setError(
+        t(
+          "finance.fileUpload.tooLarge",
+          "File exceeds 5 MB limit ({{size}}).",
+          {
+            size: formatSize(selectedFile.size),
+          },
+        ),
+      );
       return;
     }
     onFileSelect(selectedFile);
@@ -81,7 +96,7 @@ const FileUpload = ({ file, existingMeta, onFileSelect, onRemove }) => {
               onClick={() => inputRef.current?.click()}
               className="text-xs text-primary hover:underline"
             >
-              Replace
+              {t("finance.fileUpload.replace", "Replace")}
             </button>
             <button
               type="button"
@@ -114,11 +129,13 @@ const FileUpload = ({ file, existingMeta, onFileSelect, onRemove }) => {
             className={`w-8 h-8 mb-2 ${dragOver ? "text-primary" : "text-gray-400"}`}
           />
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            <span className="text-primary font-medium">Click to upload</span> or
-            drag and drop
+            <span className="text-primary font-medium">
+              {t("finance.fileUpload.clickToUpload", "Click to upload")}
+            </span>{" "}
+            {t("finance.fileUpload.orDragDrop", "or drag and drop")}
           </p>
           <p className="text-xs text-gray-400 mt-1">
-            JPEG, PNG or PDF up to 5 MB
+            {t("finance.fileUpload.fileTypes", "JPEG, PNG or PDF up to 5 MB")}
           </p>
         </div>
       )}

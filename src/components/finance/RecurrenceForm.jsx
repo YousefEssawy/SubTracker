@@ -1,5 +1,6 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 import { useSpaces } from "@/contexts/SpaceContext";
 import { useCategories } from "@/contexts/CategoryContext";
 import { useRecurrences } from "@/contexts/RecurrenceContext";
@@ -10,6 +11,7 @@ import { HiOutlineXMark } from "react-icons/hi2";
 const PATTERNS = ["Weekly", "Monthly", "Yearly", "Custom"];
 
 const RecurrenceForm = ({ onClose }) => {
+  const { t } = useTranslation();
   const { spaces } = useSpaces();
   const { incomeCategories, expenseCategories } = useCategories();
   const { addRecurrence } = useRecurrences();
@@ -29,15 +31,18 @@ const RecurrenceForm = ({ onClose }) => {
   const availableCategories =
     type === "Income" ? incomeCategories : expenseCategories;
 
-  const handleTypeChange = (t) => {
-    setType(t);
+  const handleTypeChange = (txType) => {
+    setType(txType);
     setCategoryId("");
   };
 
   const validate = () => {
     const e = {};
-    if (!spaceId) e.spaceId = "Space is required.";
-    if (!categoryId) e.categoryId = "Category is required.";
+    if (!spaceId)
+      e.spaceId = t("finance.recurrences.space", "Space") + " is required.";
+    if (!categoryId)
+      e.categoryId =
+        t("finance.recurrences.category", "Category") + " is required.";
     const num = parseFloat(amount);
     if (!amount || isNaN(num) || num <= 0) e.amount = "Amount must be > 0.";
     if (!startDate) e.startDate = "Start date is required.";
@@ -68,10 +73,15 @@ const RecurrenceForm = ({ onClose }) => {
         startDate,
         endDate: endDate || null,
       });
-      toast.success("Recurrence created!");
+      toast.success(
+        t("finance.recurrences.createSuccess", "Recurrence created!"),
+      );
       onClose();
     } catch (err) {
-      toast.error(err.message || "Failed to create recurrence.");
+      toast.error(
+        err.message ||
+          t("finance.recurrences.createError", "Failed to create recurrence."),
+      );
     } finally {
       setLoading(false);
     }
@@ -85,7 +95,7 @@ const RecurrenceForm = ({ onClose }) => {
       <div className="bg-white dark:bg-surface-dark rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6">
         <div className="flex items-center justify-between mb-5">
           <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">
-            Add Recurrence
+            {t("finance.recurrences.addRecurrence", "Add Recurrence")}
           </h2>
           <button
             onClick={onClose}
@@ -98,14 +108,16 @@ const RecurrenceForm = ({ onClose }) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Type */}
           <div className="flex rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
-            {["Income", "Expense"].map((t) => (
+            {["Income", "Expense"].map((txType) => (
               <button
-                key={t}
+                key={txType}
                 type="button"
-                onClick={() => handleTypeChange(t)}
-                className={`flex-1 py-2 text-sm font-medium transition-colors ${type === t ? (t === "Income" ? "bg-emerald-500 text-white" : "bg-red-500 text-white") : "bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400"}`}
+                onClick={() => handleTypeChange(txType)}
+                className={`flex-1 py-2 text-sm font-medium transition-colors ${type === txType ? (txType === "Income" ? "bg-emerald-500 text-white" : "bg-red-500 text-white") : "bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400"}`}
               >
-                {t}
+                {txType === "Income"
+                  ? t("finance.categories.income", "Income")
+                  : t("finance.categories.expense", "Expense")}
               </button>
             ))}
           </div>
@@ -113,14 +125,16 @@ const RecurrenceForm = ({ onClose }) => {
           {/* Space */}
           <div>
             <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
-              Space
+              {t("finance.recurrences.space", "Space")}
             </label>
             <select
               value={spaceId}
               onChange={(e) => setSpaceId(e.target.value)}
               className={inputCls}
             >
-              <option value="">Select…</option>
+              <option value="">
+                {t("finance.recurrences.select", "Select…")}
+              </option>
               {spaces.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.icon} {s.name}
@@ -135,14 +149,16 @@ const RecurrenceForm = ({ onClose }) => {
           {/* Category */}
           <div>
             <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
-              Category
+              {t("finance.recurrences.category", "Category")}
             </label>
             <select
               value={categoryId}
               onChange={(e) => setCategoryId(e.target.value)}
               className={inputCls}
             >
-              <option value="">Select…</option>
+              <option value="">
+                {t("finance.recurrences.select", "Select…")}
+              </option>
               {availableCategories.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.name}
@@ -158,7 +174,7 @@ const RecurrenceForm = ({ onClose }) => {
           <div className="flex gap-3">
             <div className="flex-1">
               <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
-                Amount
+                {t("finance.transactions.amount", "Amount")}
               </label>
               <input
                 type="number"
@@ -175,7 +191,7 @@ const RecurrenceForm = ({ onClose }) => {
             </div>
             <div className="w-24">
               <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
-                Currency
+                {t("finance.transactions.currency", "Currency")}
               </label>
               <select
                 value={currency}
@@ -195,7 +211,7 @@ const RecurrenceForm = ({ onClose }) => {
           <div className="flex gap-3">
             <div className="flex-1">
               <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
-                Pattern
+                {t("finance.recurrences.pattern", "Pattern")}
               </label>
               <select
                 value={pattern}
@@ -211,7 +227,7 @@ const RecurrenceForm = ({ onClose }) => {
             </div>
             <div className="w-24">
               <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
-                Every
+                {t("finance.recurrences.interval", "Every")}
               </label>
               <input
                 type="number"
@@ -230,7 +246,7 @@ const RecurrenceForm = ({ onClose }) => {
           <div className="flex gap-3">
             <div className="flex-1">
               <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
-                Start Date
+                {t("finance.recurrences.startDate", "Start Date")}
               </label>
               <input
                 type="date"
@@ -244,7 +260,10 @@ const RecurrenceForm = ({ onClose }) => {
             </div>
             <div className="flex-1">
               <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
-                End Date <span className="text-gray-400">(optional)</span>
+                {t(
+                  "finance.recurrences.endDateOptional",
+                  "End Date (optional)",
+                )}
               </label>
               <input
                 type="date"
@@ -260,7 +279,9 @@ const RecurrenceForm = ({ onClose }) => {
             disabled={loading}
             className="w-full py-2.5 rounded-xl btn-primary font-medium disabled:opacity-50 mt-2"
           >
-            {loading ? "Creating…" : "Create Recurrence"}
+            {loading
+              ? t("finance.recurrences.creating", "Creating…")
+              : t("finance.recurrences.createRecurrence", "Create Recurrence")}
           </button>
         </form>
       </div>

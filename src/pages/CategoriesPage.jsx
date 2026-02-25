@@ -7,122 +7,147 @@ import {
   HiOutlineTag,
 } from "react-icons/hi2";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 import { useCategories } from "@/contexts/CategoryContext";
 import CategoryForm from "@/components/finance/CategoryForm";
 
 // ── Type badge ─────────────────────────────────────────────────────────────────
-const TypeBadge = ({ type }) => (
-  <span
-    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-      type === "Income"
-        ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
-        : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
-    }`}
-  >
-    {type}
-  </span>
-);
+const TypeBadge = ({ type }) => {
+  const { t } = useTranslation();
+  return (
+    <span
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+        type === "Income"
+          ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
+          : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+      }`}
+    >
+      {type === "Income"
+        ? t("finance.categories.income", "Income")
+        : t("finance.categories.expense", "Expense")}
+    </span>
+  );
+};
 
 // ── Confirmation dialog ────────────────────────────────────────────────────────
-const ConfirmDialog = ({ name, onConfirm, onCancel, loading }) => (
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-    className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
-    onClick={(e) => e.target === e.currentTarget && onCancel()}
-  >
+const ConfirmDialog = ({ name, onConfirm, onCancel, loading }) => {
+  const { t } = useTranslation();
+  return (
     <motion.div
-      initial={{ scale: 0.92, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      exit={{ scale: 0.92, opacity: 0 }}
-      className="bg-white dark:bg-surface-dark rounded-2xl shadow-2xl p-6 max-w-sm w-full"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
+      onClick={(e) => e.target === e.currentTarget && onCancel()}
     >
-      <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-2">
-        Delete Category?
-      </h3>
-      <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">
-        Are you sure you want to delete <strong>"{name}"</strong>? This cannot
-        be undone.
-      </p>
-      <div className="flex gap-3">
+      <motion.div
+        initial={{ scale: 0.92, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.92, opacity: 0 }}
+        className="bg-white dark:bg-surface-dark rounded-2xl shadow-2xl p-6 max-w-sm w-full"
+      >
+        <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-2">
+          {t("finance.categories.deleteTitle", "Delete Category?")}
+        </h3>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">
+          {t(
+            "finance.categories.deleteMessage",
+            'Are you sure you want to delete "{{name}}"? This cannot be undone.',
+            { name },
+          )}
+        </p>
+        <div className="flex gap-3">
+          <button
+            onClick={onCancel}
+            className="flex-1 py-2.5 text-sm font-medium rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+          >
+            {t("finance.categories.cancel", "Cancel")}
+          </button>
+          <button
+            onClick={onConfirm}
+            disabled={loading}
+            className="flex-1 py-2.5 text-sm font-medium rounded-xl bg-red-500 hover:bg-red-600 text-white transition-colors disabled:opacity-50"
+          >
+            {loading
+              ? t("finance.categories.deleting", "Deleting…")
+              : t("finance.categories.delete", "Delete")}
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
+
+// ── Category row ───────────────────────────────────────────────────────────────
+const CategoryRow = ({ category, onEdit, onDelete }) => {
+  const { t } = useTranslation();
+  return (
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      transition={{ type: "spring", stiffness: 300, damping: 28 }}
+      className="bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-gray-800 px-5 py-4 flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow"
+    >
+      <div className="flex-1 min-w-0">
+        <p className="font-medium text-gray-900 dark:text-gray-100 truncate">
+          {category.name}
+        </p>
+      </div>
+      <TypeBadge type={category.type} />
+      <div className="flex items-center gap-1">
         <button
-          onClick={onCancel}
-          className="flex-1 py-2.5 text-sm font-medium rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+          onClick={() => onEdit(category)}
+          className="p-2 rounded-lg text-gray-400 hover:text-primary hover:bg-primary/10 transition-colors"
+          aria-label={t("finance.categories.editCategory", "Edit Category")}
         >
-          Cancel
+          <HiOutlinePencil className="w-4 h-4" />
         </button>
         <button
-          onClick={onConfirm}
-          disabled={loading}
-          className="flex-1 py-2.5 text-sm font-medium rounded-xl bg-red-500 hover:bg-red-600 text-white transition-colors disabled:opacity-50"
+          onClick={() => onDelete(category)}
+          className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+          aria-label={t("finance.categories.deleteTitle", "Delete Category")}
         >
-          {loading ? "Deleting…" : "Delete"}
+          <HiOutlineTrash className="w-4 h-4" />
         </button>
       </div>
     </motion.div>
-  </motion.div>
-);
-
-// ── Category row ───────────────────────────────────────────────────────────────
-const CategoryRow = ({ category, onEdit, onDelete }) => (
-  <motion.div
-    layout
-    initial={{ opacity: 0, y: 12 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, scale: 0.95 }}
-    transition={{ type: "spring", stiffness: 300, damping: 28 }}
-    className="bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-gray-800 px-5 py-4 flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow"
-  >
-    <div className="flex-1 min-w-0">
-      <p className="font-medium text-gray-900 dark:text-gray-100 truncate">
-        {category.name}
-      </p>
-    </div>
-    <TypeBadge type={category.type} />
-    <div className="flex items-center gap-1">
-      <button
-        onClick={() => onEdit(category)}
-        className="p-2 rounded-lg text-gray-400 hover:text-primary hover:bg-primary/10 transition-colors"
-        aria-label={`Edit ${category.name}`}
-      >
-        <HiOutlinePencil className="w-4 h-4" />
-      </button>
-      <button
-        onClick={() => onDelete(category)}
-        className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
-        aria-label={`Delete ${category.name}`}
-      >
-        <HiOutlineTrash className="w-4 h-4" />
-      </button>
-    </div>
-  </motion.div>
-);
+  );
+};
 
 // ── Empty state ────────────────────────────────────────────────────────────────
-const EmptyState = ({ onAdd }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 24 }}
-    animate={{ opacity: 1, y: 0 }}
-    className="flex flex-col items-center justify-center py-24 text-center"
-  >
-    <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-5">
-      <HiOutlineTag className="w-10 h-10 text-primary" />
-    </div>
-    <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
-      No categories yet
-    </h3>
-    <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xs mb-6">
-      Create Income and Expense categories to classify your transactions.
-    </p>
-    <button onClick={onAdd} className="btn-primary flex items-center gap-2">
-      <HiOutlinePlus className="w-4 h-4" /> Create your first category
-    </button>
-  </motion.div>
-);
+const EmptyState = ({ onAdd }) => {
+  const { t } = useTranslation();
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="flex flex-col items-center justify-center py-24 text-center"
+    >
+      <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-5">
+        <HiOutlineTag className="w-10 h-10 text-primary" />
+      </div>
+      <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
+        {t("finance.categories.noCategories", "No categories yet")}
+      </h3>
+      <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xs mb-6">
+        {t(
+          "finance.categories.noCategoriesDesc",
+          "Create Income and Expense categories to classify your transactions.",
+        )}
+      </p>
+      <button onClick={onAdd} className="btn-primary flex items-center gap-2">
+        <HiOutlinePlus className="w-4 h-4" />
+        {t("finance.categories.createFirst", "Create your first category")}
+      </button>
+    </motion.div>
+  );
+};
 
 // ── Page ───────────────────────────────────────────────────────────────────────
 const CategoriesPage = () => {
+  const { t } = useTranslation();
   const {
     categories,
     loading,
@@ -157,14 +182,19 @@ const CategoriesPage = () => {
     try {
       if (editingCategory) {
         await updateCategory(editingCategory.id, { name: data.name });
-        toast.success("Category updated!");
+        toast.success(
+          t("finance.categories.editCategory", "Category updated!"),
+        );
       } else {
         await addCategory(data);
-        toast.success("Category created!");
+        toast.success(t("finance.categories.addCategory", "Category created!"));
       }
       handleCloseForm();
     } catch (err) {
-      toast.error(err.message || "Failed to save category.");
+      toast.error(
+        err.message ||
+          t("finance.categories.deleteBlocked", "Failed to save category."),
+      );
     } finally {
       setFormLoading(false);
     }
@@ -175,15 +205,26 @@ const CategoriesPage = () => {
     setDeleteLoading(true);
     try {
       await deleteCategory(deletingCategory.id);
-      toast.success(`"${deletingCategory.name}" deleted.`);
+      toast.success(
+        `"${deletingCategory.name}" ${t("finance.categories.delete", "deleted")}.`,
+      );
       setDeletingCategory(null);
     } catch (err) {
-      toast.error(err.message || "Failed to delete category.");
+      toast.error(
+        err.message ||
+          t("finance.categories.deleteBlocked", "Failed to delete category."),
+      );
       setDeletingCategory(null);
     } finally {
       setDeleteLoading(false);
     }
   };
+
+  const tabs = [
+    { key: "All", label: t("finance.categories.all", "All") },
+    { key: "Income", label: t("finance.categories.income", "Income") },
+    { key: "Expense", label: t("finance.categories.expense", "Expense") },
+  ];
 
   const displayedCategories =
     filterType === "Income"
@@ -206,39 +247,41 @@ const CategoriesPage = () => {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-            Categories
+            {t("finance.categories.title", "Categories")}
           </h1>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
-            {incomeCategories.length} income · {expenseCategories.length}{" "}
-            expense
+            {incomeCategories.length} {t("finance.categories.income", "income")}{" "}
+            · {expenseCategories.length}{" "}
+            {t("finance.categories.expense", "expense")}
           </p>
         </div>
         <button
           onClick={handleAdd}
           className="btn-primary flex items-center gap-2"
         >
-          <HiOutlinePlus className="w-4 h-4" /> Add Category
+          <HiOutlinePlus className="w-4 h-4" />
+          {t("finance.categories.addCategory", "Add Category")}
         </button>
       </div>
 
       {/* Type filter tabs */}
       {categories.length > 0 && (
         <div className="flex gap-2 mb-5">
-          {["All", "Income", "Expense"].map((t) => (
+          {tabs.map(({ key, label }) => (
             <button
-              key={t}
-              onClick={() => setFilterType(t)}
+              key={key}
+              onClick={() => setFilterType(key)}
               className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                filterType === t
-                  ? t === "Income"
+                filterType === key
+                  ? key === "Income"
                     ? "bg-emerald-500 text-white"
-                    : t === "Expense"
+                    : key === "Expense"
                       ? "bg-red-500 text-white"
                       : "bg-primary text-white"
                   : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
               }`}
             >
-              {t}
+              {label}
             </button>
           ))}
         </div>
@@ -249,7 +292,13 @@ const CategoriesPage = () => {
         <EmptyState onAdd={handleAdd} />
       ) : displayedCategories.length === 0 ? (
         <p className="text-center text-sm text-gray-400 py-16">
-          No {filterType.toLowerCase()} categories yet.
+          {t(
+            "finance.categories.noCategoryTypeYet",
+            "No {{type}} categories yet.",
+            {
+              type: filterType.toLowerCase(),
+            },
+          )}
         </p>
       ) : (
         <div className="space-y-3">

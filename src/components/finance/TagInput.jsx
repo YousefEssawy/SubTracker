@@ -1,7 +1,9 @@
 import { useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { HiOutlineXMark } from "react-icons/hi2";
 
 const TagInput = ({ tags = [], onChange, maxTags = 10, maxLength = 30 }) => {
+  const { t } = useTranslation();
   const [input, setInput] = useState("");
   const [error, setError] = useState("");
   const inputRef = useRef(null);
@@ -11,15 +13,23 @@ const TagInput = ({ tags = [], onChange, maxTags = 10, maxLength = 30 }) => {
     if (!tag) return;
 
     if (tag.length > maxLength) {
-      setError(`Tag cannot exceed ${maxLength} characters.`);
+      setError(
+        t("finance.tags.tooLong", "Tag cannot exceed {{max}} characters.", {
+          max: maxLength,
+        }),
+      );
       return;
     }
     if (tags.length >= maxTags) {
-      setError(`Maximum ${maxTags} tags allowed.`);
+      setError(
+        t("finance.tags.maxTags", "Maximum {{max}} tags allowed.", {
+          max: maxTags,
+        }),
+      );
       return;
     }
     if (tags.includes(tag)) {
-      setError("Tag already exists.");
+      setError(t("finance.tags.alreadyExists", "Tag already exists."));
       return;
     }
 
@@ -29,7 +39,7 @@ const TagInput = ({ tags = [], onChange, maxTags = 10, maxLength = 30 }) => {
   };
 
   const removeTag = (tag) => {
-    onChange(tags.filter((t) => t !== tag));
+    onChange(tags.filter((tg) => tg !== tag));
     setError("");
   };
 
@@ -78,14 +88,14 @@ const TagInput = ({ tags = [], onChange, maxTags = 10, maxLength = 30 }) => {
           onKeyDown={handleKeyDown}
           placeholder={
             tags.length >= maxTags
-              ? "Max tags reached"
-              : "Type a tag and press Enter…"
+              ? t("finance.tags.maxReached", "Max tags reached")
+              : t("finance.tags.placeholder", "Type a tag and press Enter…")
           }
           disabled={tags.length >= maxTags}
           maxLength={maxLength}
           className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm disabled:opacity-50"
         />
-        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">
+        <span className="absolute end-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">
           {tags.length}/{maxTags}
         </span>
       </div>
