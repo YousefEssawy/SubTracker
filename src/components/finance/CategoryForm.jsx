@@ -2,6 +2,15 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HiOutlineXMark } from "react-icons/hi2";
 
+/**
+ * Modal form for creating or editing a Category.
+ *
+ * @param {object} props
+ * @param {import('@/models').Category | null} [props.category] - Existing category when editing; null for create.
+ * @param {(data: import('@/models').CategoryInput) => Promise<void>} props.onSubmit - Called with validated input.
+ * @param {() => void} props.onClose - Called when the modal should close.
+ * @param {boolean} [props.loading] - Disables the submit button when true.
+ */
 const CategoryForm = ({
   category = null,
   onSubmit,

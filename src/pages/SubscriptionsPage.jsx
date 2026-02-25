@@ -45,6 +45,29 @@ const SubscriptionsPage = () => {
     });
   }, [subscriptions, search, filterCat, filterStatus]);
 
+  // Returns { count, totals: { [currency]: monthlyCost } } for a given status
+  const stats = useMemo(() => {
+    const calc = (status) => {
+      const group = subscriptions.filter((s) => s.status === status);
+      const totals = {};
+      group.forEach((s) => {
+        const monthly = getMonthlyEquivalent(
+          s.price,
+          s.billingCycle,
+          s.customCycleDays,
+        );
+        const cur = s.currency || "EGP";
+        totals[cur] = (totals[cur] || 0) + monthly;
+      });
+      return { count: group.length, totals };
+    };
+    return {
+      active: calc("active"),
+      paused: calc("paused"),
+      cancelled: calc("cancelled"),
+    };
+  }, [subscriptions]);
+
   const handleDelete = async () => {
     if (deleteTarget) {
       await deleteSubscription(user.uid, deleteTarget);
@@ -89,6 +112,66 @@ const SubscriptionsPage = () => {
           <HiOutlinePlusCircle className="w-4 h-4" />
           <span className="hidden sm:inline">{t("subscriptions.addNew")}</span>
         </Link>
+      </div>
+
+      {/* Summary Stats */}
+      <div className="grid grid-cols-3 gap-3">
+        {[
+          {
+            key: "active",
+            color: "border-success",
+            labelColor: "text-success",
+            labelKey: "subscriptions.active",
+          },
+          {
+            key: "paused",
+            color: "border-warning",
+            labelColor: "text-warning",
+            labelKey: "subscriptions.paused",
+          },
+          {
+            key: "cancelled",
+            color: "border-danger",
+            labelColor: "text-danger",
+            labelKey: "subscriptions.cancelled",
+          },
+        ].map(({ key, color, labelColor, labelKey }, idx) => {
+          const { count, totals } = stats[key];
+          const currencyEntries = Object.entries(totals);
+          return (
+            <motion.div
+              key={key}
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: idx * 0.05 }}
+              className={`glass-card p-4 flex flex-col items-center gap-1 border-t-2 ${color}`}
+            >
+              <span className="text-2xl font-bold text-gray-900 dark:text-white">
+                {count}
+              </span>
+              <span
+                className={`text-xs ${labelColor} font-medium uppercase tracking-wide`}
+              >
+                {t(labelKey)}
+              </span>
+              {currencyEntries.length > 0 && (
+                <div className="mt-1.5 flex flex-col items-center gap-0.5 w-full">
+                  {currencyEntries.map(([cur, total]) => (
+                    <span
+                      key={cur}
+                      className="text-[11px] font-semibold text-gray-700 dark:text-gray-300 truncate max-w-full"
+                    >
+                      {formatCurrency(total, cur)}
+                      <span className="text-[10px] font-normal text-gray-400 ms-0.5">
+                        /{t("common.mo", "mo")}
+                      </span>
+                    </span>
+                  ))}
+                </div>
+              )}
+            </motion.div>
+          );
+        })}
       </div>
 
       {/* Search & Filter */}

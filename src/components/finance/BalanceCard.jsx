@@ -100,9 +100,9 @@ const CurrencyBlock = ({ currency, data, compact }) => {
 /**
  * BalanceCard — displays computed balances grouped by currency.
  *
- * @param {{ variant: "summary" | "contextual", balances: object }} props
- *   - summary:    full card for dashboard
- *   - contextual: compact inline header for TransactionsPage
+ * @param {object} props
+ * @param {"summary" | "contextual"} [props.variant] - Display variant.
+ * @param {import('@/models').BalanceMap} [props.balances] - Per-currency balance map from computeBalances().
  */
 const BalanceCard = ({ variant = "summary", balances = {} }) => {
   const currencies = Object.keys(balances);

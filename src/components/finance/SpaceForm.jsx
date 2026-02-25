@@ -8,6 +8,15 @@ import {
   DEFAULT_SPACE_ICON,
 } from "@/utils/spaceDefaults";
 
+/**
+ * Modal form for creating or editing a Space.
+ *
+ * @param {object} props
+ * @param {import('@/models').Space | null} [props.space] - Existing space when editing; null for create.
+ * @param {(data: import('@/models').SpaceInput) => Promise<void>} props.onSubmit - Called with validated input.
+ * @param {() => void} props.onClose - Called when the modal should close.
+ * @param {boolean} [props.loading] - Disables the submit button when true.
+ */
 const SpaceForm = ({ space = null, onSubmit, onClose, loading = false }) => {
   const isEditing = Boolean(space);
   const [name, setName] = useState(space?.name || "");

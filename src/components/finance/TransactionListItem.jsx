@@ -6,6 +6,12 @@ import { formatCurrency } from "@/utils/currencies";
 import { useSpaces } from "@/contexts/SpaceContext";
 import { useCategories } from "@/contexts/CategoryContext";
 
+/**
+ * Renders a single transaction row in a list.
+ *
+ * @param {object} props
+ * @param {import('@/models').Transaction} props.transaction - The transaction to display.
+ */
 const TransactionListItem = ({ transaction }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();

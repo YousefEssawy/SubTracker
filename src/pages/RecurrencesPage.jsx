@@ -30,6 +30,17 @@ const patternLabel = (pattern, interval, t) => {
   return prefix + (unit[pattern] || "month");
 };
 
+/**
+ * Displays a single recurrence rule card with action buttons.
+ *
+ * @param {object} props
+ * @param {import('@/models').Recurrence} props.recurrence - The recurrence rule to display.
+ * @param {import('@/models').Space | undefined} props.space - The associated space.
+ * @param {import('@/models').Category | undefined} props.category - The associated category.
+ * @param {() => void} props.onPause - Called when the pause button is clicked.
+ * @param {() => void} props.onReactivate - Called when the reactivate button is clicked.
+ * @param {() => void} props.onDelete - Called when the delete button is clicked.
+ */
 const RecurrenceCard = ({
   recurrence,
   space,
