@@ -50,7 +50,7 @@ const Header = ({ onMenuToggle }) => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 h-16 bg-white/80 dark:bg-surface-dark/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-800/50 z-40">
+    <header className="fixed top-0 inset-x-0 h-16 bg-white/80 dark:bg-surface-dark/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-800/50 z-40">
       <div className="flex items-center justify-between h-full px-4 lg:px-6">
         <div className="flex items-center gap-3">
           <button
@@ -96,7 +96,7 @@ const Header = ({ onMenuToggle }) => {
           {!user ? (
             <Link
               to="/login"
-              className="ml-2 px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary-dark rounded-xl transition-colors"
+              className="ms-2 px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary-dark rounded-xl transition-colors"
             >
               {t("header.signIn", "Sign In")}
             </Link>
@@ -110,7 +110,7 @@ const Header = ({ onMenuToggle }) => {
                 >
                   <HiOutlineBell className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                   {upcomingRenewals.length > 0 && (
-                    <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-danger rounded-full animate-pulse" />
+                    <span className="absolute top-1.5 end-1.5 w-2 h-2 bg-danger rounded-full animate-pulse" />
                   )}
                 </button>
                 {showNotif && (
@@ -195,7 +195,7 @@ const Header = ({ onMenuToggle }) => {
                       onClick={handleLogout}
                       className="w-full flex items-center gap-2 px-4 py-3 text-sm text-danger hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                     >
-                      <HiOutlineArrowRightOnRectangle className="w-4 h-4" />
+                      <HiOutlineArrowRightOnRectangle className="w-4 h-4 rtl:-scale-x-100" />
                       {t("header.signOut", "Sign Out")}
                     </button>
                   </div>

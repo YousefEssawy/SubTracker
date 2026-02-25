@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useViewport } from "@/contexts/ViewportContext";
 import { useSubscriptions } from "@/contexts/SubscriptionContext";
 import { useTransactions } from "@/contexts/TransactionContext";
 import BalanceCard from "@/components/finance/BalanceCard";
@@ -88,7 +89,9 @@ const FinancialOverview = () => {
 
 const DashboardPage = () => {
   const { activeSubscriptions, payments, loading } = useSubscriptions();
+  const { isMobile } = useViewport();
   const { t, i18n } = useTranslation();
+  const isRtl = i18n.language === "ar";
   const displayCurrency = "EGP";
 
   const stats = useMemo(() => {
@@ -365,7 +368,12 @@ const DashboardPage = () => {
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart
                 data={monthlyTrendData}
-                margin={{ top: 5, right: 10, left: -10, bottom: 5 }}
+                margin={{
+                  top: 5,
+                  right: isRtl ? (isMobile ? 0 : -10) : isMobile ? 0 : 10,
+                  left: isRtl ? (isMobile ? 0 : 10) : isMobile ? 0 : -10,
+                  bottom: 5,
+                }}
               >
                 <defs>
                   <linearGradient
@@ -388,8 +396,15 @@ const DashboardPage = () => {
                   dataKey="month"
                   tick={{ fontSize: 12 }}
                   stroke="#94a3b8"
+                  reversed={isRtl}
                 />
-                <YAxis tick={{ fontSize: 11 }} stroke="#94a3b8" width={40} />
+                <YAxis
+                  tick={{ fontSize: 11 }}
+                  stroke="#94a3b8"
+                  width={isMobile ? 0 : 40}
+                  hide={isMobile}
+                  orientation={isRtl ? "right" : "left"}
+                />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: "#fff",

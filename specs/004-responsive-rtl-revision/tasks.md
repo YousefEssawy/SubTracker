@@ -9,8 +9,8 @@
 
 **Purpose**: Project initialization and basic structure
 
-- [ ] T001 Verify project structure and dependencies per plan.md in package.json
-- [ ] T002 [P] Establish CSS/Tailwind standards for logical properties (e.g., using `inset-inline-start` instead of `left`) in src/styles/globals.scss
+- [x] T001 Verify project structure and dependencies per plan.md in package.json
+- [x] T002 [P] Establish CSS/Tailwind standards for logical properties (e.g., using `inset-inline-start` instead of `left`) in src/styles/globals.scss
 
 ---
 
@@ -18,9 +18,9 @@
 
 **Purpose**: Core infrastructure that MUST be complete before ANY user story can be implemented
 
-- [ ] T003 Implement `useViewport` hook for responsive breakpoint detection in src/context/ViewportContext.jsx
-- [ ] T004 Provide `ViewportProvider` to handle resize listeners in src/App.jsx
-- [ ] T005 [P] Update `tailwind.config.js` with any missing RTL-specific spacing or layout utilities
+- [x] T003 Implement `useViewport` hook for responsive breakpoint detection in src/context/ViewportContext.jsx
+- [x] T004 Provide `ViewportProvider` to handle resize listeners in src/App.jsx
+- [x] T005 [P] Update `tailwind.config.js` with any missing RTL-specific spacing or layout utilities
 
 ---
 
@@ -32,10 +32,10 @@
 
 ### Implementation for User Story 1
 
-- [ ] T006 [P] [US1] Update icons in sidebar and header to support RTL mirroring (flipped arrows) in src/components/layout/Sidebar.jsx and src/components/layout/Header.jsx
-- [ ] T007 [P] [US1] Refactor Sidebar layout to use Tailwind logical properties (`start-0`, `border-e`) in src/components/layout/Sidebar.jsx
-- [ ] T008 [P] [US1] Refactor Header layout to use Tailwind logical properties (`end-0`) in src/components/layout/Header.jsx
-- [ ] T009 [US1] Implement native RTL support for Recharts (axes and legends mirroring) in src/pages/DashboardPage.jsx
+- [x] T006 [P] [US1] Update icons in sidebar and header to support RTL mirroring (flipped arrows) in src/components/layout/Sidebar.jsx and src/components/layout/Header.jsx
+- [x] T007 [P] [US1] Refactor Sidebar layout to use Tailwind logical properties (`start-0`, `border-e`) in src/components/layout/Sidebar.jsx
+- [x] T008 [P] [US1] Refactor Header layout to use Tailwind logical properties (`end-0`) in src/components/layout/Header.jsx
+- [x] T009 [US1] Implement native RTL support for Recharts (axes and legends mirroring) in src/pages/DashboardPage.jsx
 
 **Checkpoint**: User Story 1 should be fully functional; the app should look and flow correctly in Arabic RTL mode.
 
@@ -49,11 +49,11 @@
 
 ### Implementation for User Story 2
 
-- [ ] T010 [P] [US2] Update `DataTable` (or `TransactionListItem`) to support stacked card layout on mobile in src/components/finance/TransactionListItem.jsx
-- [ ] T011 [US2] Implement Hamburger menu with sliding drawer for mobile navigation in src/components/layout/Sidebar.jsx and src/components/layout/Header.jsx
-- [ ] T012 [US2] Optimize Dashboard summary cards for 1-column layout on mobile in src/pages/DashboardPage.jsx
-- [ ] T013 [P] [US2] Refactor all forms to use vertical stacking for labels and inputs on mobile in src/components/finance/TransactionFormPage.jsx
-- [ ] T014 [US2] Adjust Recharts margins and label visibility for small screens in src/pages/DashboardPage.jsx
+- [x] T010 [P] [US2] Update `DataTable` (or `TransactionListItem`) to support stacked card layout on mobile in src/components/finance/TransactionListItem.jsx
+- [x] T011 [US2] Implement Hamburger menu with sliding drawer for mobile navigation in src/components/layout/Sidebar.jsx and src/components/layout/Header.jsx
+- [x] T012 [US2] Optimize Dashboard summary cards for 1-column layout on mobile in src/pages/DashboardPage.jsx
+- [x] T013 [P] [US2] Refactor all forms to use vertical stacking for labels and inputs on mobile in src/components/finance/TransactionFormPage.jsx
+- [x] T014 [US2] Adjust Recharts margins and label visibility for small screens in src/pages/DashboardPage.jsx
 
 **Checkpoint**: User Story 2 should be fully functional; the app should be 100% usable on mobile with no horizontal scrolling.
 
@@ -67,8 +67,8 @@
 
 ### Implementation for User Story 3
 
-- [ ] T015 [US3] Perform visual regression check on all primary pages in English/Desktop mode
-- [ ] T016 [US3] Fix any alignment or spacing issues introduced by logical property refactoring in src/styles/globals.scss
+- [x] T015 [US3] Perform visual regression check on all primary pages in English/Desktop mode
+- [x] T016 [US3] Fix any alignment or spacing issues introduced by logical property refactoring in src/styles/globals.scss
 
 ---
 
@@ -76,10 +76,10 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T017 [P] Final audit of all buttons to ensure touch target size >= 44x44px in src/components/ui/
-- [ ] T018 Ensure smooth 60fps animations for mobile drawer using Framer Motion
-- [ ] T019 Run validation against quickstart.md and success criteria in spec.md
-- [ ] T020 [P] Update documentation with RTL/Mobile design guidelines in README.md
+- [x] T017 [P] Final audit of all buttons to ensure touch target size >= 44x44px in src/components/ui/
+- [x] T018 Ensure smooth 60fps animations for mobile drawer using Framer Motion
+- [x] T019 Run validation against quickstart.md and success criteria in spec.md
+- [x] T020 [P] Update documentation with RTL/Mobile design guidelines in README.md
 
 ---
 

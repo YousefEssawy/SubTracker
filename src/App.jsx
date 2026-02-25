@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { ViewportProvider } from "@/contexts/ViewportContext";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import { SpaceProvider } from "@/contexts/SpaceContext";
 import { CategoryProvider } from "@/contexts/CategoryContext";
@@ -69,170 +70,172 @@ const RootRoute = () => {
 const App = () => {
   return (
     <ThemeProvider>
-      <Router basename="/SubTracker">
-        <AuthProvider>
-          <Routes>
-            {/* Public root – landing page for guests, redirect to dashboard for users */}
-            <Route path="/" element={<RootRoute />} />
+      <ViewportProvider>
+        <Router basename="/SubTracker">
+          <AuthProvider>
+            <Routes>
+              {/* Public root – landing page for guests, redirect to dashboard for users */}
+              <Route path="/" element={<RootRoute />} />
 
-            {/* Auth Routes */}
-            <Route
-              path="/login"
-              element={
-                <PublicAuthRoute>
-                  <LoginPage />
-                </PublicAuthRoute>
-              }
-            />
-            <Route
-              path="/signup"
-              element={
-                <PublicAuthRoute>
-                  <SignupPage />
-                </PublicAuthRoute>
-              }
-            />
+              {/* Auth Routes */}
+              <Route
+                path="/login"
+                element={
+                  <PublicAuthRoute>
+                    <LoginPage />
+                  </PublicAuthRoute>
+                }
+              />
+              <Route
+                path="/signup"
+                element={
+                  <PublicAuthRoute>
+                    <SignupPage />
+                  </PublicAuthRoute>
+                }
+              />
 
-            {/* App shell with sidebar layout */}
-            <Route
-              path="/*"
-              element={
-                <SubscriptionProvider>
-                  <SpaceProvider>
-                    <CategoryProvider>
-                      <TransactionProvider>
-                        <RecurrenceProvider>
-                          <Layout>
-                            <Routes>
-                              {/* Dashboard */}
-                              <Route
-                                path="/dashboard"
-                                element={
-                                  <ProtectedRoute>
-                                    <DashboardPage />
-                                  </ProtectedRoute>
-                                }
-                              />
+              {/* App shell with sidebar layout */}
+              <Route
+                path="/*"
+                element={
+                  <SubscriptionProvider>
+                    <SpaceProvider>
+                      <CategoryProvider>
+                        <TransactionProvider>
+                          <RecurrenceProvider>
+                            <Layout>
+                              <Routes>
+                                {/* Dashboard */}
+                                <Route
+                                  path="/dashboard"
+                                  element={
+                                    <ProtectedRoute>
+                                      <DashboardPage />
+                                    </ProtectedRoute>
+                                  }
+                                />
 
-                              {/* Subscriptions */}
-                              <Route
-                                path="/subscriptions"
-                                element={
-                                  <ProtectedRoute>
-                                    <SubscriptionsPage />
-                                  </ProtectedRoute>
-                                }
-                              />
-                              <Route
-                                path="/subscriptions/add"
-                                element={
-                                  <ProtectedRoute>
-                                    <SubscriptionFormPage />
-                                  </ProtectedRoute>
-                                }
-                              />
-                              <Route
-                                path="/subscriptions/:id"
-                                element={
-                                  <ProtectedRoute>
-                                    <SubscriptionFormPage />
-                                  </ProtectedRoute>
-                                }
-                              />
-                              <Route
-                                path="/history"
-                                element={
-                                  <ProtectedRoute>
-                                    <HistoryPage />
-                                  </ProtectedRoute>
-                                }
-                              />
-                              <Route
-                                path="/settings"
-                                element={
-                                  <ProtectedRoute>
-                                    <SettingsPage />
-                                  </ProtectedRoute>
-                                }
-                              />
+                                {/* Subscriptions */}
+                                <Route
+                                  path="/subscriptions"
+                                  element={
+                                    <ProtectedRoute>
+                                      <SubscriptionsPage />
+                                    </ProtectedRoute>
+                                  }
+                                />
+                                <Route
+                                  path="/subscriptions/add"
+                                  element={
+                                    <ProtectedRoute>
+                                      <SubscriptionFormPage />
+                                    </ProtectedRoute>
+                                  }
+                                />
+                                <Route
+                                  path="/subscriptions/:id"
+                                  element={
+                                    <ProtectedRoute>
+                                      <SubscriptionFormPage />
+                                    </ProtectedRoute>
+                                  }
+                                />
+                                <Route
+                                  path="/history"
+                                  element={
+                                    <ProtectedRoute>
+                                      <HistoryPage />
+                                    </ProtectedRoute>
+                                  }
+                                />
+                                <Route
+                                  path="/settings"
+                                  element={
+                                    <ProtectedRoute>
+                                      <SettingsPage />
+                                    </ProtectedRoute>
+                                  }
+                                />
 
-                              {/* ── Finance Routes ── */}
-                              <Route
-                                path="/spaces"
-                                element={
-                                  <ProtectedRoute>
-                                    <SpacesPage />
-                                  </ProtectedRoute>
-                                }
-                              />
-                              <Route
-                                path="/categories"
-                                element={
-                                  <ProtectedRoute>
-                                    <CategoriesPage />
-                                  </ProtectedRoute>
-                                }
-                              />
-                              <Route
-                                path="/transactions"
-                                element={
-                                  <ProtectedRoute>
-                                    <TransactionsPage />
-                                  </ProtectedRoute>
-                                }
-                              />
-                              <Route
-                                path="/transactions/add"
-                                element={
-                                  <ProtectedRoute>
-                                    <TransactionFormPage />
-                                  </ProtectedRoute>
-                                }
-                              />
-                              <Route
-                                path="/transactions/:id/edit"
-                                element={
-                                  <ProtectedRoute>
-                                    <TransactionFormPage />
-                                  </ProtectedRoute>
-                                }
-                              />
-                              <Route
-                                path="/transactions/:id"
-                                element={
-                                  <ProtectedRoute>
-                                    <TransactionDetailPage />
-                                  </ProtectedRoute>
-                                }
-                              />
-                              <Route
-                                path="/recurrences"
-                                element={
-                                  <ProtectedRoute>
-                                    <RecurrencesPage />
-                                  </ProtectedRoute>
-                                }
-                              />
+                                {/* ── Finance Routes ── */}
+                                <Route
+                                  path="/spaces"
+                                  element={
+                                    <ProtectedRoute>
+                                      <SpacesPage />
+                                    </ProtectedRoute>
+                                  }
+                                />
+                                <Route
+                                  path="/categories"
+                                  element={
+                                    <ProtectedRoute>
+                                      <CategoriesPage />
+                                    </ProtectedRoute>
+                                  }
+                                />
+                                <Route
+                                  path="/transactions"
+                                  element={
+                                    <ProtectedRoute>
+                                      <TransactionsPage />
+                                    </ProtectedRoute>
+                                  }
+                                />
+                                <Route
+                                  path="/transactions/add"
+                                  element={
+                                    <ProtectedRoute>
+                                      <TransactionFormPage />
+                                    </ProtectedRoute>
+                                  }
+                                />
+                                <Route
+                                  path="/transactions/:id/edit"
+                                  element={
+                                    <ProtectedRoute>
+                                      <TransactionFormPage />
+                                    </ProtectedRoute>
+                                  }
+                                />
+                                <Route
+                                  path="/transactions/:id"
+                                  element={
+                                    <ProtectedRoute>
+                                      <TransactionDetailPage />
+                                    </ProtectedRoute>
+                                  }
+                                />
+                                <Route
+                                  path="/recurrences"
+                                  element={
+                                    <ProtectedRoute>
+                                      <RecurrencesPage />
+                                    </ProtectedRoute>
+                                  }
+                                />
 
-                              {/* Public Layout Routes */}
-                              <Route path="/about" element={<AboutPage />} />
-                              <Route path="/how-to" element={<HowToPage />} />
-                              <Route
-                                path="/coming-soon"
-                                element={<ComingSoonPage />}
-                              />
-                            </Routes>
-                          </Layout>
-                        </RecurrenceProvider>
-                      </TransactionProvider>
-                    </CategoryProvider>
-                  </SpaceProvider>
-                </SubscriptionProvider>
-              }
-            />
-          </Routes>
-        </AuthProvider>
-      </Router>
+                                {/* Public Layout Routes */}
+                                <Route path="/about" element={<AboutPage />} />
+                                <Route path="/how-to" element={<HowToPage />} />
+                                <Route
+                                  path="/coming-soon"
+                                  element={<ComingSoonPage />}
+                                />
+                              </Routes>
+                            </Layout>
+                          </RecurrenceProvider>
+                        </TransactionProvider>
+                      </CategoryProvider>
+                    </SpaceProvider>
+                  </SubscriptionProvider>
+                }
+              />
+            </Routes>
+          </AuthProvider>
+        </Router>
+      </ViewportProvider>
     </ThemeProvider>
   );
 };

@@ -287,7 +287,7 @@ const TransactionFormPage = () => {
         </div>
 
         {/* Amount + Currency */}
-        <div className="flex gap-3">
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-3">
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
               Amount
@@ -305,7 +305,7 @@ const TransactionFormPage = () => {
               <p className="mt-1 text-xs text-red-500">{errors.amount}</p>
             )}
           </div>
-          <div className="w-28">
+          <div className="w-full sm:w-28">
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
               Currency
             </label>
