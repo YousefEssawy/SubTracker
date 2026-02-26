@@ -1,8 +1,9 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { HiOutlineBanknotes } from "react-icons/hi2";
 import { useTranslation } from "react-i18next";
+import type { BalanceMap, CurrencyBalance } from "@/models";
 
-const currencySymbolMap = {
+const currencySymbolMap: Record<string, string> = {
   EGP: "E£",
   USD: "$",
   EUR: "€",
@@ -23,7 +24,7 @@ const currencySymbolMap = {
   AUD: "A$",
 };
 
-const fmt = (value) => {
+const fmt = (value: number) => {
   try {
     return new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 2,
@@ -34,7 +35,13 @@ const fmt = (value) => {
   }
 };
 
-const CurrencyBlock = ({ currency, data, compact }) => {
+interface CurrencyBlockProps {
+  currency: string;
+  data: CurrencyBalance;
+  compact?: boolean;
+}
+
+const CurrencyBlock = ({ currency, data, compact }: CurrencyBlockProps) => {
   const symbol = currencySymbolMap[currency] || currency;
   const isPositive = data.balance >= 0;
   const { t } = useTranslation();
@@ -49,7 +56,7 @@ const CurrencyBlock = ({ currency, data, compact }) => {
           className={`text-sm font-bold ${isPositive ? "text-emerald-600 dark:text-emerald-400" : "text-red-500 dark:text-red-400"}`}
         >
           {isPositive ? "+" : "-"}
-          {symbol} {fmt(data.balance, currency)}
+          {symbol} {fmt(data.balance)}
         </span>
       </div>
     );
@@ -72,7 +79,7 @@ const CurrencyBlock = ({ currency, data, compact }) => {
           className={`text-base font-bold ${isPositive ? "text-emerald-600 dark:text-emerald-400" : "text-red-500 dark:text-red-400"}`}
         >
           {isPositive ? "+" : "-"}
-          {symbol} {fmt(data.balance, currency)}
+          {symbol} {fmt(data.balance)}
         </span>
       </div>
       <div className="grid grid-cols-2 gap-3">
@@ -81,7 +88,7 @@ const CurrencyBlock = ({ currency, data, compact }) => {
             {t("finance.balance.income", "Income")}
           </p>
           <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">
-            {symbol} {fmt(data.income, currency)}
+            {symbol} {fmt(data.income)}
           </p>
         </div>
         <div className="bg-red-50 dark:bg-red-900/20 rounded-xl p-3">
@@ -89,7 +96,7 @@ const CurrencyBlock = ({ currency, data, compact }) => {
             {t("finance.balance.expenses", "Expense")}
           </p>
           <p className="text-sm font-semibold text-red-600 dark:text-red-300">
-            {symbol} {fmt(data.expense, currency)}
+            {symbol} {fmt(data.expense)}
           </p>
         </div>
       </div>
@@ -97,14 +104,15 @@ const CurrencyBlock = ({ currency, data, compact }) => {
   );
 };
 
-/**
- * BalanceCard — displays computed balances grouped by currency.
- *
- * @param {object} props
- * @param {"summary" | "contextual"} [props.variant] - Display variant.
- * @param {import('@/models').BalanceMap} [props.balances] - Per-currency balance map from computeBalances().
- */
-const BalanceCard = ({ variant = "summary", balances = {} }) => {
+interface BalanceCardProps {
+  variant?: "summary" | "contextual";
+  balances?: BalanceMap;
+}
+
+const BalanceCard = ({
+  variant = "summary",
+  balances = {},
+}: BalanceCardProps) => {
   const currencies = Object.keys(balances);
   const { t } = useTranslation();
 
@@ -126,14 +134,16 @@ const BalanceCard = ({ variant = "summary", balances = {} }) => {
           {t("finance.balance.title", "Balance")}
         </p>
         <AnimatePresence mode="wait">
-          {currencies.map((cur) => (
-            <CurrencyBlock
-              key={cur}
-              currency={cur}
-              data={balances[cur]}
-              compact
-            />
-          ))}
+          {(currencies as import("@/models/common").CurrencyCode[]).map(
+            (cur) => (
+              <CurrencyBlock
+                key={cur}
+                currency={cur}
+                data={balances[cur]!}
+                compact
+              />
+            ),
+          )}
         </AnimatePresence>
       </div>
     );
@@ -145,11 +155,11 @@ const BalanceCard = ({ variant = "summary", balances = {} }) => {
       className={`grid gap-4 mb-6 ${currencies.length === 1 ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2"}`}
     >
       <AnimatePresence>
-        {currencies.map((cur) => (
+        {(currencies as import("@/models/common").CurrencyCode[]).map((cur) => (
           <CurrencyBlock
             key={cur}
             currency={cur}
-            data={balances[cur]}
+            data={balances[cur]!}
             compact={false}
           />
         ))}

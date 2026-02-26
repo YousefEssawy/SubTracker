@@ -7,13 +7,17 @@ import { db } from "@/services/firebase";
 import { CURRENCIES, DEFAULT_CURRENCY } from "@/utils/currencies";
 import { HiOutlineSun, HiOutlineMoon, HiOutlineCheck } from "react-icons/hi2";
 import { useTranslation } from "react-i18next";
+import type { CurrencyCode } from "@/models";
 
 const SettingsPage = () => {
   const { user } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const { t } = useTranslation();
-  const [settings, setSettings] = useState({
-    preferredCurrency: DEFAULT_CURRENCY,
+  const [settings, setSettings] = useState<{
+    preferredCurrency: CurrencyCode;
+    reminderDays: number;
+  }>({
+    preferredCurrency: DEFAULT_CURRENCY as CurrencyCode,
     reminderDays: 3,
   });
   const [saved, setSaved] = useState(false);
@@ -27,7 +31,8 @@ const SettingsPage = () => {
         if (snap.exists()) {
           const data = snap.data();
           setSettings({
-            preferredCurrency: data.preferredCurrency || DEFAULT_CURRENCY,
+            preferredCurrency:
+              (data.preferredCurrency as CurrencyCode) || DEFAULT_CURRENCY,
             reminderDays: data.reminderDays ?? 3,
           });
         }
@@ -37,6 +42,7 @@ const SettingsPage = () => {
   }, [user]);
 
   const handleSave = async () => {
+    if (!user) return;
     const profileRef = doc(db, "users", user.uid);
     await setDoc(profileRef, settings, { merge: true });
     setSaved(true);
@@ -118,7 +124,7 @@ const SettingsPage = () => {
             onChange={(e) =>
               setSettings((prev) => ({
                 ...prev,
-                preferredCurrency: e.target.value,
+                preferredCurrency: e.target.value as CurrencyCode,
               }))
             }
             className="select-field"

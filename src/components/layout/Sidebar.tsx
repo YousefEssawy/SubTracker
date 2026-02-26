@@ -15,11 +15,18 @@ import {
   HiOutlineArrowPath,
 } from "react-icons/hi2";
 import { useTranslation } from "react-i18next";
+import { TFunction } from "i18next";
+import type { IconType } from "react-icons";
 import logo from "@/assets/logo/main-logo.png";
 
 // ─── Nav items defined outside the component to avoid re-creation on render ──
+interface NavItem {
+  path: string;
+  label: string;
+  icon: IconType;
+}
 
-const makeNavItems = (t) => ({
+const makeNavItems = (t: TFunction): Record<string, NavItem[]> => ({
   main: [
     {
       path: "/dashboard",
@@ -79,7 +86,15 @@ const makeNavItems = (t) => ({
 });
 
 // ─── Individual nav link ──────────────────────────────────────────────────────
-const NavLink = ({ item, onClick, isActive }) => (
+const NavLink = ({
+  item,
+  onClick,
+  isActive,
+}: {
+  item: NavItem;
+  onClick?: () => void;
+  isActive: boolean;
+}) => (
   <Link
     to={item.path}
     onClick={onClick}
@@ -98,7 +113,17 @@ const NavLink = ({ item, onClick, isActive }) => (
 );
 
 // ─── Section of nav links ─────────────────────────────────────────────────────
-const NavSection = ({ title, items, onClick, pathname }) => (
+const NavSection = ({
+  title,
+  items,
+  onClick,
+  pathname,
+}: {
+  title?: string;
+  items: NavItem[];
+  onClick?: () => void;
+  pathname: string;
+}) => (
   <div className="mb-2">
     {title && (
       <p className="px-4 pt-4 pb-1 text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
@@ -120,7 +145,13 @@ const NavSection = ({ title, items, onClick, pathname }) => (
 );
 
 // ─── Add Subscription button ──────────────────────────────────────────────────
-const AddButton = ({ onClick, label }) => (
+const AddButton = ({
+  onClick,
+  label,
+}: {
+  onClick?: () => void;
+  label: string;
+}) => (
   <div className="p-4 border-t border-gray-200 dark:border-gray-800">
     <Link
       to="/subscriptions/add"
@@ -133,8 +164,13 @@ const AddButton = ({ onClick, label }) => (
   </div>
 );
 
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
 // ─── Sidebar component ────────────────────────────────────────────────────────
-const Sidebar = ({ isOpen, onClose }) => {
+const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const location = useLocation();
   const { t, i18n } = useTranslation();
   const isRtl = i18n.language === "ar";
@@ -142,21 +178,21 @@ const Sidebar = ({ isOpen, onClose }) => {
   const navItems = makeNavItems(t);
   const addLabel = t("sidebar.addSubscription", "Add Subscription");
 
-  const NavContent = ({ onClick }) => (
+  const NavContent = ({ onClick }: { onClick?: () => void }) => (
     <>
       <NavSection
-        items={navItems.main}
+        items={navItems.main!}
         onClick={onClick}
         pathname={location.pathname}
       />
       <NavSection
         title={t("sidebar.finance", "Finance")}
-        items={navItems.finance}
+        items={navItems.finance!}
         onClick={onClick}
         pathname={location.pathname}
       />
       <NavSection
-        items={navItems.meta}
+        items={navItems.meta!}
         onClick={onClick}
         pathname={location.pathname}
       />

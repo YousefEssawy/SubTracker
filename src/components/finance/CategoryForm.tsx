@@ -1,28 +1,29 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HiOutlineXMark } from "react-icons/hi2";
+import type { Category, CategoryInput } from "@/models";
 
-/**
- * Modal form for creating or editing a Category.
- *
- * @param {object} props
- * @param {import('@/models').Category | null} [props.category] - Existing category when editing; null for create.
- * @param {(data: import('@/models').CategoryInput) => Promise<void>} props.onSubmit - Called with validated input.
- * @param {() => void} props.onClose - Called when the modal should close.
- * @param {boolean} [props.loading] - Disables the submit button when true.
- */
+interface CategoryFormProps {
+  category?: Category | null;
+  onSubmit: (data: CategoryInput) => Promise<void>;
+  onClose: () => void;
+  loading?: boolean;
+}
+
 const CategoryForm = ({
   category = null,
   onSubmit,
   onClose,
   loading = false,
-}) => {
+}: CategoryFormProps) => {
   const isEditing = Boolean(category);
   const [name, setName] = useState(category?.name || "");
-  const [type, setType] = useState(category?.type || "Income");
+  const [type, setType] = useState<"Income" | "Expense">(
+    category?.type || "Income",
+  );
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!name.trim()) {
       setError("Category name is required.");
@@ -33,7 +34,12 @@ const CategoryForm = ({
       return;
     }
     setError("");
-    await onSubmit({ name: name.trim(), type });
+    await onSubmit({
+      name: name.trim(),
+      type,
+      icon: category?.icon || "🏷️",
+      color: category?.color || "#3b82f6",
+    });
   };
 
   return (
@@ -43,7 +49,9 @@ const CategoryForm = ({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
-        onClick={(e) => e.target === e.currentTarget && onClose()}
+        onClick={(e: React.MouseEvent<HTMLDivElement>) =>
+          e.target === e.currentTarget && onClose()
+        }
       >
         <motion.div
           initial={{ scale: 0.92, opacity: 0, y: 20 }}
@@ -59,6 +67,7 @@ const CategoryForm = ({
             </h2>
             <button
               onClick={onClose}
+              type="button"
               className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
               <HiOutlineXMark className="w-5 h-5" />
@@ -73,7 +82,7 @@ const CategoryForm = ({
                   Type
                 </label>
                 <div className="flex rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
-                  {["Income", "Expense"].map((t) => (
+                  {(["Income", "Expense"] as const).map((t) => (
                     <button
                       key={t}
                       type="button"
@@ -94,7 +103,7 @@ const CategoryForm = ({
             )}
 
             {/* Show type as read-only badge on edit */}
-            {isEditing && (
+            {isEditing && category && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Type

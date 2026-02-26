@@ -8,7 +8,7 @@ import FilterBar from "@/components/finance/FilterBar";
 import Pagination from "@/components/ui/Pagination";
 import BalanceCard from "@/components/finance/BalanceCard";
 
-const EmptyNoData = ({ onAdd }) => {
+const EmptyNoData = ({ onAdd }: { onAdd: () => void }) => {
   const { t } = useTranslation();
   return (
     <motion.div
@@ -59,7 +59,7 @@ const TransactionsPage = () => {
   const { t } = useTranslation();
   const { transactions, loading, filters, setFilters, balances, pagination } =
     useTransactions();
-  const hasFilters = Object.keys(filters).some((k) => filters[k]);
+  const hasFilters = Object.values(filters).some((val) => val);
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
@@ -81,7 +81,7 @@ const TransactionsPage = () => {
       <BalanceCard variant="contextual" balances={balances} />
 
       {/* Filters */}
-      <FilterBar filters={filters} setFilters={setFilters} />
+      <FilterBar filters={filters as any} setFilters={setFilters as any} />
 
       {/* Loading */}
       {loading ? (

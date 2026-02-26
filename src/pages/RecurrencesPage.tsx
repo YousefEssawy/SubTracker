@@ -15,31 +15,25 @@ import { useCategories } from "@/contexts/CategoryContext";
 import { formatDate } from "@/utils/dateUtils";
 import { formatCurrency } from "@/utils/currencies";
 import RecurrenceForm from "@/components/finance/RecurrenceForm";
+import type { Recurrence, Space, Category } from "@/models";
+import type { TFunction } from "i18next";
 
-const patternLabel = (pattern, interval, t) => {
+const patternLabel = (pattern: string, interval: number, t: TFunction) => {
   const prefix =
     interval > 1
       ? `${t("finance.recurrences.interval", "Every")} ${interval} `
       : `${t("finance.recurrences.interval", "Every")} `;
-  const unit = {
-    Weekly: interval > 1 ? "weeks" : "week",
-    Monthly: interval > 1 ? "months" : "month",
-    Yearly: interval > 1 ? "years" : "year",
-    Custom: interval > 1 ? "days" : "day",
+  const unit: Record<string, string> = {
+    weekly: interval > 1 ? "weeks" : "week",
+    monthly: interval > 1 ? "months" : "month",
+    yearly: interval > 1 ? "years" : "year",
+    daily: interval > 1 ? "days" : "day",
   };
   return prefix + (unit[pattern] || "month");
 };
 
 /**
  * Displays a single recurrence rule card with action buttons.
- *
- * @param {object} props
- * @param {import('@/models').Recurrence} props.recurrence - The recurrence rule to display.
- * @param {import('@/models').Space | undefined} props.space - The associated space.
- * @param {import('@/models').Category | undefined} props.category - The associated category.
- * @param {() => void} props.onPause - Called when the pause button is clicked.
- * @param {() => void} props.onReactivate - Called when the reactivate button is clicked.
- * @param {() => void} props.onDelete - Called when the delete button is clicked.
  */
 const RecurrenceCard = ({
   recurrence,
@@ -48,9 +42,17 @@ const RecurrenceCard = ({
   onPause,
   onReactivate,
   onDelete,
+}: {
+  recurrence: Recurrence;
+  space?: Space;
+  category?: Category;
+  onPause: () => void;
+  onReactivate: () => void;
+  onDelete: () => void;
 }) => {
   const { t } = useTranslation();
   const isIncome = recurrence.type === "Income";
+  const isActive = recurrence.status === "active";
   return (
     <motion.div
       layout
@@ -79,9 +81,9 @@ const RecurrenceCard = ({
                   : t("finance.categories.expense", "Expense")}
               </span>
               <span
-                className={`text-xs font-medium px-2 py-0.5 rounded-full ${recurrence.isActive ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400" : "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400"}`}
+                className={`text-xs font-medium px-2 py-0.5 rounded-full ${isActive ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400" : "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400"}`}
               >
-                {recurrence.isActive
+                {isActive
                   ? t("finance.recurrences.active", "Active")
                   : t("finance.recurrences.paused", "Paused")}
               </span>
@@ -100,16 +102,16 @@ const RecurrenceCard = ({
           >
             {formatCurrency(recurrence.amount, recurrence.currency)}
           </p>
-          {recurrence.nextExecutionDate && (
+          {recurrence.nextDate && (
             <p className="text-xs text-gray-400 mt-0.5">
               {t("finance.recurrences.next", "Next:")}{" "}
-              {formatDate(recurrence.nextExecutionDate)}
+              {formatDate(recurrence.nextDate)}
             </p>
           )}
         </div>
       </div>
       <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
-        {recurrence.isActive ? (
+        {isActive ? (
           <button
             onClick={onPause}
             className="flex items-center gap-1.5 text-xs text-yellow-600 hover:text-yellow-700 transition-colors"
@@ -151,9 +153,9 @@ const RecurrencesPage = () => {
   const { getSpaceById } = useSpaces();
   const { getCategoryById } = useCategories();
   const [showForm, setShowForm] = useState(false);
-  const [confirmDelete, setConfirmDelete] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
 
-  const handlePause = async (id) => {
+  const handlePause = async (id: string) => {
     try {
       await pauseRecurrence(id);
       toast.success(
@@ -164,7 +166,7 @@ const RecurrencesPage = () => {
     }
   };
 
-  const handleReactivate = async (rec) => {
+  const handleReactivate = async (rec: Recurrence) => {
     try {
       await reactivateRecurrence(rec.id, rec.pattern, rec.interval);
       toast.success(
@@ -177,7 +179,7 @@ const RecurrencesPage = () => {
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: string) => {
     try {
       await deleteRecurrence(id);
       toast.success(

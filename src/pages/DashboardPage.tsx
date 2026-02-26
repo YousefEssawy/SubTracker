@@ -30,10 +30,9 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  BarChart,
-  Bar,
 } from "recharts";
 import { useTranslation } from "react-i18next";
+import type { CurrencyCode } from "@/models";
 
 const CHART_COLORS = [
   "#6366F1",
@@ -52,7 +51,7 @@ const CHART_COLORS = [
 const FinancialOverview = () => {
   const { balances } = useTransactions();
   const { t } = useTranslation();
-  const hasTx = Object.keys(balances).length > 0;
+  const hasTx = Object.keys(balances as object).length > 0;
   return (
     <motion.div
       variants={{ hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } }}
@@ -70,7 +69,7 @@ const FinancialOverview = () => {
         </Link>
       </div>
       {hasTx ? (
-        <BalanceCard variant="summary" balances={balances} />
+        <BalanceCard variant="summary" balances={balances as any} />
       ) : (
         <p className="text-sm text-gray-400 text-center py-6">
           {t(
@@ -92,17 +91,22 @@ const DashboardPage = () => {
   const { isMobile } = useViewport();
   const { t, i18n } = useTranslation();
   const isRtl = i18n.language === "ar";
-  const displayCurrency = "EGP";
+  const displayCurrency: CurrencyCode = "EGP";
 
   const stats = useMemo(() => {
     const totalMonthly = activeSubscriptions.reduce((sum, sub) => {
       const monthly = getMonthlyEquivalent(
         sub.price,
-        sub.billingCycle,
+        sub.billingCycle as any,
         sub.customCycleDays,
       );
       return (
-        sum + convertCurrency(monthly, sub.currency || "EGP", displayCurrency)
+        sum +
+        convertCurrency(
+          monthly,
+          (sub.currency as CurrencyCode) || "EGP",
+          displayCurrency,
+        )
       );
     }, 0);
 
@@ -126,17 +130,17 @@ const DashboardPage = () => {
   }, [activeSubscriptions, displayCurrency]);
 
   const categoryData = useMemo(() => {
-    const map = {};
+    const map: Record<string, number> = {};
     activeSubscriptions.forEach((sub) => {
       const cat = getCategoryById(sub.category);
       const monthly = getMonthlyEquivalent(
         sub.price,
-        sub.billingCycle,
+        sub.billingCycle as any,
         sub.customCycleDays,
       );
       const converted = convertCurrency(
         monthly,
-        sub.currency || "EGP",
+        (sub.currency as CurrencyCode) || "EGP",
         displayCurrency,
       );
       map[cat.name] = (map[cat.name] || 0) + converted;
@@ -148,7 +152,7 @@ const DashboardPage = () => {
   }, [activeSubscriptions, displayCurrency]);
 
   const monthlyTrendData = useMemo(() => {
-    const months = [];
+    const months: { month: string; spending: number }[] = [];
     const now = new Date();
     const currentLang = i18n.language || "en";
     for (let i = 11; i >= 0; i--) {
@@ -165,7 +169,7 @@ const DashboardPage = () => {
       if (item) {
         item.spending += convertCurrency(
           p.amount,
-          p.currency || "EGP",
+          (p.currency as CurrencyCode) || "EGP",
           displayCurrency,
         );
       }
@@ -328,7 +332,9 @@ const DashboardPage = () => {
                       borderRadius: "12px",
                       boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
                     }}
-                    formatter={(val) => formatCurrency(val, displayCurrency)}
+                    formatter={(val) =>
+                      formatCurrency(val as number, displayCurrency)
+                    }
                   />
                 </PieChart>
               </ResponsiveContainer>
@@ -412,7 +418,9 @@ const DashboardPage = () => {
                     borderRadius: "12px",
                     boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
                   }}
-                  formatter={(val) => formatCurrency(val, displayCurrency)}
+                  formatter={(val) =>
+                    formatCurrency(val as number, displayCurrency)
+                  }
                 />
                 <Area
                   type="monotone"
@@ -471,7 +479,7 @@ const DashboardPage = () => {
                   </div>
                   <div className="text-right">
                     <p className="font-semibold text-sm">
-                      {formatCurrency(sub.price, sub.currency)}
+                      {formatCurrency(sub.price, sub.currency as CurrencyCode)}
                     </p>
                     <p
                       className={`text-xs font-medium ${sub.daysUntil <= 3 ? "text-danger" : "text-warning"}`}

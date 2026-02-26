@@ -10,9 +10,20 @@ import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { useSpaces } from "@/contexts/SpaceContext";
 import SpaceForm from "@/components/finance/SpaceForm";
+import type { Space } from "@/models";
 
 // ── Confirmation dialog ────────────────────────────────────────────────────────
-const ConfirmDialog = ({ spaceName, onConfirm, onCancel, loading }) => {
+const ConfirmDialog = ({
+  spaceName,
+  onConfirm,
+  onCancel,
+  loading,
+}: {
+  spaceName: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+  loading: boolean;
+}) => {
   const { t } = useTranslation();
   return (
     <motion.div
@@ -61,7 +72,15 @@ const ConfirmDialog = ({ spaceName, onConfirm, onCancel, loading }) => {
 };
 
 // ── Space card ─────────────────────────────────────────────────────────────────
-const SpaceCard = ({ space, onEdit, onDelete }) => {
+const SpaceCard = ({
+  space,
+  onEdit,
+  onDelete,
+}: {
+  space: Space;
+  onEdit: (space: Space) => void;
+  onDelete: (space: Space) => void;
+}) => {
   const { t } = useTranslation();
   return (
     <motion.div
@@ -119,7 +138,7 @@ const SpaceCard = ({ space, onEdit, onDelete }) => {
 };
 
 // ── Empty state ────────────────────────────────────────────────────────────────
-const EmptyState = ({ onAdd }) => {
+const EmptyState = ({ onAdd }: { onAdd: () => void }) => {
   const { t } = useTranslation();
   return (
     <motion.div
@@ -152,8 +171,8 @@ const SpacesPage = () => {
   const { t } = useTranslation();
   const { spaces, loading, addSpace, updateSpace, deleteSpace } = useSpaces();
   const [showForm, setShowForm] = useState(false);
-  const [editingSpace, setEditingSpace] = useState(null);
-  const [deletingSpace, setDeletingSpace] = useState(null);
+  const [editingSpace, setEditingSpace] = useState<Space | null>(null);
+  const [deletingSpace, setDeletingSpace] = useState<Space | null>(null);
   const [formLoading, setFormLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
@@ -161,7 +180,7 @@ const SpacesPage = () => {
     setEditingSpace(null);
     setShowForm(true);
   };
-  const handleEdit = (space) => {
+  const handleEdit = (space: Space) => {
     setEditingSpace(space);
     setShowForm(true);
   };
@@ -170,7 +189,7 @@ const SpacesPage = () => {
     setEditingSpace(null);
   };
 
-  const handleSubmit = async (data) => {
+  const handleSubmit = async (data: any) => {
     setFormLoading(true);
     try {
       if (editingSpace) {
@@ -181,7 +200,7 @@ const SpacesPage = () => {
         toast.success(t("finance.spaces.addSpace", "Space created!"));
       }
       handleCloseForm();
-    } catch (err) {
+    } catch (err: any) {
       toast.error(
         err.message || t("finance.spaces.deleteError", "Failed to save space."),
       );
@@ -199,7 +218,7 @@ const SpacesPage = () => {
         `"${deletingSpace.name}" ${t("finance.spaces.delete", "deleted")}.`,
       );
       setDeletingSpace(null);
-    } catch (err) {
+    } catch (err: any) {
       toast.error(
         err.message ||
           t("finance.spaces.deleteBlocked", "Failed to delete space."),
@@ -263,7 +282,7 @@ const SpacesPage = () => {
       <AnimatePresence>
         {showForm && (
           <SpaceForm
-            space={editingSpace}
+            space={editingSpace || undefined}
             onSubmit={handleSubmit}
             onClose={handleCloseForm}
             loading={formLoading}

@@ -7,37 +7,42 @@ import { useRecurrences } from "@/contexts/RecurrenceContext";
 import { CURRENCIES } from "@/utils/currencies";
 import { toDateInputValue } from "@/utils/dateUtils";
 import { HiOutlineXMark } from "react-icons/hi2";
+import type { TransactionType } from "@/models";
 
-const PATTERNS = ["Weekly", "Monthly", "Yearly", "Custom"];
+const PATTERNS = ["daily", "weekly", "monthly", "yearly"] as const;
 
-const RecurrenceForm = ({ onClose }) => {
+interface RecurrenceFormProps {
+  onClose: () => void;
+}
+
+const RecurrenceForm = ({ onClose }: RecurrenceFormProps) => {
   const { t } = useTranslation();
   const { spaces } = useSpaces();
   const { incomeCategories, expenseCategories } = useCategories();
   const { addRecurrence } = useRecurrences();
 
-  const [type, setType] = useState("Expense");
+  const [type, setType] = useState<TransactionType>("Expense");
   const [spaceId, setSpaceId] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState("EGP");
-  const [pattern, setPattern] = useState("Monthly");
+  const [pattern, setPattern] = useState<(typeof PATTERNS)[number]>("monthly");
   const [interval, setInterval] = useState("1");
   const [startDate, setStartDate] = useState(toDateInputValue(new Date()));
   const [endDate, setEndDate] = useState("");
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const availableCategories =
     type === "Income" ? incomeCategories : expenseCategories;
 
-  const handleTypeChange = (txType) => {
+  const handleTypeChange = (txType: TransactionType) => {
     setType(txType);
     setCategoryId("");
   };
 
   const validate = () => {
-    const e = {};
+    const e: Record<string, string> = {};
     if (!spaceId)
       e.spaceId = t("finance.recurrences.space", "Space") + " is required.";
     if (!categoryId)
@@ -52,7 +57,7 @@ const RecurrenceForm = ({ onClose }) => {
     return e;
   };
 
-  const handleSubmit = async (ev) => {
+  const handleSubmit = async (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
@@ -67,17 +72,18 @@ const RecurrenceForm = ({ onClose }) => {
         spaceId,
         categoryId,
         amount: parseFloat(amount),
-        currency,
+        currency: currency as any,
         pattern,
         interval: parseInt(interval, 10),
         startDate,
         endDate: endDate || null,
+        status: "active",
       });
       toast.success(
         t("finance.recurrences.createSuccess", "Recurrence created!"),
       );
       onClose();
-    } catch (err) {
+    } catch (err: any) {
       toast.error(
         err.message ||
           t("finance.recurrences.createError", "Failed to create recurrence."),
@@ -108,7 +114,7 @@ const RecurrenceForm = ({ onClose }) => {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Type */}
           <div className="flex rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
-            {["Income", "Expense"].map((txType) => (
+            {(["Income", "Expense"] as const).map((txType) => (
               <button
                 key={txType}
                 type="button"
@@ -215,12 +221,12 @@ const RecurrenceForm = ({ onClose }) => {
               </label>
               <select
                 value={pattern}
-                onChange={(e) => setPattern(e.target.value)}
+                onChange={(e) => setPattern(e.target.value as any)}
                 className={inputCls}
               >
                 {PATTERNS.map((p) => (
                   <option key={p} value={p}>
-                    {p}
+                    {p.charAt(0).toUpperCase() + p.slice(1)}
                   </option>
                 ))}
               </select>

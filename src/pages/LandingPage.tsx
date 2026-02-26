@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "@/contexts/ThemeContext";
 import {
@@ -14,7 +14,7 @@ import lightLogo from "@/assets/logo/light-mode.png";
 import darkLogo from "@/assets/logo/dark-mode.png";
 
 // Animation variants
-const fadeUp = {
+const fadeUp: Variants = {
   hidden: { opacity: 0, y: 30 },
   visible: (i = 0) => ({
     opacity: 1,
@@ -23,13 +23,19 @@ const fadeUp = {
   }),
 };
 
-const stagger = {
+const stagger: Variants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.12 } },
 };
 
 // ─── NavBar ──────────────────────────────────────────────────────────
-const LandingNav = ({ theme, onToggleTheme }) => {
+const LandingNav = ({
+  theme,
+  onToggleTheme,
+}: {
+  theme: string;
+  onToggleTheme: () => void;
+}) => {
   const { t, i18n } = useTranslation();
   return (
     <header className="fixed top-0 start-0 end-0 z-50 bg-white/80 dark:bg-background-dark/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-800/50">

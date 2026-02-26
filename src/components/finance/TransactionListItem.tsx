@@ -5,14 +5,13 @@ import { formatDate } from "@/utils/dateUtils";
 import { formatCurrency } from "@/utils/currencies";
 import { useSpaces } from "@/contexts/SpaceContext";
 import { useCategories } from "@/contexts/CategoryContext";
+import type { Transaction } from "@/models";
 
-/**
- * Renders a single transaction row in a list.
- *
- * @param {object} props
- * @param {import('@/models').Transaction} props.transaction - The transaction to display.
- */
-const TransactionListItem = ({ transaction }) => {
+interface TransactionListItemProps {
+  transaction: Transaction;
+}
+
+const TransactionListItem = ({ transaction }: TransactionListItemProps) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { getSpaceById } = useSpaces();

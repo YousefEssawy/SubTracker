@@ -13,6 +13,8 @@ Auto-generated from all feature plans. Last updated: 2026-02-24
 - LocalStorage (for locale persistence), Firebase (for user profile sync if applicable) (003-system-localization)
 - JavaScript (ES2020) → TypeScript 5.x (partial migration); React 19 with JSX + Vite 7, Firebase 12, React Router 7, Framer Motion 12, Recharts, i18next (001-strong-type-models)
 - Firebase Firestore (cloud) — no local storage layer (001-strong-type-models)
+- TypeScript 5.7+ / React 18 + Vite, TailwindCSS, framer-motion, recharts (005-migrate-tsx)
+- N/A (UI layer only; services already migrated) (005-migrate-tsx)
 
 - [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION] + [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION] (001-mobile-design-refactor)
 
@@ -33,9 +35,9 @@ cd src; pytest; ruff check .
 [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]: Follow standard conventions
 
 ## Recent Changes
+- 005-migrate-tsx: Added TypeScript 5.7+ / React 18 + Vite, TailwindCSS, framer-motion, recharts
 - 001-strong-type-models: Added JavaScript (ES2020) → TypeScript 5.x (partial migration); React 19 with JSX + Vite 7, Firebase 12, React Router 7, Framer Motion 12, Recharts, i18next
 - 003-system-localization: Added JavaScript (React 19+, ESM) + Vite, TailwindCSS v3, i18next v25+, react-i18next v16+, date-fns
-- 004-responsive-rtl-revision: Added JavaScript (React 19+, ESM) + Vite, TailwindCSS v3, Framer Motion, Recharts, React-i18next
 
 
 <!-- MANUAL ADDITIONS START -->

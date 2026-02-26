@@ -2,13 +2,25 @@ import { useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { HiOutlineXMark } from "react-icons/hi2";
 
-const TagInput = ({ tags = [], onChange, maxTags = 10, maxLength = 30 }) => {
+interface TagInputProps {
+  tags?: string[];
+  onChange: (tags: string[]) => void;
+  maxTags?: number;
+  maxLength?: number;
+}
+
+const TagInput = ({
+  tags = [],
+  onChange,
+  maxTags = 10,
+  maxLength = 30,
+}: TagInputProps) => {
   const { t } = useTranslation();
   const [input, setInput] = useState("");
   const [error, setError] = useState("");
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const addTag = (raw) => {
+  const addTag = (raw: string) => {
     const tag = raw.toLowerCase().trim();
     if (!tag) return;
 
@@ -38,19 +50,19 @@ const TagInput = ({ tags = [], onChange, maxTags = 10, maxLength = 30 }) => {
     setInput("");
   };
 
-  const removeTag = (tag) => {
+  const removeTag = (tag: string) => {
     onChange(tags.filter((tg) => tg !== tag));
     setError("");
   };
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" || e.key === ",") {
       e.preventDefault();
       addTag(input);
     }
     // Remove last tag on backspace when input is empty
     if (e.key === "Backspace" && !input && tags.length > 0) {
-      removeTag(tags[tags.length - 1]);
+      removeTag(tags[tags.length - 1]!);
     }
   };
 

@@ -12,6 +12,12 @@ import { CURRENCIES, DEFAULT_CURRENCY } from "@/utils/currencies";
 import { BILLING_CYCLES, toDateInputValue } from "@/utils/dateUtils";
 import { HiOutlineArrowLeft } from "react-icons/hi2";
 import { useTranslation } from "react-i18next";
+import type {
+  CurrencyCode,
+  BillingCycle,
+  SubscriptionStatus,
+  SubscriptionInput,
+} from "@/models";
 
 const SubscriptionFormPage = () => {
   const { id } = useParams();
@@ -25,31 +31,33 @@ const SubscriptionFormPage = () => {
   const [form, setForm] = useState({
     name: "",
     price: "",
-    currency: DEFAULT_CURRENCY,
+    currency: DEFAULT_CURRENCY as CurrencyCode,
     category: "other",
-    billingCycle: "monthly",
+    billingCycle: "monthly" as BillingCycle,
     customCycleDays: "",
     renewalDate: toDateInputValue(new Date()),
     paymentMethod: "",
-    status: "active",
+    status: "active" as SubscriptionStatus,
     notes: "",
   });
 
   useEffect(() => {
-    if (isEdit && user) {
+    if (isEdit && user && id) {
       (async () => {
         const sub = await getSubscription(user.uid, id);
         if (sub) {
           setForm({
             name: sub.name || "",
-            price: sub.price || "",
-            currency: sub.currency || DEFAULT_CURRENCY,
+            price: String(sub.price || ""),
+            currency: (sub.currency as CurrencyCode) || DEFAULT_CURRENCY,
             category: sub.category || "other",
-            billingCycle: sub.billingCycle || "monthly",
-            customCycleDays: sub.customCycleDays || "",
+            billingCycle: (sub.billingCycle as BillingCycle) || "monthly",
+            customCycleDays: sub.customCycleDays
+              ? String(sub.customCycleDays)
+              : "",
             renewalDate: toDateInputValue(sub.renewalDate),
             paymentMethod: sub.paymentMethod || "",
-            status: sub.status || "active",
+            status: (sub.status as SubscriptionStatus) || "active",
             notes: sub.notes || "",
           });
         }
@@ -58,25 +66,37 @@ const SubscriptionFormPage = () => {
     }
   }, [id, isEdit, user]);
 
-  const handleChange = (e) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >,
+  ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) return;
     setLoading(true);
     try {
-      const data = {
-        ...form,
+      const data: SubscriptionInput = {
+        name: form.name,
         price: parseFloat(form.price),
+        currency: form.currency,
+        category: form.category as any, // bypassing category ID string mismatch
+        billingCycle: form.billingCycle,
+        renewalDate: form.renewalDate,
+        paymentMethod: form.paymentMethod,
+        status: form.status,
+        notes: form.notes,
         customCycleDays:
-          form.billingCycle === "custom"
-            ? parseInt(form.customCycleDays)
+          form.billingCycle === "custom" && form.customCycleDays
+            ? parseInt(form.customCycleDays, 10)
             : null,
       };
 
-      if (isEdit) {
+      if (isEdit && id) {
         await updateSubscription(user.uid, id, data);
       } else {
         await addSubscription(user.uid, data);
@@ -284,7 +304,7 @@ const SubscriptionFormPage = () => {
               name="notes"
               value={form.notes}
               onChange={handleChange}
-              rows="3"
+              rows={3}
               placeholder={t("subscriptionForm.notesPlaceholder")}
               className="input-field resize-none"
             />

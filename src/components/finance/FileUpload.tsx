@@ -6,29 +6,42 @@ import {
   HiOutlinePhoto,
   HiOutlineXMark,
 } from "react-icons/hi2";
+import type { AttachmentMeta } from "@/models";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "application/pdf"];
 const MAX_SIZE = 5 * 1024 * 1024; // 5 MB
 
-const typeIcon = (contentType) => {
+const typeIcon = (contentType?: string) => {
   if (contentType?.startsWith("image/"))
     return <HiOutlinePhoto className="w-6 h-6" />;
   return <HiOutlineDocumentText className="w-6 h-6" />;
 };
 
-const formatSize = (bytes) => {
+const formatSize = (bytes: number) => {
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
 };
 
-const FileUpload = ({ file, existingMeta, onFileSelect, onRemove }) => {
+interface FileUploadProps {
+  file: File | null;
+  existingMeta?: AttachmentMeta | null;
+  onFileSelect: (file: File) => void;
+  onRemove: () => void;
+}
+
+const FileUpload = ({
+  file,
+  existingMeta,
+  onFileSelect,
+  onRemove,
+}: FileUploadProps) => {
   const { t } = useTranslation();
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const [error, setError] = useState("");
   const [dragOver, setDragOver] = useState(false);
 
-  const validateAndSet = (selectedFile) => {
+  const validateAndSet = (selectedFile: File) => {
     setError("");
     if (!ALLOWED_TYPES.includes(selectedFile.type)) {
       setError(
@@ -54,15 +67,15 @@ const FileUpload = ({ file, existingMeta, onFileSelect, onRemove }) => {
     onFileSelect(selectedFile);
   };
 
-  const handleDrop = (e) => {
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setDragOver(false);
     const dropped = e.dataTransfer.files[0];
     if (dropped) validateAndSet(dropped);
   };
 
-  const handleChange = (e) => {
-    const selected = e.target.files[0];
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selected = e.target.files?.[0];
     if (selected) validateAndSet(selected);
   };
 
@@ -71,9 +84,9 @@ const FileUpload = ({ file, existingMeta, onFileSelect, onRemove }) => {
     file ||
     (existingMeta
       ? {
-          name: existingMeta.fileName,
-          size: existingMeta.fileSize,
-          type: existingMeta.contentType,
+          name: existingMeta.name,
+          size: existingMeta.size,
+          type: existingMeta.type,
         }
       : null);
 

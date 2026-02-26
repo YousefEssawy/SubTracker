@@ -1,5 +1,15 @@
 import { useTranslation } from "react-i18next";
 
+export interface PaginationProps {
+  hasNext: boolean;
+  hasPrev: boolean;
+  goNext: () => void;
+  goPrev: () => void;
+  pageSize: number;
+  setPageSize: (size: number) => void;
+  pageSizeOptions?: number[] | readonly number[];
+}
+
 const Pagination = ({
   hasNext,
   hasPrev,
@@ -8,7 +18,7 @@ const Pagination = ({
   pageSize,
   setPageSize,
   pageSizeOptions = [10, 25, 50],
-}) => {
+}: PaginationProps) => {
   const { t } = useTranslation();
 
   return (

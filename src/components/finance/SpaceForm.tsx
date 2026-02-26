@@ -7,24 +7,28 @@ import {
   DEFAULT_SPACE_COLOR,
   DEFAULT_SPACE_ICON,
 } from "@/utils/spaceDefaults";
+import type { Space, SpaceInput } from "@/models";
 
-/**
- * Modal form for creating or editing a Space.
- *
- * @param {object} props
- * @param {import('@/models').Space | null} [props.space] - Existing space when editing; null for create.
- * @param {(data: import('@/models').SpaceInput) => Promise<void>} props.onSubmit - Called with validated input.
- * @param {() => void} props.onClose - Called when the modal should close.
- * @param {boolean} [props.loading] - Disables the submit button when true.
- */
-const SpaceForm = ({ space = null, onSubmit, onClose, loading = false }) => {
+interface SpaceFormProps {
+  space?: Space | null;
+  onSubmit: (data: SpaceInput) => Promise<void>;
+  onClose: () => void;
+  loading?: boolean;
+}
+
+const SpaceForm = ({
+  space = null,
+  onSubmit,
+  onClose,
+  loading = false,
+}: SpaceFormProps) => {
   const isEditing = Boolean(space);
   const [name, setName] = useState(space?.name || "");
   const [color, setColor] = useState(space?.color || DEFAULT_SPACE_COLOR);
   const [icon, setIcon] = useState(space?.icon || DEFAULT_SPACE_ICON);
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!name.trim()) {
       setError("Space name is required.");
@@ -45,7 +49,9 @@ const SpaceForm = ({ space = null, onSubmit, onClose, loading = false }) => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
-        onClick={(e) => e.target === e.currentTarget && onClose()}
+        onClick={(e: React.MouseEvent<HTMLDivElement>) =>
+          e.target === e.currentTarget && onClose()
+        }
       >
         <motion.div
           initial={{ scale: 0.92, opacity: 0, y: 20 }}
@@ -61,6 +67,7 @@ const SpaceForm = ({ space = null, onSubmit, onClose, loading = false }) => {
             </h2>
             <button
               onClick={onClose}
+              type="button"
               className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
               <HiOutlineXMark className="w-5 h-5" />

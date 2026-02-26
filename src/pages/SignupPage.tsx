@@ -1,41 +1,52 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
-import { signInWithEmail, signInWithGoogle } from "@/services/authService";
+import { signUpWithEmail, signInWithGoogle } from "@/services/authService";
+import { motion } from "framer-motion";
 import { FcGoogle } from "react-icons/fc";
 import {
   HiOutlineEnvelope,
   HiOutlineLockClosed,
+  HiOutlineUser,
   HiOutlineEye,
   HiOutlineEyeSlash,
 } from "react-icons/hi2";
+import { useTranslation } from "react-i18next";
 
 import lightLogo from "@/assets/logo/light-mode.png";
 import darkLogo from "@/assets/logo/dark-mode.png";
-
 import { useTheme } from "@/contexts/ThemeContext";
-import { useTranslation } from "react-i18next";
 
-const LoginPage = () => {
-  const { theme } = useTheme();
+const SignupPage = () => {
   const { t } = useTranslation();
+  const { theme } = useTheme();
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPwd, setConfirmPwd] = useState("");
   const [showPwd, setShowPwd] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleEmailLogin = async (e) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    if (password !== confirmPwd) {
+      setError(t("signup.passwordsMismatch"));
+      return;
+    }
+    if (password.length < 6) {
+      setError(t("signup.passwordTooShort"));
+      return;
+    }
     setLoading(true);
     try {
-      await signInWithEmail(email, password);
+      await signUpWithEmail(email, password, name);
       navigate("/");
-    } catch (err) {
+    } catch (err: any) {
       setError(
-        err.message.replace("Firebase: ", "").replace(/\(auth\/.*\)/, ""),
+        err.message?.replace("Firebase: ", "").replace(/\(auth\/.*\)/, "") ||
+          t("signup.error"),
       );
     }
     setLoading(false);
@@ -47,9 +58,10 @@ const LoginPage = () => {
     try {
       await signInWithGoogle();
       navigate("/");
-    } catch (err) {
+    } catch (err: any) {
       setError(
-        err.message.replace("Firebase: ", "").replace(/\(auth\/.*\)/, ""),
+        err.message?.replace("Firebase: ", "").replace(/\(auth\/.*\)/, "") ||
+          t("signup.error"),
       );
     }
     setLoading(false);
@@ -70,14 +82,13 @@ const LoginPage = () => {
             className="h-20 mx-auto mb-2"
           />
           <p className="text-gray-500 dark:text-gray-400">
-            {t("login.subtitle")}
+            {t("signup.subtitle")}
           </p>
         </div>
 
-        {/* Card */}
         <div className="glass-card p-8">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-            {t("login.welcomeBack")}
+            {t("signup.createAccount")}
           </h2>
 
           {error && (
@@ -86,14 +97,13 @@ const LoginPage = () => {
             </div>
           )}
 
-          {/* Google Sign-In */}
           <button
             onClick={handleGoogleLogin}
             disabled={loading}
             className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-750 transition-all duration-200 mb-6"
           >
             <FcGoogle className="w-5 h-5" />
-            {t("login.continueWithGoogle")}
+            {t("signup.continueWithGoogle")}
           </button>
 
           <div className="relative mb-6">
@@ -102,15 +112,28 @@ const LoginPage = () => {
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="px-4 bg-white dark:bg-surface-dark text-gray-500">
-                {t("login.or")}
+                {t("signup.or")}
               </span>
             </div>
           </div>
 
-          {/* Email Form */}
-          <form onSubmit={handleEmailLogin} className="space-y-4">
+          <form onSubmit={handleSignup} className="space-y-4">
             <div>
-              <label className="label-text">{t("login.email")}</label>
+              <label className="label-text">{t("signup.fullName")}</label>
+              <div className="relative">
+                <HiOutlineUser className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="John Doe"
+                  className="input-field pl-10"
+                  required
+                />
+              </div>
+            </div>
+            <div>
+              <label className="label-text">{t("signup.email")}</label>
               <div className="relative">
                 <HiOutlineEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
@@ -124,7 +147,7 @@ const LoginPage = () => {
               </div>
             </div>
             <div>
-              <label className="label-text">{t("login.password")}</label>
+              <label className="label-text">{t("signup.password")}</label>
               <div className="relative">
                 <HiOutlineLockClosed className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
@@ -148,22 +171,40 @@ const LoginPage = () => {
                 </button>
               </div>
             </div>
+            <div>
+              <label className="label-text">
+                {t("signup.confirmPassword")}
+              </label>
+              <div className="relative">
+                <HiOutlineLockClosed className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type={showPwd ? "text" : "password"}
+                  value={confirmPwd}
+                  onChange={(e) => setConfirmPwd(e.target.value)}
+                  placeholder="••••••••"
+                  className="input-field pl-10"
+                  required
+                />
+              </div>
+            </div>
             <button
               type="submit"
               disabled={loading}
               className="w-full btn-primary py-3 disabled:opacity-50"
             >
-              {loading ? t("login.signingIn") : t("login.signIn")}
+              {loading
+                ? t("signup.creatingAccount")
+                : t("signup.createAccountBtn")}
             </button>
           </form>
 
           <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
-            {t("login.noAccount")}{" "}
+            {t("signup.hasAccount")}{" "}
             <Link
-              to="/signup"
+              to="/login"
               className="text-primary hover:underline font-medium"
             >
-              {t("login.signUp")}
+              {t("signup.signIn")}
             </Link>
           </p>
         </div>
@@ -172,4 +213,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignupPage;

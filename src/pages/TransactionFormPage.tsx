@@ -13,6 +13,15 @@ import { toDateInputValue } from "@/utils/dateUtils";
 import TagInput from "@/components/finance/TagInput";
 import FileUpload from "@/components/finance/FileUpload";
 import { useTranslation } from "react-i18next";
+import type { AttachmentMeta, TransactionInput, CurrencyCode } from "@/models";
+
+interface ValidationErrors {
+  spaceId?: string;
+  categoryId?: string;
+  amount?: string;
+  transactionDate?: string;
+  currency?: string;
+}
 
 const TransactionFormPage = () => {
   const navigate = useNavigate();
@@ -28,10 +37,10 @@ const TransactionFormPage = () => {
 
   const [loading, setLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(isEditMode);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<ValidationErrors>({});
 
   // Core fields
-  const [type, setType] = useState("Expense");
+  const [type, setType] = useState<"Income" | "Expense">("Expense");
   const [spaceId, setSpaceId] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [amount, setAmount] = useState("");
@@ -42,10 +51,13 @@ const TransactionFormPage = () => {
 
   // Enrichment fields
   const [notes, setNotes] = useState("");
-  const [tags, setTags] = useState([]);
-  const [attachmentFile, setAttachmentFile] = useState(null);
-  const [existingAttachmentMeta, setExistingAttachmentMeta] = useState(null);
-  const [_existingAttachmentUrl, setExistingAttachmentUrl] = useState(null);
+  const [tags, setTags] = useState<string[]>([]);
+  const [attachmentFile, setAttachmentFile] = useState<File | null>(null);
+  const [existingAttachmentMeta, setExistingAttachmentMeta] =
+    useState<AttachmentMeta | null>(null);
+  const [_existingAttachmentUrl, setExistingAttachmentUrl] = useState<
+    string | null
+  >(null);
 
   const availableCategories =
     type === "Income" ? incomeCategories : expenseCategories;
@@ -83,13 +95,13 @@ const TransactionFormPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, isEditMode, user]);
 
-  const handleTypeChange = (newType) => {
+  const handleTypeChange = (newType: "Income" | "Expense") => {
     setType(newType);
     setCategoryId("");
   };
 
-  const validate = () => {
-    const e = {};
+  const validate = (): ValidationErrors => {
+    const e: ValidationErrors = {};
     if (!spaceId) e.spaceId = "Space is required.";
     if (!categoryId) e.categoryId = "Category is required.";
     const num = parseFloat(amount);
@@ -102,8 +114,9 @@ const TransactionFormPage = () => {
     return e;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) return;
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -112,31 +125,34 @@ const TransactionFormPage = () => {
     setErrors({});
     setLoading(true);
     try {
-      const data = {
+      const data: TransactionInput = {
         type,
         spaceId,
         categoryId,
         amount: parseFloat(amount),
-        currency,
+        currency: currency as CurrencyCode,
         transactionDate,
         notes: notes.trim() || null,
         tags,
+        attachmentUrl: _existingAttachmentUrl,
+        attachmentMeta: existingAttachmentMeta,
+        recurrenceId: null,
       };
 
-      let txId = id;
+      let txId: string | undefined = id;
 
-      if (isEditMode) {
+      if (isEditMode && txId) {
         // Handle attachment on edit
         if (attachmentFile) {
           const { url, meta } = await uploadAttachment(
             user.uid,
-            id,
+            txId,
             attachmentFile,
           );
           data.attachmentUrl = url;
           data.attachmentMeta = meta;
         }
-        await updateTransaction(id, data);
+        await updateTransaction(txId, data);
         toast.success(
           t("finance.transactions.updated", "Transaction updated!"),
         );
@@ -167,7 +183,7 @@ const TransactionFormPage = () => {
         toast.success(t("finance.transactions.added", "Transaction added!"));
       }
       navigate("/transactions");
-    } catch (err) {
+    } catch (err: any) {
       toast.error(
         err.message ||
           t("finance.transactions.saveError", "Failed to save transaction."),
@@ -217,7 +233,7 @@ const TransactionFormPage = () => {
             {t("finance.transactions.type", "Type")}
           </label>
           <div className="flex rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
-            {["Income", "Expense"].map((txType) => (
+            {(["Income", "Expense"] as const).map((txType) => (
               <button
                 key={txType}
                 type="button"

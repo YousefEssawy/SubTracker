@@ -25,6 +25,7 @@ import {
 } from "react-icons/hi2";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import { useTranslation } from "react-i18next";
+import type { SubscriptionStatus, CurrencyCode, Subscription } from "@/models";
 
 const SubscriptionsPage = () => {
   const { user } = useAuth();
@@ -34,7 +35,7 @@ const SubscriptionsPage = () => {
   const [filterCat, setFilterCat] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
   const [showFilters, setShowFilters] = useState(false);
-  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
     return subscriptions.filter((sub) => {
@@ -47,16 +48,16 @@ const SubscriptionsPage = () => {
 
   // Returns { count, totals: { [currency]: monthlyCost } } for a given status
   const stats = useMemo(() => {
-    const calc = (status) => {
+    const calc = (status: SubscriptionStatus) => {
       const group = subscriptions.filter((s) => s.status === status);
-      const totals = {};
+      const totals: Record<string, number> = {};
       group.forEach((s) => {
         const monthly = getMonthlyEquivalent(
           s.price,
-          s.billingCycle,
+          s.billingCycle as any,
           s.customCycleDays,
         );
-        const cur = s.currency || "EGP";
+        const cur = (s.currency as CurrencyCode) || "EGP";
         totals[cur] = (totals[cur] || 0) + monthly;
       });
       return { count: group.length, totals };
@@ -69,18 +70,20 @@ const SubscriptionsPage = () => {
   }, [subscriptions]);
 
   const handleDelete = async () => {
-    if (deleteTarget) {
+    if (deleteTarget && user) {
       await deleteSubscription(user.uid, deleteTarget);
       setDeleteTarget(null);
     }
   };
 
-  const handleToggleStatus = async (sub) => {
-    const newStatus = sub.status === "active" ? "paused" : "active";
+  const handleToggleStatus = async (sub: Subscription) => {
+    if (!user) return;
+    const newStatus: SubscriptionStatus =
+      sub.status === "active" ? "paused" : "active";
     await updateSubscription(user.uid, sub.id, { status: newStatus });
   };
 
-  const getStatusLabel = (status) => {
+  const getStatusLabel = (status: string) => {
     switch (status) {
       case "active":
         return t("subscriptions.active");
@@ -116,26 +119,28 @@ const SubscriptionsPage = () => {
 
       {/* Summary Stats */}
       <div className="grid grid-cols-3 gap-3">
-        {[
-          {
-            key: "active",
-            color: "border-success",
-            labelColor: "text-success",
-            labelKey: "subscriptions.active",
-          },
-          {
-            key: "paused",
-            color: "border-warning",
-            labelColor: "text-warning",
-            labelKey: "subscriptions.paused",
-          },
-          {
-            key: "cancelled",
-            color: "border-danger",
-            labelColor: "text-danger",
-            labelKey: "subscriptions.cancelled",
-          },
-        ].map(({ key, color, labelColor, labelKey }, idx) => {
+        {(
+          [
+            {
+              key: "active",
+              color: "border-success",
+              labelColor: "text-success",
+              labelKey: "subscriptions.active",
+            },
+            {
+              key: "paused",
+              color: "border-warning",
+              labelColor: "text-warning",
+              labelKey: "subscriptions.paused",
+            },
+            {
+              key: "cancelled",
+              color: "border-danger",
+              labelColor: "text-danger",
+              labelKey: "subscriptions.cancelled",
+            },
+          ] as const
+        ).map(({ key, color, labelColor, labelKey }, idx) => {
           const { count, totals } = stats[key];
           const currencyEntries = Object.entries(totals);
           return (
@@ -161,7 +166,7 @@ const SubscriptionsPage = () => {
                       key={cur}
                       className="text-[11px] font-semibold text-gray-700 dark:text-gray-300 truncate max-w-full"
                     >
-                      {formatCurrency(total, cur)}
+                      {formatCurrency(total, cur as CurrencyCode)}
                       <span className="text-[10px] font-normal text-gray-400 ms-0.5">
                         /{t("common.mo", "mo")}
                       </span>
@@ -271,10 +276,9 @@ const SubscriptionsPage = () => {
           <AnimatePresence mode="popLayout">
             {filtered.map((sub) => {
               const cat = getCategoryById(sub.category);
-              const daysUntil = getDaysUntilRenewal(sub.renewalDate);
               const monthly = getMonthlyEquivalent(
                 sub.price,
-                sub.billingCycle,
+                sub.billingCycle as any,
                 sub.customCycleDays,
               );
               return (
@@ -326,11 +330,17 @@ const SubscriptionsPage = () => {
                     <div className="hidden sm:flex items-center gap-4 flex-shrink-0 ml-2">
                       <div className="text-right">
                         <p className="font-bold text-gray-900 dark:text-white">
-                          {formatCurrency(sub.price, sub.currency)}
+                          {formatCurrency(
+                            sub.price,
+                            sub.currency as CurrencyCode,
+                          )}
                         </p>
                         <p className="text-xs text-gray-400">
-                          {formatCurrency(monthly, sub.currency)}/
-                          {t("common.mo", "mo")}
+                          {formatCurrency(
+                            monthly,
+                            sub.currency as CurrencyCode,
+                          )}
+                          /{t("common.mo", "mo")}
                         </p>
                       </div>
                       <div className="flex items-center gap-1">
@@ -367,7 +377,7 @@ const SubscriptionsPage = () => {
                   {/* Row 3: Action buttons — visible only on mobile */}
                   <div className="flex sm:hidden items-center justify-between mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
                     <p className="font-semibold text-gray-900 dark:text-white text-sm">
-                      {formatCurrency(sub.price, sub.currency)}
+                      {formatCurrency(sub.price, sub.currency as CurrencyCode)}
                       <span className="text-xs text-gray-400 font-normal ml-1">
                         /{sub.billingCycle}
                       </span>

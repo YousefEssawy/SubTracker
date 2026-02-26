@@ -3,8 +3,16 @@ import { useTranslation } from "react-i18next";
 import { useSpaces } from "@/contexts/SpaceContext";
 import { CURRENCIES } from "@/utils/currencies";
 import { HiOutlineXMark, HiOutlineFunnel } from "react-icons/hi2";
+import type { TransactionType } from "@/models";
 
-const TypeButton = ({ label, active, onClick, color }) => (
+interface TypeButtonProps {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+  color: string;
+}
+
+const TypeButton = ({ label, active, onClick, color }: TypeButtonProps) => (
   <button
     onClick={onClick}
     className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
@@ -17,7 +25,23 @@ const TypeButton = ({ label, active, onClick, color }) => (
   </button>
 );
 
-const FilterBar = ({ filters, setFilters }) => {
+export interface Filters {
+  spaceId?: string;
+  type?: TransactionType;
+  currency?: string;
+  tag?: string;
+  dateRange?: {
+    start?: string;
+    end?: string;
+  };
+}
+
+interface FilterBarProps {
+  filters: Filters;
+  setFilters: (filters: Filters) => void;
+}
+
+const FilterBar = ({ filters, setFilters }: FilterBarProps) => {
   const { spaces } = useSpaces();
   const { t } = useTranslation();
   const [showMore, setShowMore] = useState(false);
@@ -30,17 +54,17 @@ const FilterBar = ({ filters, setFilters }) => {
     filters.dateRange?.start ||
     filters.dateRange?.end;
 
-  const updateFilter = (key, value) => {
+  const updateFilter = <K extends keyof Filters>(key: K, value: Filters[K]) => {
     setFilters({ ...filters, [key]: value });
   };
 
-  const updateDateRange = (field, value) => {
+  const updateDateRange = (field: "start" | "end", value: string) => {
     const current = filters.dateRange || {};
     const next = { ...current, [field]: value || undefined };
     // Remove the dateRange key entirely if both are empty
     if (!next.start && !next.end) {
       const { dateRange: _dr, ...rest } = filters;
-      setFilters(rest);
+      setFilters(rest as Filters);
     } else {
       setFilters({ ...filters, dateRange: next });
     }
@@ -239,7 +263,7 @@ const FilterBar = ({ filters, setFilters }) => {
               <button
                 onClick={() => {
                   const { dateRange: _dr2, ...rest } = filters;
-                  setFilters(rest);
+                  setFilters(rest as Filters);
                 }}
                 className="hover:opacity-70"
               >

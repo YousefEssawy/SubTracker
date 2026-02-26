@@ -45,7 +45,7 @@ interface TransactionContextValue {
   setFilters: (filters: TransactionFilters) => void;
   balances: BalanceMap;
   pagination: PaginationControl;
-  addTransaction: (data: TransactionInput) => Promise<void>;
+  addTransaction: (data: TransactionInput) => Promise<Transaction>;
   updateTransaction: (id: string, data: TransactionUpdate) => Promise<void>;
 }
 
@@ -159,7 +159,7 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
   const addTransaction = useCallback(
     async (data: TransactionInput) => {
       if (!user) throw new Error("Not authenticated");
-      await addTransactionSvc(user.uid, data);
+      return await addTransactionSvc(user.uid, data);
     },
     [user],
   );

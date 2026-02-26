@@ -7,6 +7,7 @@ import { getTransaction } from "@/services/transactionService";
 import { useSpaces } from "@/contexts/SpaceContext";
 import { useCategories } from "@/contexts/CategoryContext";
 import { formatDate } from "@/utils/dateUtils";
+import type { Transaction } from "@/models";
 
 const TransactionDetailPage = () => {
   const { id } = useParams();
@@ -15,7 +16,7 @@ const TransactionDetailPage = () => {
   const { user } = useAuth();
   const { getSpaceById } = useSpaces();
   const { getCategoryById } = useCategories();
-  const [transaction, setTransaction] = useState(null);
+  const [transaction, setTransaction] = useState<Transaction | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -118,13 +119,13 @@ const TransactionDetailPage = () => {
         </div>
 
         {/* Tags */}
-        {transaction.tags?.length > 0 && (
+        {transaction.tags && transaction.tags.length > 0 && (
           <div className="pt-2 border-t border-gray-100 dark:border-gray-800">
             <p className="text-xs text-gray-400 mb-2">
               {t("finance.transactions.tags", "Tags")}
             </p>
             <div className="flex flex-wrap gap-2">
-              {transaction.tags.map((tag) => (
+              {transaction.tags.map((tag: string) => (
                 <span
                   key={tag}
                   className="px-2.5 py-0.5 rounded-full text-xs bg-primary/10 text-primary font-medium"

@@ -17,7 +17,11 @@ import { useTranslation } from "react-i18next";
 import lightLogo from "@/assets/logo/light-mode.png";
 import darkLogo from "@/assets/logo/dark-mode.png";
 
-const Header = ({ onMenuToggle }) => {
+interface HeaderProps {
+  onMenuToggle: () => void;
+}
+
+const Header = ({ onMenuToggle }: HeaderProps) => {
   const { user } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const { activeSubscriptions } = useSubscriptions();
@@ -26,18 +30,18 @@ const Header = ({ onMenuToggle }) => {
   const [showNotif, setShowNotif] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [imageError, setImageError] = useState(false);
-  const notifRef = useRef(null);
-  const profileRef = useRef(null);
+  const notifRef = useRef<HTMLDivElement>(null);
+  const profileRef = useRef<HTMLDivElement>(null);
 
   const upcomingRenewals = activeSubscriptions.filter((s) =>
     isRenewingSoon(s.renewalDate, 7),
   );
 
   useEffect(() => {
-    const handleClick = (e) => {
-      if (notifRef.current && !notifRef.current.contains(e.target))
+    const handleClick = (e: MouseEvent) => {
+      if (notifRef.current && !notifRef.current.contains(e.target as Node))
         setShowNotif(false);
-      if (profileRef.current && !profileRef.current.contains(e.target))
+      if (profileRef.current && !profileRef.current.contains(e.target as Node))
         setShowProfile(false);
     };
     document.addEventListener("mousedown", handleClick);
@@ -101,7 +105,7 @@ const Header = ({ onMenuToggle }) => {
               {t("header.signIn", "Sign In")}
             </Link>
           ) : (
-            <>
+            <div className="flex items-center gap-2">
               {/* Notifications */}
               <div ref={notifRef} className="relative">
                 <button
@@ -138,7 +142,8 @@ const Header = ({ onMenuToggle }) => {
                               <span className="text-xs text-warning font-medium">
                                 {(() => {
                                   const days = Math.ceil(
-                                    (new Date(sub.renewalDate) - new Date()) /
+                                    (new Date(sub.renewalDate).getTime() -
+                                      new Date().getTime()) /
                                       (1000 * 60 * 60 * 24),
                                   );
                                   return days <= 0
@@ -177,7 +182,7 @@ const Header = ({ onMenuToggle }) => {
                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-sm font-bold">
                       {(user?.displayName ||
                         user?.email ||
-                        "?")[0].toUpperCase()}
+                        "?")[0]!.toUpperCase()}
                     </div>
                   )}
                 </button>
@@ -201,7 +206,7 @@ const Header = ({ onMenuToggle }) => {
                   </div>
                 )}
               </div>
-            </>
+            </div>
           )}
         </div>
       </div>

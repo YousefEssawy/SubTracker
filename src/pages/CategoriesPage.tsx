@@ -10,9 +10,10 @@ import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { useCategories } from "@/contexts/CategoryContext";
 import CategoryForm from "@/components/finance/CategoryForm";
+import type { Category, CategoryInput } from "@/models";
 
 // ── Type badge ─────────────────────────────────────────────────────────────────
-const TypeBadge = ({ type }) => {
+const TypeBadge = ({ type }: { type: "Income" | "Expense" }) => {
   const { t } = useTranslation();
   return (
     <span
@@ -30,7 +31,19 @@ const TypeBadge = ({ type }) => {
 };
 
 // ── Confirmation dialog ────────────────────────────────────────────────────────
-const ConfirmDialog = ({ name, onConfirm, onCancel, loading }) => {
+interface ConfirmDialogProps {
+  name: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+  loading: boolean;
+}
+
+const ConfirmDialog = ({
+  name,
+  onConfirm,
+  onCancel,
+  loading,
+}: ConfirmDialogProps) => {
   const { t } = useTranslation();
   return (
     <motion.div
@@ -38,7 +51,9 @@ const ConfirmDialog = ({ name, onConfirm, onCancel, loading }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
-      onClick={(e) => e.target === e.currentTarget && onCancel()}
+      onClick={(e: React.MouseEvent<HTMLDivElement>) =>
+        e.target === e.currentTarget && onCancel()
+      }
     >
       <motion.div
         initial={{ scale: 0.92, opacity: 0 }}
@@ -79,7 +94,13 @@ const ConfirmDialog = ({ name, onConfirm, onCancel, loading }) => {
 };
 
 // ── Category row ───────────────────────────────────────────────────────────────
-const CategoryRow = ({ category, onEdit, onDelete }) => {
+interface CategoryRowProps {
+  category: Category;
+  onEdit: (category: Category) => void;
+  onDelete: (category: Category) => void;
+}
+
+const CategoryRow = ({ category, onEdit, onDelete }: CategoryRowProps) => {
   const { t } = useTranslation();
   return (
     <motion.div
@@ -117,7 +138,7 @@ const CategoryRow = ({ category, onEdit, onDelete }) => {
 };
 
 // ── Empty state ────────────────────────────────────────────────────────────────
-const EmptyState = ({ onAdd }) => {
+const EmptyState = ({ onAdd }: { onAdd: () => void }) => {
   const { t } = useTranslation();
   return (
     <motion.div
@@ -158,9 +179,13 @@ const CategoriesPage = () => {
     deleteCategory,
   } = useCategories();
   const [showForm, setShowForm] = useState(false);
-  const [editingCategory, setEditingCategory] = useState(null);
-  const [deletingCategory, setDeletingCategory] = useState(null);
-  const [filterType, setFilterType] = useState("All");
+  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
+  const [deletingCategory, setDeletingCategory] = useState<Category | null>(
+    null,
+  );
+  const [filterType, setFilterType] = useState<"All" | "Income" | "Expense">(
+    "All",
+  );
   const [formLoading, setFormLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
@@ -168,7 +193,7 @@ const CategoriesPage = () => {
     setEditingCategory(null);
     setShowForm(true);
   };
-  const handleEdit = (cat) => {
+  const handleEdit = (cat: Category) => {
     setEditingCategory(cat);
     setShowForm(true);
   };
@@ -177,7 +202,7 @@ const CategoriesPage = () => {
     setEditingCategory(null);
   };
 
-  const handleSubmit = async (data) => {
+  const handleSubmit = async (data: CategoryInput) => {
     setFormLoading(true);
     try {
       if (editingCategory) {
@@ -190,7 +215,7 @@ const CategoriesPage = () => {
         toast.success(t("finance.categories.addCategory", "Category created!"));
       }
       handleCloseForm();
-    } catch (err) {
+    } catch (err: any) {
       toast.error(
         err.message ||
           t("finance.categories.deleteBlocked", "Failed to save category."),
@@ -209,7 +234,7 @@ const CategoriesPage = () => {
         `"${deletingCategory.name}" ${t("finance.categories.delete", "deleted")}.`,
       );
       setDeletingCategory(null);
-    } catch (err) {
+    } catch (err: any) {
       toast.error(
         err.message ||
           t("finance.categories.deleteBlocked", "Failed to delete category."),
@@ -220,7 +245,7 @@ const CategoriesPage = () => {
     }
   };
 
-  const tabs = [
+  const tabs: { key: "All" | "Income" | "Expense"; label: string }[] = [
     { key: "All", label: t("finance.categories.all", "All") },
     { key: "Income", label: t("finance.categories.income", "Income") },
     { key: "Expense", label: t("finance.categories.expense", "Expense") },
@@ -319,7 +344,7 @@ const CategoriesPage = () => {
       <AnimatePresence>
         {showForm && (
           <CategoryForm
-            category={editingCategory}
+            category={editingCategory || undefined}
             onSubmit={handleSubmit}
             onClose={handleCloseForm}
             loading={formLoading}
