@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<title>Typography — SubTracker Design System</title>
+<link rel="stylesheet" href="../tokens.css" />
+<style>
+  body { font-family: var(--font-arabic); background: var(--bg-light); color: var(--ink-900); margin: 0; padding: 48px; }
+  a.back { color: var(--brand-primary-600); text-decoration: none; font-weight: 600; }
+  .row { border-bottom: 1px solid var(--ink-200); padding: 20px 0; display: flex; align-items: baseline; gap: 16px; }
+  .row b { font-size: var(--text-caption); color: var(--ink-500); width: 160px; direction: ltr; text-align: left; flex-shrink: 0; }
+  .en { font-family: var(--font-latin); }
+  h2 { font-size: var(--text-h3); margin: 40px 0 12px; }
+</style>
+</head>
+<body>
+  <a class="back" href="index.html">&larr; رجوع</a>
+  <h1>التيبوجرافي</h1>
+
+  <h2>عربي — Cairo</h2>
+  <div class="row"><b>display / 40px</b><span style="font-size:var(--text-display); font-weight:700; line-height:var(--leading-tight)">١٢٥٠ ج.م الرصيد الحالي</span></div>
+  <div class="row"><b>h1 / 30px</b><span style="font-size:var(--text-h1); font-weight:700">عنوان الصفحة</span></div>
+  <div class="row"><b>h2 / 24px</b><span style="font-size:var(--text-h2); font-weight:600">عنوان قسم</span></div>
+  <div class="row"><b>h3 / 20px</b><span style="font-size:var(--text-h3); font-weight:600">عنوان فرعي</span></div>
+  <div class="row"><b>body / 16px</b><span style="font-size:var(--text-body); line-height:var(--leading-relaxed)">اشتراك نتفليكس الشهري بيتجدد يوم ٥ كل شهر</span></div>
+  <div class="row"><b>body-sm / 14px</b><span style="font-size:var(--text-body-sm); color:var(--ink-500)">آخر تحديث من ٣ أيام</span></div>
+  <div class="row"><b>caption / 12px</b><span style="font-size:var(--text-caption); color:var(--ink-400)">ملاحظة صغيرة</span></div>
+
+  <h2>English — Inter</h2>
+  <div class="row en"><b>display / 40px</b><span style="font-size:var(--text-display); font-weight:700; line-height:var(--leading-tight)">$1,250.00 Balance</span></div>
+  <div class="row en"><b>h1 / 30px</b><span style="font-size:var(--text-h1); font-weight:700">Page Title</span></div>
+  <div class="row en"><b>h2 / 24px</b><span style="font-size:var(--text-h2); font-weight:600">Section Title</span></div>
+  <div class="row en"><b>body / 16px</b><span style="font-size:var(--text-body); line-height:var(--leading-normal)">Netflix subscription renews on the 5th every month</span></div>
+  <div class="row en"><b>body-sm / 14px</b><span style="font-size:var(--text-body-sm); color:var(--ink-500)">Updated 3 days ago</span></div>
+  <div class="row en"><b>caption / 12px</b><span style="font-size:var(--text-caption); color:var(--ink-400)">Small note</span></div>
+</body>
+</html>

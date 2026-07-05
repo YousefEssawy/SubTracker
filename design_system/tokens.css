@@ -1,0 +1,111 @@
+/**
+ * SubTracker Design System — Design Tokens
+ * Single source of truth for color / type / radius / shadow / spacing / motion.
+ * Import this BEFORE globals.scss. Never hardcode hex/px values in components —
+ * reference these tokens (via Tailwind theme extension or var(--token)) instead.
+ */
+
+:root {
+  /* ---------- Brand: Primary (Indigo) ---------- */
+  --brand-primary-900: #312E81;
+  --brand-primary-700: #4338CA;
+  --brand-primary-600: #4F46E5; /* dark */
+  --brand-primary-500: #6366F1; /* DEFAULT */
+  --brand-primary-400: #818CF8; /* light */
+  --brand-primary-100: #E0E7FF;
+  --brand-primary-050: #EEF2FF;
+
+  /* ---------- Brand: Accent (Pink) ---------- */
+  --brand-accent-700: #BE185D;
+  --brand-accent-600: #DB2777; /* dark */
+  --brand-accent-500: #EC4899; /* DEFAULT */
+  --brand-accent-400: #F472B6; /* light */
+  --brand-accent-100: #FCE7F3;
+  --brand-accent-050: #FDF2F8;
+
+  /* ---------- Semantic ---------- */
+  --success-600: #059669;
+  --success-500: #10B981;
+  --success-400: #34D399;
+  --success-bg: #ECFDF5;
+
+  --warning-600: #D97706;
+  --warning-500: #F59E0B;
+  --warning-400: #FBBF24;
+  --warning-bg: #FFFBEB;
+
+  --danger-600: #DC2626;
+  --danger-500: #EF4444;
+  --danger-400: #F87171;
+  --danger-bg: #FEF2F2;
+
+  /* ---------- Neutrals (slate) ---------- */
+  --ink-900: #0F172A;
+  --ink-800: #1E293B;
+  --ink-700: #334155;
+  --ink-500: #64748B;
+  --ink-400: #94A3B8;
+  --ink-300: #CBD5E1;
+  --ink-200: #E2E8F0;
+  --ink-100: #F1F5F9;
+  --ink-050: #F8FAFC;
+  --ink-000: #FFFFFF;
+
+  /* ---------- Surfaces ---------- */
+  --surface-light: #FFFFFF;
+  --surface-dark: #1E293B;
+  --bg-light: #F8FAFC;
+  --bg-dark: #0F172A;
+
+  /* ---------- Glass ---------- */
+  --glass-fill-light: rgba(255, 255, 255, 0.8);
+  --glass-fill-dark: rgba(30, 41, 59, 0.8);
+  --glass-border-light: rgba(255, 255, 255, 0.2);
+  --glass-border-dark: rgba(51, 65, 85, 0.3);
+  --glass-blur: 16px;
+
+  /* ---------- Typography ---------- */
+  --font-latin: 'Inter', system-ui, sans-serif;
+  --font-arabic: 'Cairo', 'Inter', system-ui, sans-serif;
+
+  --text-display: 2.5rem;   /* 40px — big dashboard numbers */
+  --text-h1: 1.875rem;      /* 30px */
+  --text-h2: 1.5rem;        /* 24px */
+  --text-h3: 1.25rem;       /* 20px */
+  --text-h4: 1.125rem;      /* 18px */
+  --text-body: 1rem;        /* 16px */
+  --text-body-sm: 0.875rem; /* 14px */
+  --text-caption: 0.75rem;  /* 12px */
+
+  --leading-tight: 1.2;
+  --leading-snug: 1.35;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65; /* Arabic body */
+
+  /* ---------- Radius ---------- */
+  --radius-sm: 0.5rem;   /* 8px  — chips, small buttons */
+  --radius-md: 0.75rem;  /* 12px — inputs, list rows */
+  --radius-lg: 1rem;     /* 16px — cards */
+  --radius-xl: 1.5rem;   /* 24px — modals, hero panels */
+  --radius-pill: 999px;  /* buttons, badges */
+
+  /* ---------- Shadow ---------- */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
+  --shadow-card-hover: 0 4px 16px rgba(0, 0, 0, 0.12), 0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  --shadow-glass-dark: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  --shadow-glow-primary: 0 12px 32px rgba(99, 102, 241, 0.3);
+  --shadow-glow-accent: 0 12px 32px rgba(236, 72, 153, 0.3);
+
+  /* ---------- Spacing (complements Tailwind's 4px scale) ---------- */
+  --sidebar-width: 260px;
+  --sidebar-collapsed: 72px;
+  --header-height: 64px;
+
+  /* ---------- Motion ---------- */
+  --ease-standard: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --duration-fast: 140ms;
+  --duration-base: 220ms;
+  --duration-slow: 380ms;
+}

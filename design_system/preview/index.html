@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<title>SubTracker Design System — Preview</title>
+<link rel="stylesheet" href="../tokens.css" />
+<style>
+  body { font-family: 'Cairo', system-ui, sans-serif; background: var(--bg-light); color: var(--ink-900); margin: 0; padding: 48px; }
+  h1 { font-size: var(--text-h1); margin-bottom: 8px; }
+  p.sub { color: var(--ink-500); margin-bottom: 32px; }
+  ul.nav { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 8px; max-width: 320px; }
+  ul.nav li a {
+    display: block; padding: 14px 20px; border-radius: var(--radius-md);
+    background: var(--surface-light); box-shadow: var(--shadow-card);
+    color: var(--brand-primary-600); text-decoration: none; font-weight: 600;
+    transition: box-shadow var(--duration-base) var(--ease-standard);
+  }
+  ul.nav li a:hover { box-shadow: var(--shadow-card-hover); }
+</style>
+</head>
+<body>
+  <h1>SubTracker — Design System Preview</h1>
+  <p class="sub">Swatches مستقلة لكل توكن — بدون تشغيل الابليكيشن.</p>
+  <ul class="nav">
+    <li><a href="colors.html">الألوان — Colors</a></li>
+    <li><a href="typography.html">التيبوجرافي — Typography</a></li>
+    <li><a href="buttons.html">الأزرار — Buttons</a></li>
+    <li><a href="cards.html">الكروت — Cards & Glass</a></li>
+    <li><a href="inputs.html">الإنبوتس — Inputs</a></li>
+    <li><a href="radius-shadow.html">Radius & Shadow</a></li>
+    <li><a href="spacing.html">Spacing</a></li>
+  </ul>
+</body>
+</html>

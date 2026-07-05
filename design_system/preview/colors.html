@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<title>Colors — SubTracker Design System</title>
+<link rel="stylesheet" href="../tokens.css" />
+<style>
+  body { font-family: 'Cairo', system-ui, sans-serif; background: var(--bg-light); color: var(--ink-900); margin: 0; padding: 48px; }
+  a.back { color: var(--brand-primary-600); text-decoration: none; font-weight: 600; }
+  h1 { margin-top: 24px; }
+  h2 { font-size: var(--text-h3); margin: 40px 0 12px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+  .swatch { border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-card); }
+  .swatch .fill { height: 72px; }
+  .swatch .label { background: var(--surface-light); padding: 8px 12px; font-size: var(--text-caption); direction: ltr; text-align: left; }
+  .swatch .label b { display: block; font-size: var(--text-body-sm); }
+</style>
+</head>
+<body>
+  <a class="back" href="index.html">&larr; رجوع</a>
+  <h1>الألوان</h1>
+
+  <h2>Primary (Indigo)</h2>
+  <div class="grid">
+    <div class="swatch"><div class="fill" style="background:var(--brand-primary-900)"></div><div class="label"><b>900</b>#312E81</div></div>
+    <div class="swatch"><div class="fill" style="background:var(--brand-primary-700)"></div><div class="label"><b>700</b>#4338CA</div></div>
+    <div class="swatch"><div class="fill" style="background:var(--brand-primary-600)"></div><div class="label"><b>600 dark</b>#4F46E5</div></div>
+    <div class="swatch"><div class="fill" style="background:var(--brand-primary-500)"></div><div class="label"><b>500 DEFAULT</b>#6366F1</div></div>
+    <div class="swatch"><div class="fill" style="background:var(--brand-primary-400)"></div><div class="label"><b>400 light</b>#818CF8</div></div>
+    <div class="swatch"><div class="fill" style="background:var(--brand-primary-100)"></div><div class="label"><b>100</b>#E0E7FF</div></div>
+    <div class="swatch"><div class="fill" style="background:var(--brand-primary-050)"></div><div class="label"><b>050</b>#EEF2FF</div></div>
+  </div>
+
+  <h2>Accent (Pink)</h2>
+  <div class="grid">
+    <div class="swatch"><div class="fill" style="background:var(--brand-accent-700)"></div><div class="label"><b>700</b>#BE185D</div></div>
+    <div class="swatch"><div class="fill" style="background:var(--brand-accent-600)"></div><div class="label"><b>600 dark</b>#DB2777</div></div>
+    <div class="swatch"><div class="fill" style="background:var(--brand-accent-500)"></div><div class="label"><b>500 DEFAULT</b>#EC4899</div></div>
+    <div class="swatch"><div class="fill" style="background:var(--brand-accent-400)"></div><div class="label"><b>400 light</b>#F472B6</div></div>
+    <div class="swatch"><div class="fill" style="background:var(--brand-accent-100)"></div><div class="label"><b>100</b>#FCE7F3</div></div>
+    <div class="swatch"><div class="fill" style="background:var(--brand-accent-050)"></div><div class="label"><b>050</b>#FDF2F8</div></div>
+  </div>
+
+  <h2>Semantic</h2>
+  <div class="grid">
+    <div class="swatch"><div class="fill" style="background:var(--success-600)"></div><div class="label"><b>success-600</b>#059669</div></div>
+    <div class="swatch"><div class="fill" style="background:var(--success-500)"></div><div class="label"><b>success-500</b>#10B981</div></div>
+    <div class="swatch"><div class="fill" style="background:var(--warning-500)"></div><div class="label"><b>warning-500</b>#F59E0B</div></div>
+    <div class="swatch"><div class="fill" style="background:var(--danger-600)"></div><div class="label"><b>danger-600</b>#DC2626</div></div>
+    <div class="swatch"><div class="fill" style="background:var(--danger-500)"></div><div class="label"><b>danger-500</b>#EF4444</div></div>
+  </div>
+
+  <h2>Ink (Neutral)</h2>
+  <div class="grid">
+    <div class="swatch"><div class="fill" style="background:var(--ink-900)"></div><div class="label"><b>900</b>#0F172A</div></div>
+    <div class="swatch"><div class="fill" style="background:var(--ink-800)"></div><div class="label"><b>800</b>#1E293B</div></div>
+    <div class="swatch"><div class="fill" style="background:var(--ink-700)"></div><div class="label"><b>700</b>#334155</div></div>
+    <div class="swatch"><div class="fill" style="background:var(--ink-500)"></div><div class="label"><b>500</b>#64748B</div></div>
+    <div class="swatch"><div class="fill" style="background:var(--ink-400)"></div><div class="label"><b>400</b>#94A3B8</div></div>
+    <div class="swatch"><div class="fill" style="background:var(--ink-300)"></div><div class="label"><b>300</b>#CBD5E1</div></div>
+    <div class="swatch"><div class="fill" style="background:var(--ink-200)"></div><div class="label"><b>200</b>#E2E8F0</div></div>
+    <div class="swatch"><div class="fill" style="background:var(--ink-100)"></div><div class="label"><b>100</b>#F1F5F9</div></div>
+    <div class="swatch"><div class="fill" style="background:var(--ink-050); border:1px solid #eee"></div><div class="label"><b>050</b>#F8FAFC</div></div>
+  </div>
+
+  <h2>Gradient الهوية</h2>
+  <div class="swatch" style="max-width:320px">
+    <div class="fill" style="height:100px;background:linear-gradient(135deg, var(--brand-primary-500) 0%, var(--brand-accent-500) 100%)"></div>
+    <div class="label"><b>gradient-primary</b>135deg, primary-500 &rarr; accent-500</div>
+  </div>
+</body>
+</html>

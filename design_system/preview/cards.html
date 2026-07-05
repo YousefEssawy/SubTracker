@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<title>Cards & Glass — SubTracker Design System</title>
+<link rel="stylesheet" href="../tokens.css" />
+<style>
+  body { font-family: var(--font-arabic); margin: 0; padding: 48px;
+    background: linear-gradient(135deg, var(--brand-primary-100) 0%, var(--brand-accent-100) 100%); color: var(--ink-900); }
+  a.back { color: var(--brand-primary-600); text-decoration: none; font-weight: 600; }
+  h2 { font-size: var(--text-h3); margin: 40px 0 12px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+  .card { background: var(--surface-light); border-radius: var(--radius-lg); box-shadow: var(--shadow-card);
+    padding: 20px; transition: box-shadow var(--duration-base) var(--ease-standard); }
+  .card:hover { box-shadow: var(--shadow-card-hover); }
+  .glass-card { background: var(--glass-fill-light); backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border-light); border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-glass); padding: 24px; }
+  .card b, .glass-card b { display: block; font-size: var(--text-h4); margin-bottom: 4px; }
+  .card span, .glass-card span { color: var(--ink-500); font-size: var(--text-body-sm); }
+  .amount { font-size: var(--text-h2); font-weight: 700; color: var(--brand-primary-600); }
+</style>
+</head>
+<body>
+  <a class="back" href="index.html">&larr; رجوع</a>
+  <h1>الكروت</h1>
+
+  <h2>Card عادي</h2>
+  <div class="grid">
+    <div class="card"><b>Netflix</b><span>يتجدد يوم ٥</span><div class="amount">120 ج.م</div></div>
+    <div class="card"><b>Spotify</b><span>يتجدد يوم ١٢</span><div class="amount">60 ج.م</div></div>
+  </div>
+
+  <h2>Glass card (فوق خلفية gradient)</h2>
+  <div class="grid">
+    <div class="glass-card"><b>إجمالي المصاريف الشهرية</b><span>يونيو ٢٠٢٦</span><div class="amount">1,450 ج.م</div></div>
+  </div>
+</body>
+</html>

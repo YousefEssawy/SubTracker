@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<title>Spacing — SubTracker Design System</title>
+<link rel="stylesheet" href="../tokens.css" />
+<style>
+  body { font-family: var(--font-arabic); background: var(--bg-light); color: var(--ink-900); margin: 0; padding: 48px; }
+  a.back { color: var(--brand-primary-600); text-decoration: none; font-weight: 600; }
+  h2 { font-size: var(--text-h3); margin: 40px 0 12px; }
+  .row { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
+  .bar { background: var(--brand-primary-500); height: 20px; border-radius: 4px; }
+  .row b { width: 100px; font-size: var(--text-caption); color: var(--ink-500); direction: ltr; text-align: left; }
+  .layout-demo { display: flex; border: 1px dashed var(--ink-300); border-radius: var(--radius-md); overflow: hidden; margin-top: 16px; }
+  .sidebar { width: var(--sidebar-width); background: var(--ink-800); color: #fff; padding: 12px; font-size: var(--text-caption); }
+  .header { height: var(--header-height); background: var(--ink-100); display: flex; align-items: center; padding: 0 16px; font-size: var(--text-caption); flex: 1; }
+</style>
+</head>
+<body>
+  <a class="back" href="index.html">&larr; رجوع</a>
+  <h1>Spacing</h1>
+
+  <h2>Tailwind base scale (4px)</h2>
+  <div class="row"><b>4px (1)</b><div class="bar" style="width:4px"></div></div>
+  <div class="row"><b>8px (2)</b><div class="bar" style="width:8px"></div></div>
+  <div class="row"><b>16px (4)</b><div class="bar" style="width:16px"></div></div>
+  <div class="row"><b>24px (6)</b><div class="bar" style="width:24px"></div></div>
+  <div class="row"><b>32px (8)</b><div class="bar" style="width:32px"></div></div>
+  <div class="row"><b>48px (12)</b><div class="bar" style="width:48px"></div></div>
+  <div class="row"><b>64px (16)</b><div class="bar" style="width:64px"></div></div>
+
+  <h2>Layout tokens</h2>
+  <div class="layout-demo">
+    <div class="sidebar">sidebar-width<br>260px</div>
+    <div class="header">header-height 64px</div>
+  </div>
+</body>
+</html>

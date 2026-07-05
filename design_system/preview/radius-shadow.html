@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<title>Radius & Shadow — SubTracker Design System</title>
+<link rel="stylesheet" href="../tokens.css" />
+<style>
+  body { font-family: var(--font-arabic); background: var(--bg-light); color: var(--ink-900); margin: 0; padding: 48px; }
+  a.back { color: var(--brand-primary-600); text-decoration: none; font-weight: 600; }
+  h2 { font-size: var(--text-h3); margin: 40px 0 12px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px; }
+  .box { background: var(--brand-primary-500); height: 90px; display: flex; align-items: flex-end;
+    justify-content: center; padding-bottom: 8px; color: #fff; font-size: var(--text-caption); }
+  .shadow-box { background: #fff; height: 90px; display: flex; align-items: center; justify-content: center;
+    border-radius: var(--radius-md); font-size: var(--text-caption); color: var(--ink-700); }
+</style>
+</head>
+<body>
+  <a class="back" href="index.html">&larr; رجوع</a>
+  <h1>Radius & Shadow</h1>
+
+  <h2>Radius</h2>
+  <div class="grid">
+    <div class="box" style="border-radius:var(--radius-sm)">sm 8px</div>
+    <div class="box" style="border-radius:var(--radius-md)">md 12px</div>
+    <div class="box" style="border-radius:var(--radius-lg)">lg 16px</div>
+    <div class="box" style="border-radius:var(--radius-xl)">xl 24px</div>
+    <div class="box" style="border-radius:var(--radius-pill)">pill</div>
+  </div>
+
+  <h2>Shadow</h2>
+  <div class="grid">
+    <div class="shadow-box" style="box-shadow:var(--shadow-card)">card</div>
+    <div class="shadow-box" style="box-shadow:var(--shadow-card-hover)">card-hover</div>
+    <div class="shadow-box" style="box-shadow:var(--shadow-glass)">glass</div>
+    <div class="shadow-box" style="box-shadow:var(--shadow-glow-primary)">glow-primary</div>
+    <div class="shadow-box" style="box-shadow:var(--shadow-glow-accent)">glow-accent</div>
+  </div>
+</body>
+</html>
