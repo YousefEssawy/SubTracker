@@ -9,18 +9,27 @@ interface LayoutProps {
 }
 
 const Layout = ({ children }: LayoutProps) => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  // Desktop starts with the sidebar open; mobile starts closed (drawer).
+  const [sidebarOpen, setSidebarOpen] = useState(() =>
+    typeof window !== "undefined"
+      ? window.matchMedia("(min-width: 1024px)").matches
+      : true,
+  );
   const location = useLocation();
 
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark overflow-x-hidden">
       <Header onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
 
-      {/* Responsive Sidebar */}
+      {/* Responsive Sidebar — collapsible on desktop, drawer on mobile */}
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Main Content */}
-      <main className="lg:ms-[280px] pt-24 min-h-screen">
+      <main
+        className={`pt-24 min-h-screen transition-[margin] duration-300 ease-standard ${
+          sidebarOpen ? "lg:ms-[280px]" : "lg:ms-0"
+        }`}
+      >
         <div className="page-container">
           <motion.div
             key={location.pathname}

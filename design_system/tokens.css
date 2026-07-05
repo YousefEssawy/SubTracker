@@ -67,6 +67,8 @@
   /* ---------- Typography ---------- */
   --font-latin: 'Inter', system-ui, sans-serif;
   --font-arabic: 'Cairo', 'Inter', system-ui, sans-serif;
+  --font-display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 
   --text-display: 2.5rem;   /* 40px — big dashboard numbers */
   --text-h1: 1.875rem;      /* 30px */

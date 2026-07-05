@@ -27,7 +27,7 @@ interface NavItem {
 }
 
 const makeNavItems = (t: TFunction): Record<string, NavItem[]> => ({
-  main: [
+  overview: [
     {
       path: "/dashboard",
       label: t("sidebar.dashboard", "Dashboard"),
@@ -66,7 +66,7 @@ const makeNavItems = (t: TFunction): Record<string, NavItem[]> => ({
       icon: HiOutlineArrowPath,
     },
   ],
-  meta: [
+  preferences: [
     {
       path: "/settings",
       label: t("sidebar.settings", "Settings"),
@@ -153,27 +153,37 @@ const AddButton = ({
   </div>
 );
 
-// ─── Nav content (main + finance + meta sections) ─────────────────────────────
+// ─── Nav content (overview + finance + preferences sections) ──────────────────
 const NavContent = ({
   navItems,
-  financeLabel,
+  sectionLabels,
   pathname,
   onClick,
 }: {
   navItems: Record<string, NavItem[]>;
-  financeLabel: string;
+  sectionLabels: Record<string, string>;
   pathname: string;
   onClick?: () => void;
 }) => (
   <>
-    <NavSection items={navItems.main!} onClick={onClick} pathname={pathname} />
     <NavSection
-      title={financeLabel}
+      title={sectionLabels.overview}
+      items={navItems.overview!}
+      onClick={onClick}
+      pathname={pathname}
+    />
+    <NavSection
+      title={sectionLabels.finance}
       items={navItems.finance!}
       onClick={onClick}
       pathname={pathname}
     />
-    <NavSection items={navItems.meta!} onClick={onClick} pathname={pathname} />
+    <NavSection
+      title={sectionLabels.preferences}
+      items={navItems.preferences!}
+      onClick={onClick}
+      pathname={pathname}
+    />
   </>
 );
 
@@ -190,16 +200,26 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
   const navItems = makeNavItems(t);
   const addLabel = t("sidebar.addSubscription", "Add Subscription");
-  const financeLabel = t("sidebar.finance", "Finance");
+  const sectionLabels = {
+    overview: t("sidebar.overview", "Overview"),
+    finance: t("sidebar.finance", "Finance"),
+    preferences: t("sidebar.preferences", "Preferences"),
+  };
 
   return (
     <>
-      {/* Desktop Sidebar — floating glass panel, always visible on lg+ */}
-      <aside className="hidden lg:flex fixed start-3 top-20 bottom-3 w-64 flex-col glass-card z-30 overflow-hidden">
+      {/* Desktop Sidebar — floating glass panel, collapsible via isOpen */}
+      <aside
+        className={`hidden lg:flex fixed start-3 top-20 bottom-3 w-64 flex-col glass-card z-30 overflow-hidden transition-transform duration-300 ease-standard ${
+          isOpen
+            ? "translate-x-0"
+            : "ltr:-translate-x-[calc(100%+0.75rem)] rtl:translate-x-[calc(100%+0.75rem)]"
+        }`}
+      >
         <nav className="flex-1 py-4 px-3 overflow-y-auto">
           <NavContent
             navItems={navItems}
-            financeLabel={financeLabel}
+            sectionLabels={sectionLabels}
             pathname={location.pathname}
             onClick={undefined}
           />
@@ -246,7 +266,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
               <nav className="flex-1 py-4 px-3 overflow-y-auto">
                 <NavContent
                   navItems={navItems}
-                  financeLabel={financeLabel}
+                  sectionLabels={sectionLabels}
                   pathname={location.pathname}
                   onClick={onClose}
                 />

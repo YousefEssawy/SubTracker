@@ -10,7 +10,11 @@ import {
 } from "@/services/subscriptionService";
 import { getCategoryById, CATEGORIES } from "@/utils/categories";
 import { formatCurrency } from "@/utils/currencies";
-import { getMonthlyEquivalent, formatDate } from "@/utils/dateUtils";
+import {
+  getMonthlyEquivalent,
+  getDaysUntilRenewal,
+  formatDate,
+} from "@/utils/dateUtils";
 import {
   HiOutlinePlusCircle,
   HiOutlinePencilSquare,
@@ -21,6 +25,7 @@ import {
   HiOutlineMagnifyingGlass,
 } from "react-icons/hi2";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
+import RenewalDial from "@/components/ui/RenewalDial";
 import { useTranslation } from "react-i18next";
 import type { SubscriptionStatus, CurrencyCode, Subscription } from "@/models";
 
@@ -300,12 +305,14 @@ const SubscriptionsPage = () => {
                   {/* Row 1 + 2: Icon, name/status/details, and price+actions (sm+) */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
-                      <div
-                        className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
-                        style={{ backgroundColor: cat.color + "20" }}
-                      >
-                        {cat.icon}
-                      </div>
+                      <RenewalDial
+                        icon={cat.icon}
+                        iconColor={cat.color}
+                        daysUntil={getDaysUntilRenewal(sub.renewalDate)}
+                        billingCycle={sub.billingCycle}
+                        customCycleDays={sub.customCycleDays}
+                        size={48}
+                      />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
                           <h3 className="font-semibold text-gray-900 dark:text-white truncate">
@@ -329,20 +336,22 @@ const SubscriptionsPage = () => {
                           )}
                           <br />
                           {t("subscriptions.renews")}{" "}
-                          {formatDate(sub.renewalDate)}
+                          <span className="font-mono">
+                            {formatDate(sub.renewalDate)}
+                          </span>
                         </p>
                       </div>
                     </div>
                     {/* Price + actions — visible only on sm+ inline */}
                     <div className="hidden sm:flex items-center gap-4 flex-shrink-0 ml-2">
                       <div className="text-right">
-                        <p className="font-bold text-gray-900 dark:text-white">
+                        <p className="figure font-bold text-gray-900 dark:text-white">
                           {formatCurrency(
                             sub.price,
                             sub.currency as CurrencyCode,
                           )}
                         </p>
-                        <p className="text-xs text-gray-400">
+                        <p className="figure text-xs text-gray-400">
                           {formatCurrency(
                             monthly,
                             sub.currency as CurrencyCode,
@@ -383,7 +392,7 @@ const SubscriptionsPage = () => {
                   </div>
                   {/* Row 3: Action buttons — visible only on mobile */}
                   <div className="flex sm:hidden items-center justify-between mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
-                    <p className="font-semibold text-gray-900 dark:text-white text-sm">
+                    <p className="figure font-semibold text-gray-900 dark:text-white text-sm">
                       {formatCurrency(sub.price, sub.currency as CurrencyCode)}
                       <span className="text-xs text-gray-400 font-normal ml-1">
                         /{sub.billingCycle}

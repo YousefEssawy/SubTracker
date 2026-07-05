@@ -5,6 +5,7 @@ import { useViewport } from "@/contexts/ViewportContext";
 import { useSubscriptions } from "@/contexts/SubscriptionContext";
 import { useTransactions } from "@/contexts/TransactionContext";
 import BalanceCard from "@/components/finance/BalanceCard";
+import RenewalDial from "@/components/ui/RenewalDial";
 import { getCategoryById } from "@/utils/categories";
 import { formatCurrency, convertCurrency } from "@/utils/currencies";
 import {
@@ -276,7 +277,7 @@ const DashboardPage = () => {
             <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-1">
               {card.label}
             </p>
-            <p className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-white">
+            <p className="figure text-lg sm:text-2xl font-bold text-gray-900 dark:text-white">
               {card.value}
             </p>
             {card.subtext && (
@@ -462,23 +463,25 @@ const DashboardPage = () => {
                   className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center text-lg"
-                      style={{ backgroundColor: cat.color + "20" }}
-                    >
-                      {cat.icon}
-                    </div>
+                    <RenewalDial
+                      icon={cat.icon}
+                      iconColor={cat.color}
+                      daysUntil={sub.daysUntil}
+                      billingCycle={sub.billingCycle}
+                      customCycleDays={sub.customCycleDays}
+                      size={40}
+                    />
                     <div>
                       <p className="font-medium text-sm text-gray-900 dark:text-white">
                         {sub.name}
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-gray-500 font-mono">
                         {formatDate(sub.renewalDate)}
                       </p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-semibold text-sm">
+                    <p className="figure font-semibold text-sm">
                       {formatCurrency(sub.price, sub.currency as CurrencyCode)}
                     </p>
                     <p

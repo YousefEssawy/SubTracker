@@ -38,6 +38,8 @@ export default {
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
+        display: ["Space Grotesk", "Inter", "system-ui", "sans-serif"],
+        mono: ["IBM Plex Mono", "ui-monospace", "monospace"],
       },
       borderRadius: {
         "2xl": "1rem",
@@ -52,6 +54,9 @@ export default {
       },
       backdropBlur: {
         glass: "16px",
+      },
+      transitionTimingFunction: {
+        standard: "cubic-bezier(0.2, 0.7, 0.2, 1)",
       },
     },
   },

@@ -12,6 +12,24 @@ import {
 } from "react-icons/hi2";
 import lightLogo from "@/assets/logo/light-mode.png";
 import darkLogo from "@/assets/logo/dark-mode.png";
+import RenewalDial from "@/components/ui/RenewalDial";
+import { formatCurrency } from "@/utils/currencies";
+
+// Sample subscriptions for the hero demo card — illustrative only, not live data.
+interface DemoSub {
+  name: string;
+  icon: string;
+  color: string;
+  price: number;
+  daysUntil: number;
+}
+
+const DEMO_SUBS: DemoSub[] = [
+  { name: "Netflix", icon: "🎬", color: "#EF4444", price: 250, daysUntil: 3 },
+  { name: "ChatGPT Plus", icon: "🤖", color: "#10B981", price: 380, daysUntil: 12 },
+  { name: "iCloud+", icon: "☁️", color: "#06B6D4", price: 45, daysUntil: 20 },
+  { name: "Adobe CC", icon: "💻", color: "#6366F1", price: 620, daysUntil: 1 },
+];
 
 // Animation variants
 const fadeUp: Variants = {
@@ -83,21 +101,80 @@ const LandingNav = ({
   );
 };
 
+// ─── Hero demo card — the product's signature dial, shown doing its job ──
+const HeroDemoCard = () => {
+  const { t } = useTranslation();
+  const total = DEMO_SUBS.reduce((sum, s) => sum + s.price, 0);
+
+  return (
+    <motion.div
+      variants={fadeUp}
+      custom={2}
+      className="glass-card p-5 sm:p-6 w-full max-w-sm mx-auto lg:mx-0"
+    >
+      <div className="flex items-baseline justify-between mb-5">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+            {t("landing.hero.demoTitle")}
+          </p>
+          <p className="figure text-2xl font-bold text-gray-900 dark:text-white">
+            {formatCurrency(total, "EGP")}
+          </p>
+        </div>
+        <span className="text-[11px] text-gray-400">
+          {t("landing.hero.demoSub")}
+        </span>
+      </div>
+
+      <div className="space-y-1">
+        {DEMO_SUBS.map((sub, i) => (
+          <motion.div
+            key={sub.name}
+            variants={fadeUp}
+            custom={3 + i * 0.4}
+            className="flex items-center gap-3 py-2"
+          >
+            <RenewalDial
+              icon={sub.icon}
+              iconColor={sub.color}
+              daysUntil={sub.daysUntil}
+              billingCycle="monthly"
+              size={38}
+            />
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                {sub.name}
+              </p>
+              <p className="text-xs text-gray-500">
+                {sub.daysUntil === 0
+                  ? t("dashboard.today")
+                  : t("dashboard.days", { count: sub.daysUntil })}
+              </p>
+            </div>
+            <p className="figure text-sm font-semibold text-gray-700 dark:text-gray-300">
+              {formatCurrency(sub.price, "EGP")}
+            </p>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+  );
+};
+
 // ─── Hero ─────────────────────────────────────────────────────────────
 const HeroSection = () => {
   const { t } = useTranslation();
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-      {/* Background blobs */}
-      <div className="absolute -top-32 -start-32 w-96 h-96 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-32 -end-32 w-96 h-96 bg-accent/20 rounded-full blur-3xl pointer-events-none" />
+    <section className="relative min-h-screen flex items-center overflow-hidden pt-16">
+      {/* Radial wash, contained behind the demo card rather than floating across the viewport */}
+      <div className="absolute top-1/2 end-0 -translate-y-1/2 w-[36rem] h-[36rem] bg-gradient-to-br from-primary/15 via-accent/10 to-transparent rounded-full blur-3xl pointer-events-none" />
 
-      <div className="relative max-w-4xl mx-auto text-center px-4 sm:px-6">
+      <div className="relative max-w-6xl mx-auto px-4 sm:px-6 grid lg:grid-cols-[1.1fr_0.9fr] gap-12 lg:gap-16 items-center">
         <motion.div
           variants={stagger}
           initial="hidden"
           animate="visible"
-          className="space-y-6"
+          className="space-y-6 text-center lg:text-start"
         >
           <motion.div variants={fadeUp} custom={0}>
             <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium">
@@ -109,7 +186,7 @@ const HeroSection = () => {
           <motion.h1
             variants={fadeUp}
             custom={1}
-            className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight"
+            className="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-tight"
           >
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary-dark to-accent">
               {t("landing.hero.title1")}
@@ -123,7 +200,7 @@ const HeroSection = () => {
           <motion.p
             variants={fadeUp}
             custom={2}
-            className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed"
+            className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-xl mx-auto lg:mx-0 leading-relaxed"
           >
             {t("landing.hero.desc")}
           </motion.p>
@@ -131,7 +208,7 @@ const HeroSection = () => {
           <motion.div
             variants={fadeUp}
             custom={3}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
+            className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4"
           >
             <Link
               to="/signup"
@@ -147,6 +224,14 @@ const HeroSection = () => {
               {t("landing.hero.loginBtn")}
             </Link>
           </motion.div>
+        </motion.div>
+
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={stagger}
+        >
+          <HeroDemoCard />
         </motion.div>
       </div>
     </section>
@@ -194,7 +279,7 @@ const AboutSection = () => {
             <span className="text-primary font-semibold text-sm uppercase tracking-wider">
               {t("landing.about.tag")}
             </span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white leading-snug">
+            <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 dark:text-white leading-snug">
               {t("landing.about.title")}
             </h2>
             <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-lg">
@@ -277,7 +362,7 @@ const HowToSection = () => {
           <span className="text-primary font-semibold text-sm uppercase tracking-wider">
             {t("landing.howTo.tag")}
           </span>
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">
+          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
             {t("landing.howTo.title")}
           </h2>
           <p className="text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
@@ -342,7 +427,7 @@ const ComingSoonSection = () => {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 mx-auto">
             <HiOutlineSparkles className="w-8 h-8 text-primary animate-pulse" />
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white">
+          <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-gray-900 dark:text-white">
             {t("landing.comingSoon.title")}
           </h2>
           <p className="text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
@@ -417,7 +502,7 @@ const CtaSection = () => {
         >
           <div className="absolute inset-0 bg-white/5 rounded-3xl" />
           <div className="relative space-y-5">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
+            <h2 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-white">
               {t("landing.cta.title")}
             </h2>
             <p className="text-white/80 text-lg max-w-xl mx-auto">

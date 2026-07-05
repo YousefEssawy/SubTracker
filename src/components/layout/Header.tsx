@@ -59,7 +59,8 @@ const Header = ({ onMenuToggle }: HeaderProps) => {
         <div className="flex items-center gap-3 min-w-0">
           <button
             onClick={onMenuToggle}
-            className="lg:hidden inline-flex h-9 w-9 items-center justify-center rounded-full hover:bg-gray-100/70 dark:hover:bg-gray-800/70 transition-colors shrink-0"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full hover:bg-gray-100/70 dark:hover:bg-gray-800/70 transition-colors shrink-0"
+            aria-label="Toggle menu"
           >
             <HiOutlineBars3 className="w-5 h-5 text-gray-700 dark:text-gray-300" />
           </button>

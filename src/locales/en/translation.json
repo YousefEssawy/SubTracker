@@ -20,7 +20,9 @@
     "categories": "Categories",
     "transactions": "Transactions",
     "recurrences": "Recurrences",
-    "finance": "Finance"
+    "finance": "Finance",
+    "overview": "Overview",
+    "preferences": "Preferences"
   },
   "header": {
     "upcomingRenewals": "Upcoming Renewals",
@@ -202,7 +204,9 @@
       "title2": "to Forgotten Subs",
       "desc": "SubTracker helps you track every subscription, visualize your Expense, and get reminded before renewals — so you're always in control of your budget.",
       "startBtn": "Get Started Free",
-      "loginBtn": "Already have an account?"
+      "loginBtn": "Already have an account?",
+      "demoTitle": "This month",
+      "demoSub": "4 subscriptions, sample data"
     },
     "about": {
       "tag": "About SubTracker",
