@@ -6,6 +6,7 @@ import {
   useCallback,
   type ReactNode,
 } from "react";
+import toast from "react-hot-toast";
 import { useAuth } from "./AuthContext";
 import {
   subscribeToSpaces,
@@ -44,10 +45,18 @@ export const SpaceProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
     setLoading(true);
-    const unsub = subscribeToSpaces(user.uid, (data) => {
-      setSpaces(data);
-      setLoading(false);
-    });
+    const unsub = subscribeToSpaces(
+      user.uid,
+      (data) => {
+        setSpaces(data);
+        setLoading(false);
+      },
+      (err) => {
+        console.error(err);
+        toast.error("Failed to sync spaces.");
+        setLoading(false);
+      },
+    );
     return () => unsub();
   }, [user]);
 

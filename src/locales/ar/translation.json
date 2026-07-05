@@ -1,4 +1,12 @@
 {
+  "common": {
+    "confirmDialog": {
+      "title": "هل أنت متأكد؟",
+      "message": "لا يمكن التراجع عن هذا الإجراء.",
+      "confirm": "حذف",
+      "cancel": "إلغاء"
+    }
+  },
   "sidebar": {
     "dashboard": "لوحة القيادة",
     "subscriptions": "الاشتراكات",
@@ -48,6 +56,8 @@
     "noUpcomingRenewals": "لا توجد تجديدات قادمة",
     "today": "اليوم",
     "days_zero": "٠ أيام",
+    "days_one": "يوم واحد",
+    "days_two": "يومان",
     "days_few": "{{count}} أيام",
     "days_many": "{{count}} يوماً",
     "days_other": "{{count}} أيام"
@@ -109,6 +119,8 @@
   },
   "settings": {
     "title": "الإعدادات",
+    "loadError": "فشل تحميل الإعدادات.",
+    "saveError": "فشل حفظ الإعدادات.",
     "profile": "الملف الشخصي",
     "appearance": "المظهر",
     "light": "فاتح",
@@ -123,6 +135,8 @@
   },
   "subscriptions": {
     "title": "الاشتراكات",
+    "deleteError": "فشل حذف الاشتراك.",
+    "toggleError": "فشل تحديث الاشتراك.",
     "addNew": "إضافة جديد",
     "searchPlaceholder": "البحث في الاشتراكات...",
     "category": "الفئة",
@@ -144,6 +158,8 @@
     "cancel": "إلغاء"
   },
   "subscriptionForm": {
+    "loadError": "فشل تحميل الاشتراك.",
+    "saveError": "فشل حفظ الاشتراك.",
     "back": "رجوع",
     "addTitle": "إضافة اشتراك",
     "editTitle": "تعديل الاشتراك",

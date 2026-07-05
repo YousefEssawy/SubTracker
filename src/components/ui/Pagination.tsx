@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { HiOutlineArrowLeft, HiOutlineArrowRight } from "react-icons/hi2";
 
 export interface PaginationProps {
   hasNext: boolean;
@@ -46,16 +47,18 @@ const Pagination = ({
         <button
           onClick={goPrev}
           disabled={!hasPrev}
-          className="px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
-          {t("finance.pagination.prev", "← Prev")}
+          <HiOutlineArrowLeft className="w-4 h-4 rtl:-scale-x-100" />
+          {t("finance.pagination.prev", "Prev")}
         </button>
         <button
           onClick={goNext}
           disabled={!hasNext}
-          className="px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
-          {t("finance.pagination.next", "Next →")}
+          {t("finance.pagination.next", "Next")}
+          <HiOutlineArrowRight className="w-4 h-4 rtl:-scale-x-100" />
         </button>
       </div>
     </div>

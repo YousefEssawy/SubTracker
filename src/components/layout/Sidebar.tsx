@@ -98,16 +98,9 @@ const NavLink = ({
   <Link
     to={item.path}
     onClick={onClick}
-    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200
-      ${
-        isActive
-          ? "bg-primary/10 text-primary dark:text-primary-light"
-          : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-200"
-      }`}
+    className={`nav-link ${isActive ? "nav-link-active" : ""}`}
   >
-    <item.icon
-      className={`w-5 h-5 flex-shrink-0 ${isActive ? "text-primary" : ""}`}
-    />
+    <item.icon className="w-5 h-5 flex-shrink-0" />
     <span className="truncate">{item.label}</span>
   </Link>
 );
@@ -125,11 +118,7 @@ const NavSection = ({
   pathname: string;
 }) => (
   <div className="mb-2">
-    {title && (
-      <p className="px-4 pt-4 pb-1 text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500">
-        {title}
-      </p>
-    )}
+    {title && <p className="nav-section-label">{title}</p>}
     {items.map((item) => (
       <NavLink
         key={item.path}
@@ -152,7 +141,7 @@ const AddButton = ({
   onClick?: () => void;
   label: string;
 }) => (
-  <div className="p-4 border-t border-gray-200 dark:border-gray-800">
+  <div className="p-4 border-t border-gray-200/50 dark:border-gray-800/50">
     <Link
       to="/subscriptions/add"
       onClick={onClick}
@@ -162,6 +151,30 @@ const AddButton = ({
       {label}
     </Link>
   </div>
+);
+
+// ─── Nav content (main + finance + meta sections) ─────────────────────────────
+const NavContent = ({
+  navItems,
+  financeLabel,
+  pathname,
+  onClick,
+}: {
+  navItems: Record<string, NavItem[]>;
+  financeLabel: string;
+  pathname: string;
+  onClick?: () => void;
+}) => (
+  <>
+    <NavSection items={navItems.main!} onClick={onClick} pathname={pathname} />
+    <NavSection
+      title={financeLabel}
+      items={navItems.finance!}
+      onClick={onClick}
+      pathname={pathname}
+    />
+    <NavSection items={navItems.meta!} onClick={onClick} pathname={pathname} />
+  </>
 );
 
 interface SidebarProps {
@@ -177,34 +190,19 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
   const navItems = makeNavItems(t);
   const addLabel = t("sidebar.addSubscription", "Add Subscription");
-
-  const NavContent = ({ onClick }: { onClick?: () => void }) => (
-    <>
-      <NavSection
-        items={navItems.main!}
-        onClick={onClick}
-        pathname={location.pathname}
-      />
-      <NavSection
-        title={t("sidebar.finance", "Finance")}
-        items={navItems.finance!}
-        onClick={onClick}
-        pathname={location.pathname}
-      />
-      <NavSection
-        items={navItems.meta!}
-        onClick={onClick}
-        pathname={location.pathname}
-      />
-    </>
-  );
+  const financeLabel = t("sidebar.finance", "Finance");
 
   return (
     <>
-      {/* Desktop Sidebar — docked, always visible on lg+ */}
-      <aside className="hidden lg:flex fixed start-0 top-16 bottom-0 w-64 flex-col bg-white dark:bg-surface-dark border-e border-gray-200 dark:border-gray-800 z-30">
+      {/* Desktop Sidebar — floating glass panel, always visible on lg+ */}
+      <aside className="hidden lg:flex fixed start-3 top-20 bottom-3 w-64 flex-col glass-card z-30 overflow-hidden">
         <nav className="flex-1 py-4 px-3 overflow-y-auto">
-          <NavContent onClick={undefined} />
+          <NavContent
+            navItems={navItems}
+            financeLabel={financeLabel}
+            pathname={location.pathname}
+            onClick={undefined}
+          />
         </nav>
         <AddButton onClick={undefined} label={addLabel} />
       </aside>
@@ -220,7 +218,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="lg:hidden fixed inset-0 bg-black/50 z-40"
+              className="lg:hidden fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-40"
               onClick={onClose}
             />
 
@@ -231,14 +229,14 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
               animate={{ x: 0 }}
               exit={{ x: isRtl ? 288 : -288 }}
               transition={{ type: "spring", damping: 28, stiffness: 320 }}
-              className="lg:hidden fixed start-0 top-0 bottom-0 w-72 bg-white dark:bg-surface-dark flex flex-col z-50 shadow-2xl"
+              className="lg:hidden fixed start-3 top-3 bottom-3 w-72 glass-card flex flex-col z-50"
             >
               {/* Drawer header */}
-              <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">
+              <div className="flex items-center justify-between p-4 border-b border-gray-200/50 dark:border-gray-800/50">
                 <img src={logo} alt="SubTracker" className="h-8" />
                 <button
                   onClick={onClose}
-                  className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+                  className="p-2 rounded-full hover:bg-gray-100/70 dark:hover:bg-gray-800/70 transition-colors"
                   aria-label="Close menu"
                 >
                   <HiOutlineXMark className="w-5 h-5" />
@@ -246,7 +244,12 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
               </div>
 
               <nav className="flex-1 py-4 px-3 overflow-y-auto">
-                <NavContent onClick={onClose} />
+                <NavContent
+                  navItems={navItems}
+                  financeLabel={financeLabel}
+                  pathname={location.pathname}
+                  onClick={onClose}
+                />
               </nav>
 
               <AddButton onClick={onClose} label={addLabel} />

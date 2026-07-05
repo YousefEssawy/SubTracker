@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HiOutlineXMark } from "react-icons/hi2";
+import { useTranslation } from "react-i18next";
 import type { Category, CategoryInput } from "@/models";
 
 interface CategoryFormProps {
@@ -16,6 +17,7 @@ const CategoryForm = ({
   onClose,
   loading = false,
 }: CategoryFormProps) => {
+  const { t } = useTranslation();
   const isEditing = Boolean(category);
   const [name, setName] = useState(category?.name || "");
   const [type, setType] = useState<"Income" | "Expense">(
@@ -26,11 +28,15 @@ const CategoryForm = ({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!name.trim()) {
-      setError("Category name is required.");
+      setError(
+        t("finance.categories.nameRequired", "Category name is required."),
+      );
       return;
     }
     if (name.trim().length > 50) {
-      setError("Name cannot exceed 50 characters.");
+      setError(
+        t("finance.categories.nameTooLong", "Name cannot exceed 50 characters."),
+      );
       return;
     }
     setError("");
@@ -63,7 +69,9 @@ const CategoryForm = ({
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-              {isEditing ? "Edit Category" : "Create Category"}
+              {isEditing
+                ? t("finance.categories.editCategory", "Edit Category")
+                : t("finance.categories.createCategory", "Create Category")}
             </h2>
             <button
               onClick={onClose}
@@ -79,23 +87,25 @@ const CategoryForm = ({
             {!isEditing && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Type
+                  {t("finance.categories.type", "Type")}
                 </label>
                 <div className="flex rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
-                  {(["Income", "Expense"] as const).map((t) => (
+                  {(["Income", "Expense"] as const).map((opt) => (
                     <button
-                      key={t}
+                      key={opt}
                       type="button"
-                      onClick={() => setType(t)}
+                      onClick={() => setType(opt)}
                       className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
-                        type === t
-                          ? t === "Income"
+                        type === opt
+                          ? opt === "Income"
                             ? "bg-emerald-500 text-white"
                             : "bg-red-500 text-white"
                           : "bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
                       }`}
                     >
-                      {t}
+                      {opt === "Income"
+                        ? t("finance.categories.income", "Income")
+                        : t("finance.categories.expense", "Expense")}
                     </button>
                   ))}
                 </div>
@@ -106,7 +116,7 @@ const CategoryForm = ({
             {isEditing && category && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Type
+                  {t("finance.categories.type", "Type")}
                 </label>
                 <span
                   className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
@@ -115,10 +125,15 @@ const CategoryForm = ({
                       : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
                   }`}
                 >
-                  {category.type}
+                  {category.type === "Income"
+                    ? t("finance.categories.income", "Income")
+                    : t("finance.categories.expense", "Expense")}
                 </span>
                 <p className="mt-1 text-xs text-gray-400">
-                  Category type cannot be changed after creation.
+                  {t(
+                    "finance.categories.typeLocked",
+                    "Category type cannot be changed after creation.",
+                  )}
                 </p>
               </div>
             )}
@@ -126,7 +141,7 @@ const CategoryForm = ({
             {/* Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                Name
+                {t("finance.categories.name", "Name")}
               </label>
               <input
                 type="text"
@@ -134,8 +149,14 @@ const CategoryForm = ({
                 onChange={(e) => setName(e.target.value)}
                 placeholder={
                   type === "Income"
-                    ? "e.g. Salary, Freelance"
-                    : "e.g. Rent, Groceries"
+                    ? t(
+                        "finance.categories.namePlaceholderIncome",
+                        "e.g. Salary, Freelance",
+                      )
+                    : t(
+                        "finance.categories.namePlaceholderExpense",
+                        "e.g. Rent, Groceries",
+                      )
                 }
                 maxLength={50}
                 className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
@@ -151,7 +172,7 @@ const CategoryForm = ({
                 onClick={onClose}
                 className="flex-1 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
               >
-                Cancel
+                {t("finance.categories.cancel", "Cancel")}
               </button>
               <button
                 type="submit"
@@ -159,10 +180,10 @@ const CategoryForm = ({
                 className="flex-1 py-2.5 rounded-xl btn-primary text-sm font-medium disabled:opacity-50"
               >
                 {loading
-                  ? "Saving…"
+                  ? t("finance.categories.saving", "Saving…")
                   : isEditing
-                    ? "Save Changes"
-                    : "Create Category"}
+                    ? t("finance.categories.saveChanges", "Save Changes")
+                    : t("finance.categories.createCategory", "Create Category")}
               </button>
             </div>
           </form>

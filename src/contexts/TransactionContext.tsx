@@ -8,6 +8,7 @@ import {
   useRef,
   type ReactNode,
 } from "react";
+import toast from "react-hot-toast";
 import { useAuth } from "./AuthContext";
 import {
   addTransaction as addTransactionSvc,
@@ -97,6 +98,11 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
         }
         setLoading(false);
       },
+      (err) => {
+        console.error(err);
+        toast.error("Failed to sync transactions.");
+        setLoading(false);
+      },
     );
     return () => unsub();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -117,6 +123,10 @@ export const TransactionProvider = ({ children }: { children: ReactNode }) => {
       user.uid,
       balanceFilters,
       setAllTransactions,
+      (err) => {
+        console.error(err);
+        toast.error("Failed to sync balances.");
+      },
     );
     return () => unsub();
   }, [

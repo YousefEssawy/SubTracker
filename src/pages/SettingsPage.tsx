@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "@/contexts/ThemeContext";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { db } from "@/services/firebase";
+import { getUserSettings, saveUserSettings } from "@/services/userService";
 import { CURRENCIES, DEFAULT_CURRENCY } from "@/utils/currencies";
 import { HiOutlineSun, HiOutlineMoon, HiOutlineCheck } from "react-icons/hi2";
 import { useTranslation } from "react-i18next";
@@ -26,27 +26,34 @@ const SettingsPage = () => {
   useEffect(() => {
     if (user) {
       (async () => {
-        const profileRef = doc(db, "users", user.uid);
-        const snap = await getDoc(profileRef);
-        if (snap.exists()) {
-          const data = snap.data();
-          setSettings({
-            preferredCurrency:
-              (data.preferredCurrency as CurrencyCode) || DEFAULT_CURRENCY,
-            reminderDays: data.reminderDays ?? 3,
-          });
+        try {
+          const data = await getUserSettings(user.uid);
+          if (data) {
+            setSettings({
+              preferredCurrency:
+                (data.preferredCurrency as CurrencyCode) || DEFAULT_CURRENCY,
+              reminderDays: data.reminderDays ?? 3,
+            });
+          }
+        } catch (err) {
+          console.error(err);
+          toast.error(t("settings.loadError", "Failed to load settings."));
         }
         setLoading(false);
       })();
     }
-  }, [user]);
+  }, [user, t]);
 
   const handleSave = async () => {
     if (!user) return;
-    const profileRef = doc(db, "users", user.uid);
-    await setDoc(profileRef, settings, { merge: true });
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    try {
+      await saveUserSettings(user.uid, settings);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (err) {
+      console.error(err);
+      toast.error(t("settings.saveError", "Failed to save settings."));
+    }
   };
 
   if (loading) {

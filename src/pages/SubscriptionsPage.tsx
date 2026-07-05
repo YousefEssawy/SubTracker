@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import toast from "react-hot-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSubscriptions } from "@/contexts/SubscriptionContext";
 import {
@@ -9,11 +10,7 @@ import {
 } from "@/services/subscriptionService";
 import { getCategoryById, CATEGORIES } from "@/utils/categories";
 import { formatCurrency } from "@/utils/currencies";
-import {
-  getMonthlyEquivalent,
-  getDaysUntilRenewal,
-  formatDate,
-} from "@/utils/dateUtils";
+import { getMonthlyEquivalent, formatDate } from "@/utils/dateUtils";
 import {
   HiOutlinePlusCircle,
   HiOutlinePencilSquare,
@@ -71,7 +68,12 @@ const SubscriptionsPage = () => {
 
   const handleDelete = async () => {
     if (deleteTarget && user) {
-      await deleteSubscription(user.uid, deleteTarget);
+      try {
+        await deleteSubscription(user.uid, deleteTarget);
+      } catch (err) {
+        console.error(err);
+        toast.error(t("subscriptions.deleteError", "Failed to delete subscription."));
+      }
       setDeleteTarget(null);
     }
   };
@@ -80,7 +82,12 @@ const SubscriptionsPage = () => {
     if (!user) return;
     const newStatus: SubscriptionStatus =
       sub.status === "active" ? "paused" : "active";
-    await updateSubscription(user.uid, sub.id, { status: newStatus });
+    try {
+      await updateSubscription(user.uid, sub.id, { status: newStatus });
+    } catch (err) {
+      console.error(err);
+      toast.error(t("subscriptions.toggleError", "Failed to update subscription."));
+    }
   };
 
   const getStatusLabel = (status: string) => {

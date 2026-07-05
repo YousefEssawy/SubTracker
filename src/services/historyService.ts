@@ -28,11 +28,16 @@ export const addPaymentRecord = async (
 export const subscribeToPayments = (
   userId: string,
   callback: (payments: Payment[]) => void,
+  onError?: (error: Error) => void,
 ): (() => void) => {
   const paymentsRef = getPaymentsCollection(userId);
   const q = query(paymentsRef, orderBy("paidDate", "desc"));
-  return onSnapshot(q, (snapshot) => {
-    const payments = snapshot.docs.map((d) => toPayment(d.id, d.data()));
-    callback(payments);
-  });
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      const payments = snapshot.docs.map((d) => toPayment(d.id, d.data()));
+      callback(payments);
+    },
+    onError,
+  );
 };

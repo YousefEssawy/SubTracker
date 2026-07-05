@@ -1,4 +1,12 @@
 {
+  "common": {
+    "confirmDialog": {
+      "title": "Are you sure?",
+      "message": "This action cannot be undone.",
+      "confirm": "Delete",
+      "cancel": "Cancel"
+    }
+  },
   "sidebar": {
     "dashboard": "Dashboard",
     "subscriptions": "Subscriptions",
@@ -36,13 +44,13 @@
   "dashboard": {
     "title": "Dashboard",
     "addSubscription": "Add Subscription",
-    "monthlyExpense": "Monthly Expense",
-    "yearlyExpense": "Yearly Expense",
+    "monthlySpending": "Monthly Spending",
+    "yearlySpending": "Yearly Spending",
     "activeSubs": "Active Subs",
     "nextRenewal": "Next Renewal",
-    "ExpenseByCategory": "Expense by Category",
+    "spendingByCategory": "Spending by Category",
     "noSubscriptionsYet": "No subscriptions yet",
-    "monthlyExpenseTrend": "Monthly Expense Trend",
+    "monthlySpendingTrend": "Monthly Spending Trend",
     "upcomingRenewals": "Upcoming Renewals",
     "viewAll": "View all",
     "noUpcomingRenewals": "No upcoming renewals",
@@ -106,6 +114,8 @@
   },
   "settings": {
     "title": "Settings",
+    "loadError": "Failed to load settings.",
+    "saveError": "Failed to save settings.",
     "profile": "Profile",
     "appearance": "Appearance",
     "light": "Light",
@@ -120,6 +130,8 @@
   },
   "subscriptions": {
     "title": "Subscriptions",
+    "deleteError": "Failed to delete subscription.",
+    "toggleError": "Failed to update subscription.",
     "addNew": "Add New",
     "searchPlaceholder": "Search subscriptions...",
     "category": "Category",
@@ -141,6 +153,8 @@
     "cancel": "Cancel"
   },
   "subscriptionForm": {
+    "loadError": "Failed to load subscription.",
+    "saveError": "Failed to save subscription.",
     "back": "Back",
     "addTitle": "Add Subscription",
     "editTitle": "Edit Subscription",

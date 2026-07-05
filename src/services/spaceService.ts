@@ -83,11 +83,16 @@ export const deleteSpace = async (
 export const subscribeToSpaces = (
   userId: string,
   callback: (spaces: Space[]) => void,
+  onError?: (error: Error) => void,
 ): (() => void) => {
   const spacesRef = getSpacesCollection(userId);
   const q = query(spacesRef, orderBy("createdAt", "asc"));
-  return onSnapshot(q, (snapshot) => {
-    const spaces = snapshot.docs.map((d) => toSpace(d.id, d.data()));
-    callback(spaces);
-  });
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      const spaces = snapshot.docs.map((d) => toSpace(d.id, d.data()));
+      callback(spaces);
+    },
+    onError,
+  );
 };

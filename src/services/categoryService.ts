@@ -91,11 +91,16 @@ export const deleteCategory = async (
 export const subscribeToCategories = (
   userId: string,
   callback: (categories: Category[]) => void,
+  onError?: (error: Error) => void,
 ): (() => void) => {
   const categoriesRef = getCategoriesCollection(userId);
   const q = query(categoriesRef, orderBy("createdAt", "asc"));
-  return onSnapshot(q, (snapshot) => {
-    const categories = snapshot.docs.map((d) => toCategory(d.id, d.data()));
-    callback(categories);
-  });
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      const categories = snapshot.docs.map((d) => toCategory(d.id, d.data()));
+      callback(categories);
+    },
+    onError,
+  );
 };

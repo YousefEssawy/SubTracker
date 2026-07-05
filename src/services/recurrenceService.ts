@@ -101,10 +101,15 @@ export const updateRecurrence = async (
 export const subscribeToRecurrences = (
   userId: string,
   callback: (recurrences: Recurrence[]) => void,
+  onError?: (error: Error) => void,
 ): (() => void) => {
   const q = query(colRef(userId), orderBy("createdAt", "desc"));
-  return onSnapshot(q, (snap) => {
-    const recurrences = snap.docs.map((d) => toRecurrence(d.id, d.data()));
-    callback(recurrences);
-  });
+  return onSnapshot(
+    q,
+    (snap) => {
+      const recurrences = snap.docs.map((d) => toRecurrence(d.id, d.data()));
+      callback(recurrences);
+    },
+    onError,
+  );
 };

@@ -72,13 +72,18 @@ export const getSubscription = async (
 export const subscribeToSubscriptions = (
   userId: string,
   callback: (subscriptions: Subscription[]) => void,
+  onError?: (error: Error) => void,
 ): (() => void) => {
   const subsRef = getSubsCollection(userId);
   const q = query(subsRef, orderBy("createdAt", "desc"));
-  return onSnapshot(q, (snapshot) => {
-    const subscriptions = snapshot.docs.map((d) =>
-      toSubscription(d.id, d.data()),
-    );
-    callback(subscriptions);
-  });
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      const subscriptions = snapshot.docs.map((d) =>
+        toSubscription(d.id, d.data()),
+      );
+      callback(subscriptions);
+    },
+    onError,
+  );
 };

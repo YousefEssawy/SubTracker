@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HiOutlineXMark } from "react-icons/hi2";
+import { useTranslation } from "react-i18next";
 import {
   SPACE_COLORS,
   SPACE_ICONS,
@@ -22,6 +23,7 @@ const SpaceForm = ({
   onClose,
   loading = false,
 }: SpaceFormProps) => {
+  const { t } = useTranslation();
   const isEditing = Boolean(space);
   const [name, setName] = useState(space?.name || "");
   const [color, setColor] = useState(space?.color || DEFAULT_SPACE_COLOR);
@@ -31,11 +33,13 @@ const SpaceForm = ({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!name.trim()) {
-      setError("Space name is required.");
+      setError(t("finance.spaces.nameRequired", "Space name is required."));
       return;
     }
     if (name.trim().length > 50) {
-      setError("Name cannot exceed 50 characters.");
+      setError(
+        t("finance.spaces.nameTooLong", "Name cannot exceed 50 characters."),
+      );
       return;
     }
     setError("");
@@ -63,7 +67,9 @@ const SpaceForm = ({
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-              {isEditing ? "Edit Space" : "Create Space"}
+              {isEditing
+                ? t("finance.spaces.editSpace", "Edit Space")
+                : t("finance.spaces.createSpace", "Create Space")}
             </h2>
             <button
               onClick={onClose}
@@ -78,13 +84,16 @@ const SpaceForm = ({
             {/* Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                Name
+                {t("finance.spaces.name", "Name")}
               </label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="e.g. Personal, Freelance, Household"
+                placeholder={t(
+                  "finance.spaces.namePlaceholder",
+                  "e.g. Personal, Freelance, Household",
+                )}
                 maxLength={50}
                 className="w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm"
               />
@@ -95,7 +104,7 @@ const SpaceForm = ({
             {/* Icon picker */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Icon
+                {t("finance.spaces.icon", "Icon")}
               </label>
               <div className="grid grid-cols-10 gap-1.5">
                 {SPACE_ICONS.map((emoji) => (
@@ -118,7 +127,7 @@ const SpaceForm = ({
             {/* Color picker */}
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Color
+                {t("finance.spaces.color", "Color")}
               </label>
               <div className="grid grid-cols-6 gap-2">
                 {SPACE_COLORS.map((c) => (
@@ -150,7 +159,7 @@ const SpaceForm = ({
                 {icon}
               </div>
               <span className="font-medium text-gray-800 dark:text-gray-200 text-sm truncate">
-                {name || "Space Name Preview"}
+                {name || t("finance.spaces.namePreview", "Space Name Preview")}
               </span>
               <div
                 className="w-3 h-3 rounded-full flex-shrink-0"
@@ -165,7 +174,7 @@ const SpaceForm = ({
                 onClick={onClose}
                 className="flex-1 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
               >
-                Cancel
+                {t("finance.spaces.cancel", "Cancel")}
               </button>
               <button
                 type="submit"
@@ -173,10 +182,10 @@ const SpaceForm = ({
                 className="flex-1 py-2.5 rounded-xl btn-primary text-sm font-medium disabled:opacity-50"
               >
                 {loading
-                  ? "Saving…"
+                  ? t("finance.spaces.saving", "Saving…")
                   : isEditing
-                    ? "Save Changes"
-                    : "Create Space"}
+                    ? t("finance.spaces.saveChanges", "Save Changes")
+                    : t("finance.spaces.createSpace", "Create Space")}
               </button>
             </div>
           </form>

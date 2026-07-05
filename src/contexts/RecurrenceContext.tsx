@@ -6,6 +6,7 @@ import {
   useMemo,
   type ReactNode,
 } from "react";
+import toast from "react-hot-toast";
 import { useAuth } from "./AuthContext";
 import {
   subscribeToRecurrences,
@@ -45,10 +46,18 @@ export const RecurrenceProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
     setLoading(true);
-    const unsub = subscribeToRecurrences(user.uid, (items) => {
-      setRecurrences(items);
-      setLoading(false);
-    });
+    const unsub = subscribeToRecurrences(
+      user.uid,
+      (items) => {
+        setRecurrences(items);
+        setLoading(false);
+      },
+      (err) => {
+        console.error(err);
+        toast.error("Failed to sync recurrences.");
+        setLoading(false);
+      },
+    );
     return () => unsub();
   }, [user]);
 

@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { HiOutlineExclamationTriangle } from "react-icons/hi2";
+import { useTranslation } from "react-i18next";
 
 export interface ConfirmDialogProps {
   isOpen: boolean;
@@ -16,13 +17,22 @@ const ConfirmDialog = ({
   isOpen,
   onClose,
   onConfirm,
-  title = "Are you sure?",
-  message = "This action cannot be undone.",
-  confirmText = "Delete",
-  cancelText = "Cancel",
+  title,
+  message,
+  confirmText,
+  cancelText,
   variant = "danger", // "danger" | "warning"
 }: ConfirmDialogProps) => {
+  const { t } = useTranslation();
   if (!isOpen) return null;
+
+  const resolvedTitle = title ?? t("common.confirmDialog.title", "Are you sure?");
+  const resolvedMessage =
+    message ?? t("common.confirmDialog.message", "This action cannot be undone.");
+  const resolvedConfirmText =
+    confirmText ?? t("common.confirmDialog.confirm", "Delete");
+  const resolvedCancelText =
+    cancelText ?? t("common.confirmDialog.cancel", "Cancel");
 
   const variantStyles = {
     danger: {
@@ -68,12 +78,12 @@ const ConfirmDialog = ({
 
               {/* Title */}
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-                {title}
+                {resolvedTitle}
               </h3>
 
               {/* Message */}
               <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-                {message}
+                {resolvedMessage}
               </p>
 
               {/* Actions */}
@@ -82,7 +92,7 @@ const ConfirmDialog = ({
                   onClick={onClose}
                   className="flex-1 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-medium text-sm hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 active:scale-[0.98]"
                 >
-                  {cancelText}
+                  {resolvedCancelText}
                 </button>
                 <button
                   onClick={() => {
@@ -91,7 +101,7 @@ const ConfirmDialog = ({
                   }}
                   className={`flex-1 px-4 py-2.5 rounded-xl text-white font-medium text-sm transition-all duration-200 active:scale-[0.98] focus:ring-2 ${styles.button}`}
                 >
-                  {confirmText}
+                  {resolvedConfirmText}
                 </button>
               </div>
             </div>

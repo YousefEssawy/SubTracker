@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   addSubscription,
@@ -44,27 +45,34 @@ const SubscriptionFormPage = () => {
   useEffect(() => {
     if (isEdit && user && id) {
       (async () => {
-        const sub = await getSubscription(user.uid, id);
-        if (sub) {
-          setForm({
-            name: sub.name || "",
-            price: String(sub.price || ""),
-            currency: (sub.currency as CurrencyCode) || DEFAULT_CURRENCY,
-            category: sub.category || "other",
-            billingCycle: (sub.billingCycle as BillingCycle) || "monthly",
-            customCycleDays: sub.customCycleDays
-              ? String(sub.customCycleDays)
-              : "",
-            renewalDate: toDateInputValue(sub.renewalDate),
-            paymentMethod: sub.paymentMethod || "",
-            status: (sub.status as SubscriptionStatus) || "active",
-            notes: sub.notes || "",
-          });
+        try {
+          const sub = await getSubscription(user.uid, id);
+          if (sub) {
+            setForm({
+              name: sub.name || "",
+              price: String(sub.price || ""),
+              currency: (sub.currency as CurrencyCode) || DEFAULT_CURRENCY,
+              category: sub.category || "other",
+              billingCycle: (sub.billingCycle as BillingCycle) || "monthly",
+              customCycleDays: sub.customCycleDays
+                ? String(sub.customCycleDays)
+                : "",
+              renewalDate: toDateInputValue(sub.renewalDate),
+              paymentMethod: sub.paymentMethod || "",
+              status: (sub.status as SubscriptionStatus) || "active",
+              notes: sub.notes || "",
+            });
+          }
+        } catch (err) {
+          console.error(err);
+          toast.error(
+            t("subscriptionForm.loadError", "Failed to load subscription."),
+          );
         }
         setFetching(false);
       })();
     }
-  }, [id, isEdit, user]);
+  }, [id, isEdit, user, t]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -102,8 +110,10 @@ const SubscriptionFormPage = () => {
         await addSubscription(user.uid, data);
       }
       navigate("/subscriptions");
+      return;
     } catch (err) {
       console.error(err);
+      toast.error(t("subscriptionForm.saveError", "Failed to save subscription."));
     }
     setLoading(false);
   };

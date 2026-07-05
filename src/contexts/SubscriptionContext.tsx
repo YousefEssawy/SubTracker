@@ -3,9 +3,11 @@ import {
   useContext,
   useState,
   useEffect,
+  useMemo,
   useRef,
   type ReactNode,
 } from "react";
+import toast from "react-hot-toast";
 import { useAuth } from "./AuthContext";
 import {
   subscribeToSubscriptions,
@@ -78,24 +80,47 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     }
 
     setLoading(true);
-    const unsubSubs = subscribeToSubscriptions(user.uid, (subs) => {
-      setSubscriptions(subs);
-      setLoading(false);
+    const unsubSubs = subscribeToSubscriptions(
+      user.uid,
+      (subs) => {
+        setSubscriptions(subs);
+        setLoading(false);
 
-      subs.forEach((sub) => {
-        if (sub.status === "active" && !renewalCheckedRef.current.has(sub.id)) {
-          renewalCheckedRef.current.add(sub.id);
-          const newDate = advanceRenewalDate(sub);
-          if (newDate) {
-            void updateSubscription(user.uid, sub.id, { renewalDate: newDate });
+        subs.forEach((sub) => {
+          if (
+            sub.status === "active" &&
+            !renewalCheckedRef.current.has(sub.id)
+          ) {
+            renewalCheckedRef.current.add(sub.id);
+            const newDate = advanceRenewalDate(sub);
+            if (newDate) {
+              updateSubscription(user.uid, sub.id, {
+                renewalDate: newDate,
+              }).catch((err) => {
+                console.error(err);
+                toast.error("Failed to advance renewal date.");
+              });
+            }
           }
-        }
-      });
-    });
+        });
+      },
+      (err) => {
+        console.error(err);
+        toast.error("Failed to sync subscriptions.");
+        setLoading(false);
+      },
+    );
 
-    const unsubPayments = subscribeToPayments(user.uid, (pays) => {
-      setPayments(pays);
-    });
+    const unsubPayments = subscribeToPayments(
+      user.uid,
+      (pays) => {
+        setPayments(pays);
+      },
+      (err) => {
+        console.error(err);
+        toast.error("Failed to sync payment history.");
+      },
+    );
 
     return () => {
       unsubSubs();
@@ -104,14 +129,17 @@ export const SubscriptionProvider = ({ children }: { children: ReactNode }) => {
     };
   }, [user]);
 
-  const activeSubscriptions = subscriptions.filter(
-    (s) => s.status === "active",
+  const activeSubscriptions = useMemo(
+    () => subscriptions.filter((s) => s.status === "active"),
+    [subscriptions],
   );
-  const pausedSubscriptions = subscriptions.filter(
-    (s) => s.status === "paused",
+  const pausedSubscriptions = useMemo(
+    () => subscriptions.filter((s) => s.status === "paused"),
+    [subscriptions],
   );
-  const cancelledSubscriptions = subscriptions.filter(
-    (s) => s.status === "cancelled",
+  const cancelledSubscriptions = useMemo(
+    () => subscriptions.filter((s) => s.status === "cancelled"),
+    [subscriptions],
   );
 
   const value: SubscriptionContextValue = {

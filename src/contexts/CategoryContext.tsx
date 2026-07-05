@@ -7,6 +7,7 @@ import {
   useMemo,
   type ReactNode,
 } from "react";
+import toast from "react-hot-toast";
 import { useAuth } from "./AuthContext";
 import {
   subscribeToCategories,
@@ -52,10 +53,18 @@ export const CategoryProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
     setLoading(true);
-    const unsub = subscribeToCategories(user.uid, (data) => {
-      setCategories(data);
-      setLoading(false);
-    });
+    const unsub = subscribeToCategories(
+      user.uid,
+      (data) => {
+        setCategories(data);
+        setLoading(false);
+      },
+      (err) => {
+        console.error(err);
+        toast.error("Failed to sync categories.");
+        setLoading(false);
+      },
+    );
     return () => unsub();
   }, [user]);
 

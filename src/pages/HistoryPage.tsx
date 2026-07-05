@@ -36,13 +36,13 @@ const HistoryPage = () => {
       {/* Search */}
       <div className="glass-card p-4">
         <div className="relative">
-          <HiOutlineMagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <HiOutlineMagnifyingGlass className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             type="text"
             placeholder={t("history.searchPlaceholder")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="input-field pl-9 text-sm"
+            className="input-field ps-9 text-sm"
           />
         </div>
       </div>
@@ -66,16 +66,16 @@ const HistoryPage = () => {
             <table className="w-full">
               <thead>
                 <tr className="border-b border-gray-200 dark:border-gray-700">
-                  <th className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">
+                  <th className="text-start text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">
                     {t("history.subscription")}
                   </th>
-                  <th className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">
+                  <th className="text-start text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">
                     {t("history.date")}
                   </th>
-                  <th className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">
+                  <th className="text-start text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3">
                     {t("history.amount")}
                   </th>
-                  <th className="text-left text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3 hidden sm:table-cell">
+                  <th className="text-start text-xs font-semibold text-gray-500 uppercase tracking-wider px-5 py-3 hidden sm:table-cell">
                     {t("history.paymentMethod")}
                   </th>
                 </tr>

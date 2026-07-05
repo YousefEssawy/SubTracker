@@ -1,33 +1,10 @@
 const { onSchedule } = require("firebase-functions/v2/scheduler");
 const { getFirestore, FieldValue } = require("firebase-admin/firestore");
 const { initializeApp } = require("firebase-admin/app");
+const { advanceDate } = require("./dateLogic");
 
 initializeApp();
 const db = getFirestore();
-
-/**
- * Calculate the next execution date given a pattern + interval.
- */
-function advanceDate(dateStr, pattern, interval) {
-  const d = new Date(dateStr + "T00:00:00Z");
-  switch (pattern) {
-    case "Weekly":
-      d.setUTCDate(d.getUTCDate() + 7 * interval);
-      break;
-    case "Monthly":
-      d.setUTCMonth(d.getUTCMonth() + interval);
-      break;
-    case "Yearly":
-      d.setUTCFullYear(d.getUTCFullYear() + interval);
-      break;
-    case "Custom":
-      d.setUTCDate(d.getUTCDate() + interval);
-      break;
-    default:
-      d.setUTCMonth(d.getUTCMonth() + interval);
-  }
-  return d.toISOString().slice(0, 10);
-}
 
 /**
  * Scheduled function — runs daily at midnight UTC.
@@ -51,14 +28,24 @@ const processRecurrences = onSchedule("every day 00:00", async () => {
       .get();
 
     for (const recDoc of recSnap.docs) {
-      const rec = recDoc.data();
       try {
-        // 1. Create a transaction
-        await db
-          .collection("users")
-          .doc(userId)
-          .collection("transactions")
-          .add({
+        await db.runTransaction(async (tx) => {
+          // Re-read inside the transaction so a concurrent run that already
+          // processed this recurrence is detected instead of duplicating it.
+          const freshSnap = await tx.get(recDoc.ref);
+          if (!freshSnap.exists) return;
+          const rec = freshSnap.data();
+          if (!rec.isActive || rec.nextExecutionDate > today) return;
+
+          const interval = typeof rec.interval === "number" ? rec.interval : 1;
+          const nextDate = advanceDate(rec.nextExecutionDate, rec.pattern, interval);
+
+          const txnRef = db
+            .collection("users")
+            .doc(userId)
+            .collection("transactions")
+            .doc();
+          tx.set(txnRef, {
             type: rec.type,
             spaceId: rec.spaceId,
             categoryId: rec.categoryId,
@@ -74,31 +61,19 @@ const processRecurrences = onSchedule("every day 00:00", async () => {
             updatedAt: FieldValue.serverTimestamp(),
           });
 
-        // 2. Advance nextExecutionDate
-        const nextDate = advanceDate(
-          rec.nextExecutionDate,
-          rec.pattern,
-          rec.interval || 1,
-        );
-
-        // 3. If endDate exists and nextDate exceeds it, deactivate
-        if (rec.endDate && nextDate > rec.endDate) {
-          await recDoc.ref.update({
-            isActive: false,
-            updatedAt: FieldValue.serverTimestamp(),
-          });
-          console.log(
-            `Recurrence ${recDoc.id} for user ${userId} ended (past endDate).`,
-          );
-        } else {
-          await recDoc.ref.update({
-            nextExecutionDate: nextDate,
-            updatedAt: FieldValue.serverTimestamp(),
-          });
-          console.log(
-            `Processed recurrence ${recDoc.id} for user ${userId}. Next: ${nextDate}`,
-          );
-        }
+          if (rec.endDate && nextDate > rec.endDate) {
+            tx.update(recDoc.ref, {
+              isActive: false,
+              updatedAt: FieldValue.serverTimestamp(),
+            });
+          } else {
+            tx.update(recDoc.ref, {
+              nextExecutionDate: nextDate,
+              updatedAt: FieldValue.serverTimestamp(),
+            });
+          }
+        });
+        console.log(`Processed recurrence ${recDoc.id} for user ${userId}.`);
       } catch (err) {
         console.error(
           `Error processing recurrence ${recDoc.id} for user ${userId}:`,

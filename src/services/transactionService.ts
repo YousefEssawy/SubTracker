@@ -165,6 +165,7 @@ export const subscribeToTransactions = (
     transactions: Transaction[],
     rawDocs: QueryDocumentSnapshot<DocumentData>[],
   ) => void,
+  onError?: (error: Error) => void,
 ): (() => void) => {
   const baseQuery = buildQuery(userId, filters);
   const pageSize = filters.pageSize ?? 10;
@@ -178,26 +179,35 @@ export const subscribeToTransactions = (
     );
   }
 
-  return onSnapshot(q, (snapshot) => {
-    const transactions = snapshot.docs.map((d) =>
-      toTransaction(d.id, d.data()),
-    );
-    callback(transactions, snapshot.docs);
-  });
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      const transactions = snapshot.docs.map((d) =>
+        toTransaction(d.id, d.data()),
+      );
+      callback(transactions, snapshot.docs);
+    },
+    onError,
+  );
 };
 
 export const subscribeToAllTransactions = (
   userId: string,
   filters: TransactionFilters = {},
   callback: (transactions: Transaction[]) => void,
+  onError?: (error: Error) => void,
 ): (() => void) => {
   const q = buildQuery(userId, filters);
-  return onSnapshot(q, (snapshot) => {
-    const transactions = snapshot.docs.map((d) =>
-      toTransaction(d.id, d.data()),
-    );
-    callback(transactions);
-  });
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      const transactions = snapshot.docs.map((d) =>
+        toTransaction(d.id, d.data()),
+      );
+      callback(transactions);
+    },
+    onError,
+  );
 };
 
 export const hasLinkedTransactions = async (

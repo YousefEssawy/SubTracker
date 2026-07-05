@@ -44,16 +44,29 @@ const RecurrenceForm = ({ onClose }: RecurrenceFormProps) => {
   const validate = () => {
     const e: Record<string, string> = {};
     if (!spaceId)
-      e.spaceId = t("finance.recurrences.space", "Space") + " is required.";
+      e.spaceId = t("finance.recurrences.spaceRequired", "Space is required.");
     if (!categoryId)
-      e.categoryId =
-        t("finance.recurrences.category", "Category") + " is required.";
+      e.categoryId = t(
+        "finance.recurrences.categoryRequired",
+        "Category is required.",
+      );
     const num = parseFloat(amount);
-    if (!amount || isNaN(num) || num <= 0) e.amount = "Amount must be > 0.";
-    if (!startDate) e.startDate = "Start date is required.";
+    if (!amount || isNaN(num) || num <= 0)
+      e.amount = t(
+        "finance.recurrences.amountInvalid",
+        "Amount must be greater than 0.",
+      );
+    if (!startDate)
+      e.startDate = t(
+        "finance.recurrences.startDateRequired",
+        "Start date is required.",
+      );
     const intv = parseInt(interval, 10);
     if (!interval || isNaN(intv) || intv < 1)
-      e.interval = "Interval must be ≥ 1.";
+      e.interval = t(
+        "finance.recurrences.intervalInvalid",
+        "Interval must be at least 1.",
+      );
     return e;
   };
 
