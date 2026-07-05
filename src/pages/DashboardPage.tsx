@@ -16,8 +16,6 @@ import {
 import {
   HiOutlineCreditCard,
   HiOutlineBanknotes,
-  HiOutlineCalendarDays,
-  HiOutlineArrowTrendingUp,
   HiOutlinePlusCircle,
 } from "react-icons/hi2";
 import {
@@ -228,66 +226,137 @@ const DashboardPage = () => {
         </Link>
       </div>
 
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {[
-          {
-            id: "monthly",
-            label: t("dashboard.monthlySpending"),
-            value: formatCurrency(stats.totalMonthly, displayCurrency),
-            icon: HiOutlineBanknotes,
-            color: "from-primary to-indigo-400",
-          },
-          {
-            id: "yearly",
-            label: t("dashboard.yearlySpending"),
-            value: formatCurrency(stats.totalYearly, displayCurrency),
-            icon: HiOutlineArrowTrendingUp,
-            color: "from-accent to-pink-400",
-          },
-          {
-            id: "active",
-            label: t("dashboard.activeSubs"),
-            value: stats.activeCount,
-            icon: HiOutlineCreditCard,
-            color: "from-success to-emerald-400",
-          },
-          {
-            id: "renewal",
-            label: t("dashboard.nextRenewal"),
-            value: stats.nextRenewal ? `${stats.nextRenewal.daysUntil}d` : "—",
-            subtext: stats.nextRenewal?.name,
-            icon: HiOutlineCalendarDays,
-            color: "from-warning to-amber-400",
-          },
-        ].map((card) => (
-          <motion.div
-            key={card.id}
-            variants={itemAnim}
-            className="glass-card p-4 sm:p-5 relative overflow-hidden group hover:shadow-card-hover transition-shadow duration-300"
-          >
-            <div
-              className={`absolute top-0 right-0 w-20 h-20 rounded-bl-[40px] bg-gradient-to-br ${card.color} opacity-10 group-hover:opacity-20 transition-opacity`}
+      {/* Hero strip — the two facts this page exists for: what it's costing,
+          and what's charging next. Everything else here is supporting detail. */}
+      <motion.div
+        variants={itemAnim}
+        className="glass-card p-5 sm:p-6 grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] gap-6 items-center"
+      >
+        <div className="flex items-center gap-4">
+          <div className="inline-flex p-3 rounded-xl bg-gradient-to-br from-primary to-indigo-400 flex-shrink-0">
+            <HiOutlineBanknotes className="w-6 h-6 text-white" />
+          </div>
+          <div className="min-w-0">
+            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+              {t("dashboard.monthlySpending")}
+            </p>
+            <p className="figure text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">
+              {formatCurrency(stats.totalMonthly, displayCurrency)}
+            </p>
+            <p className="figure text-xs text-gray-400">
+              {formatCurrency(stats.totalYearly, displayCurrency)}{" "}
+              {t("dashboard.perYear", "/ year")}
+            </p>
+          </div>
+        </div>
+
+        <div className="hidden sm:block w-px h-16 bg-gray-200 dark:bg-gray-700" />
+
+        {stats.nextRenewal ? (
+          <div className="flex items-center gap-4">
+            <RenewalDial
+              icon={getCategoryById(stats.nextRenewal.category).icon}
+              iconColor={getCategoryById(stats.nextRenewal.category).color}
+              daysUntil={stats.nextRenewal.daysUntil}
+              billingCycle={stats.nextRenewal.billingCycle}
+              customCycleDays={stats.nextRenewal.customCycleDays}
+              size={56}
             />
-            <div
-              className={`inline-flex p-2.5 rounded-xl bg-gradient-to-br ${card.color} mb-3`}
-            >
-              <card.icon className="w-5 h-5 text-white" />
-            </div>
-            <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-1">
-              {card.label}
-            </p>
-            <p className="figure text-lg sm:text-2xl font-bold text-gray-900 dark:text-white">
-              {card.value}
-            </p>
-            {card.subtext && (
-              <p className="text-xs text-gray-400 mt-1 truncate">
-                {card.subtext}
+            <div className="min-w-0">
+              <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                {t("dashboard.nextRenewal")}
               </p>
-            )}
-          </motion.div>
-        ))}
-      </div>
+              <p className="font-semibold text-gray-900 dark:text-white truncate">
+                {stats.nextRenewal.name}
+              </p>
+              <p
+                className={`text-xs font-medium ${stats.nextRenewal.daysUntil <= 3 ? "text-danger" : "text-warning"}`}
+              >
+                {stats.nextRenewal.daysUntil === 0
+                  ? t("dashboard.today")
+                  : t("dashboard.days", { count: stats.nextRenewal.daysUntil })}
+              </p>
+            </div>
+          </div>
+        ) : (
+          <p className="text-sm text-gray-400">
+            {t("dashboard.noUpcomingRenewals")}
+          </p>
+        )}
+
+        <div className="flex sm:flex-col items-center sm:items-end gap-4 sm:gap-1 justify-between sm:justify-center text-sm">
+          <span className="inline-flex items-center gap-1.5 text-gray-500 dark:text-gray-400">
+            <HiOutlineCreditCard className="w-4 h-4" />
+            {t("dashboard.activeSubs")}
+            <span className="figure font-semibold text-gray-900 dark:text-white">
+              {stats.activeCount}
+            </span>
+          </span>
+        </div>
+      </motion.div>
+
+      {/* Upcoming Renewals — the actionable list, ahead of the analysis charts */}
+      <motion.div variants={itemAnim} className="glass-card p-5">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="font-semibold text-gray-900 dark:text-white">
+            {t("dashboard.upcomingRenewals")}
+          </h3>
+          <Link
+            to="/subscriptions"
+            className="text-sm text-primary hover:underline"
+          >
+            {t("dashboard.viewAll")}
+          </Link>
+        </div>
+        {stats.upcomingSorted.length === 0 ? (
+          <p className="text-gray-400 text-sm text-center py-6">
+            {t("dashboard.noUpcomingRenewals")}
+          </p>
+        ) : (
+          <div className="space-y-3">
+            {stats.upcomingSorted.map((sub) => {
+              const cat = getCategoryById(sub.category);
+              return (
+                <div
+                  key={sub.id}
+                  className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+                >
+                  <div className="flex items-center gap-3">
+                    <RenewalDial
+                      icon={cat.icon}
+                      iconColor={cat.color}
+                      daysUntil={sub.daysUntil}
+                      billingCycle={sub.billingCycle}
+                      customCycleDays={sub.customCycleDays}
+                      size={40}
+                    />
+                    <div>
+                      <p className="font-medium text-sm text-gray-900 dark:text-white">
+                        {sub.name}
+                      </p>
+                      <p className="text-xs text-gray-500 font-mono">
+                        {formatDate(sub.renewalDate)}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="figure font-semibold text-sm">
+                      {formatCurrency(sub.price, sub.currency as CurrencyCode)}
+                    </p>
+                    <p
+                      className={`text-xs font-medium ${sub.daysUntil <= 3 ? "text-danger" : "text-warning"}`}
+                    >
+                      {sub.daysUntil === 0
+                        ? t("dashboard.today")
+                        : t("dashboard.days", { count: sub.daysUntil })}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </motion.div>
 
       {/* Financial Overview */}
       <FinancialOverview />
@@ -435,69 +504,6 @@ const DashboardPage = () => {
           </div>
         </motion.div>
       </div>
-
-      {/* Upcoming Renewals */}
-      <motion.div variants={itemAnim} className="glass-card p-5">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-gray-900 dark:text-white">
-            {t("dashboard.upcomingRenewals")}
-          </h3>
-          <Link
-            to="/subscriptions"
-            className="text-sm text-primary hover:underline"
-          >
-            {t("dashboard.viewAll")}
-          </Link>
-        </div>
-        {stats.upcomingSorted.length === 0 ? (
-          <p className="text-gray-400 text-sm text-center py-6">
-            {t("dashboard.noUpcomingRenewals")}
-          </p>
-        ) : (
-          <div className="space-y-3">
-            {stats.upcomingSorted.map((sub) => {
-              const cat = getCategoryById(sub.category);
-              return (
-                <div
-                  key={sub.id}
-                  className="flex items-center justify-between p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <RenewalDial
-                      icon={cat.icon}
-                      iconColor={cat.color}
-                      daysUntil={sub.daysUntil}
-                      billingCycle={sub.billingCycle}
-                      customCycleDays={sub.customCycleDays}
-                      size={40}
-                    />
-                    <div>
-                      <p className="font-medium text-sm text-gray-900 dark:text-white">
-                        {sub.name}
-                      </p>
-                      <p className="text-xs text-gray-500 font-mono">
-                        {formatDate(sub.renewalDate)}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="text-right">
-                    <p className="figure font-semibold text-sm">
-                      {formatCurrency(sub.price, sub.currency as CurrencyCode)}
-                    </p>
-                    <p
-                      className={`text-xs font-medium ${sub.daysUntil <= 3 ? "text-danger" : "text-warning"}`}
-                    >
-                      {sub.daysUntil === 0
-                        ? t("dashboard.today")
-                        : t("dashboard.days", { count: sub.daysUntil })}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </motion.div>
     </motion.div>
   );
 };
