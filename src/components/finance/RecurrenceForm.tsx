@@ -114,7 +114,7 @@ const RecurrenceForm = ({ onClose }: RecurrenceFormProps) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
       <div className="bg-white dark:bg-surface-dark rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6">
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+          <h2 className="font-display text-lg font-bold tracking-tight text-gray-900 dark:text-gray-100">
             {t("finance.recurrences.addRecurrence", "Add Recurrence")}
           </h2>
           <button

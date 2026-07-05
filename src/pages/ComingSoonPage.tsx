@@ -56,7 +56,7 @@ const ComingSoonPage = () => {
           <HiOutlineSparkles className="w-10 h-10 text-primary animate-pulse" />
           <div className="absolute inset-0 bg-primary/20 rounded-full animate-ping opacity-75"></div>
         </div>
-        <h1 className="text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent mb-6">
+        <h1 className="font-display text-5xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent mb-6">
           {t("comingSoon.title", "More Power is Coming Soon!")}
         </h1>
         <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
@@ -84,7 +84,7 @@ const ComingSoonPage = () => {
             >
               <feature.icon className="w-8 h-8" />
             </div>
-            <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white group-hover:text-primary transition-colors">
+            <h3 className="font-display text-2xl font-bold tracking-tight mb-4 text-gray-900 dark:text-white group-hover:text-primary transition-colors">
               {feature.title}
             </h3>
             <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
@@ -99,7 +99,7 @@ const ComingSoonPage = () => {
           className="md:col-span-2 card p-8 border-2 border-dashed border-primary/30 bg-primary/5 flex flex-col items-center justify-center text-center min-h-[200px]"
         >
           <HiOutlinePlus className="w-12 h-12 text-primary/40 mb-4" />
-          <h3 className="text-xl font-semibold text-gray-500 dark:text-gray-400">
+          <h3 className="font-display text-xl font-semibold tracking-tight text-gray-500 dark:text-gray-400">
             {t("comingSoon.muchMore", "And much more...")}
           </h3>
           <p className="text-sm text-gray-400 mt-2">

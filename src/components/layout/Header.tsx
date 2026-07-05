@@ -122,7 +122,7 @@ const Header = ({ onMenuToggle }: HeaderProps) => {
                 {showNotif && (
                   <div className="absolute end-0 top-12 w-80 bg-white dark:bg-surface-dark rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden animate-scale-in">
                     <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
-                      <h3 className="font-semibold text-sm">
+                      <h3 className="font-display font-semibold tracking-tight text-sm">
                         {t("header.upcomingRenewals", "Upcoming Renewals")}
                       </h3>
                     </div>

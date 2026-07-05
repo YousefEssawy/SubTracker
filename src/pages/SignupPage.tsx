@@ -82,7 +82,7 @@ const SignupPage = () => {
         </div>
 
         <div className="glass-card p-8">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+          <h2 className="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white mb-6">
             {t("signup.createAccount")}
           </h2>
 

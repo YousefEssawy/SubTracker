@@ -57,7 +57,7 @@ const FinancialOverview = () => {
       className="glass-card p-5"
     >
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-semibold text-gray-900 dark:text-white">
+        <h3 className="font-display font-semibold tracking-tight text-gray-900 dark:text-white">
           {t("finance.balance.financialOverview", "Financial Overview")}
         </h3>
         <Link
@@ -298,7 +298,7 @@ const DashboardPage = () => {
       {/* Upcoming Renewals — the actionable list, ahead of the analysis charts */}
       <motion.div variants={itemAnim} className="glass-card p-5">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-gray-900 dark:text-white">
+          <h3 className="font-display font-semibold tracking-tight text-gray-900 dark:text-white">
             {t("dashboard.upcomingRenewals")}
           </h3>
           <Link
@@ -368,7 +368,7 @@ const DashboardPage = () => {
           variants={itemAnim}
           className="glass-card p-5 w-full min-w-0 overflow-hidden"
         >
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
+          <h3 className="font-display font-semibold tracking-tight text-gray-900 dark:text-white mb-4">
             {t("dashboard.spendingByCategory")}
           </h3>
           {categoryData.length === 0 ? (
@@ -437,7 +437,7 @@ const DashboardPage = () => {
           variants={itemAnim}
           className="glass-card p-5 w-full min-w-0 overflow-hidden"
         >
-          <h3 className="font-semibold text-gray-900 dark:text-white mb-4">
+          <h3 className="font-display font-semibold tracking-tight text-gray-900 dark:text-white mb-4">
             {t("dashboard.monthlySpendingTrend")}
           </h3>
           <div className="h-64 -ml-2 overflow-hidden">

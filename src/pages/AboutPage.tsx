@@ -51,7 +51,7 @@ const AboutPage = () => {
           <div className="inline-flex items-center justify-center p-4 bg-primary/10 rounded-2xl mb-4">
             <FaCode className="w-8 h-8 text-primary" />
           </div>
-          <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
+          <h1 className="font-display text-4xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
             {t("about.title")}
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-400">
@@ -60,12 +60,12 @@ const AboutPage = () => {
         </motion.div>
 
         <motion.div variants={itemVariants} className="card p-8">
-          <h2 className="text-2xl font-bold mb-4">{t("about.missionTitle")}</h2>
+          <h2 className="font-display text-2xl font-bold tracking-tight mb-4">{t("about.missionTitle")}</h2>
           <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6">
             {t("about.missionText")}
           </p>
           <div className="bg-primary/5 rounded-xl p-6 border border-primary/10">
-            <h3 className="font-semibold text-lg mb-2 text-primary">
+            <h3 className="font-display font-semibold tracking-tight text-lg mb-2 text-primary">
               {t("about.keyFeatures")}
             </h3>
             <ul className="list-disc list-inside space-y-2 text-gray-600 dark:text-gray-400">
@@ -78,13 +78,13 @@ const AboutPage = () => {
         </motion.div>
 
         <motion.div variants={itemVariants} className="card p-8 text-center">
-          <h2 className="text-2xl font-bold mb-6">
+          <h2 className="font-display text-2xl font-bold tracking-tight mb-6">
             {t("about.meetDeveloper")}
           </h2>
           <div className="w-24 h-24 mx-auto bg-gradient-to-br from-primary to-accent rounded-full mb-4 flex items-center justify-center shadow-lg">
             <span className="text-3xl font-bold text-white">YE</span>
           </div>
-          <h3 className="text-xl font-bold mb-2">Yousef Essawy</h3>
+          <h3 className="font-display text-xl font-bold tracking-tight mb-2">Yousef Essawy</h3>
           <p className="text-gray-500 mb-6">{t("about.developerRole")}</p>
 
           <div className="flex items-center justify-center gap-6">

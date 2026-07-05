@@ -219,7 +219,7 @@ const TransactionFormPage = () => {
         {t("finance.transactions.backToList", "Back to Transactions")}
       </button>
 
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-7">
+      <h1 className="page-title mb-7">
         {isEditMode
           ? t("finance.transactions.editTransaction", "Edit Transaction")
           : type === "Income"

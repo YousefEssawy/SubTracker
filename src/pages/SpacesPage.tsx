@@ -40,7 +40,7 @@ const ConfirmDialog = ({
         exit={{ scale: 0.92, opacity: 0 }}
         className="bg-white dark:bg-surface-dark rounded-2xl shadow-2xl p-6 max-w-sm w-full"
       >
-        <h3 className="text-base font-semibold text-gray-900 dark:text-gray-100 mb-2">
+        <h3 className="font-display text-base font-semibold tracking-tight text-gray-900 dark:text-gray-100 mb-2">
           {t("finance.spaces.deleteTitle", "Delete Space?")}
         </h3>
         <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">
@@ -150,7 +150,7 @@ const EmptyState = ({ onAdd }: { onAdd: () => void }) => {
       <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-5">
         <HiOutlineRectangleGroup className="w-10 h-10 text-primary" />
       </div>
-      <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
+      <h3 className="font-display text-lg font-semibold tracking-tight text-gray-800 dark:text-gray-200 mb-2">
         {t("finance.spaces.noSpaces", "No spaces yet")}
       </h3>
       <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xs mb-6">
@@ -244,7 +244,7 @@ const SpacesPage = () => {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+          <h1 className="page-title">
             {t("finance.spaces.title", "Spaces")}
           </h1>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">

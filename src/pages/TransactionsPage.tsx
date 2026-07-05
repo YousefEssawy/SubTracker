@@ -19,7 +19,7 @@ const EmptyNoData = ({ onAdd }: { onAdd: () => void }) => {
       <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-5">
         <HiOutlineBanknotes className="w-10 h-10 text-primary" />
       </div>
-      <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
+      <h3 className="font-display text-lg font-semibold tracking-tight text-gray-800 dark:text-gray-200 mb-2">
         {t("finance.transactions.noTransactions", "No transactions yet")}
       </h3>
       <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xs mb-6">
@@ -65,7 +65,7 @@ const TransactionsPage = () => {
     <div className="max-w-3xl mx-auto px-4 py-8">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+        <h1 className="page-title">
           {t("finance.transactions.title", "Transactions")}
         </h1>
         <button

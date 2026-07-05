@@ -54,7 +54,7 @@ const HowToPage = () => {
         animate={{ opacity: 1, y: 0 }}
         className="text-center mb-12"
       >
-        <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent mb-4">
+        <h1 className="font-display text-4xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent mb-4">
           {t("howTo.title")}
         </h1>
         <p className="text-xl text-gray-600 dark:text-gray-400">
@@ -79,7 +79,7 @@ const HowToPage = () => {
                 <step.icon className="w-8 h-8" />
               </div>
               <div>
-                <h3 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">
+                <h3 className="font-display text-2xl font-bold tracking-tight mb-2 text-gray-900 dark:text-white">
                   {step.title}
                 </h3>
                 <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
@@ -97,7 +97,7 @@ const HowToPage = () => {
         transition={{ delay: 0.6 }}
         className="mt-12 text-center p-8 bg-primary/5 rounded-2xl border border-primary/20"
       >
-        <h2 className="text-2xl font-bold mb-4">{t("howTo.ctaTitle")}</h2>
+        <h2 className="font-display text-2xl font-bold tracking-tight mb-4">{t("howTo.ctaTitle")}</h2>
         <p className="text-gray-600 dark:text-gray-400 mb-6">
           {t("howTo.ctaText")}
         </p>

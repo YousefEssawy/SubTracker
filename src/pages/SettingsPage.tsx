@@ -74,7 +74,7 @@ const SettingsPage = () => {
 
       {/* Profile */}
       <div className="glass-card p-6">
-        <h2 className="font-semibold text-lg text-gray-900 dark:text-white mb-4">
+        <h2 className="font-display font-semibold tracking-tight text-lg text-gray-900 dark:text-white mb-4">
           {t("settings.profile")}
         </h2>
         <div className="flex items-center gap-4">
@@ -96,7 +96,7 @@ const SettingsPage = () => {
 
       {/* Appearance */}
       <div className="glass-card p-6">
-        <h2 className="font-semibold text-lg text-gray-900 dark:text-white mb-4">
+        <h2 className="font-display font-semibold tracking-tight text-lg text-gray-900 dark:text-white mb-4">
           {t("settings.appearance")}
         </h2>
         <div className="flex gap-3">
@@ -121,7 +121,7 @@ const SettingsPage = () => {
 
       {/* Preferences */}
       <div className="glass-card p-6 space-y-5">
-        <h2 className="font-semibold text-lg text-gray-900 dark:text-white">
+        <h2 className="font-display font-semibold tracking-tight text-lg text-gray-900 dark:text-white">
           {t("settings.preferences")}
         </h2>
         <div>

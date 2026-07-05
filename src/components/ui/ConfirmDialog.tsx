@@ -77,7 +77,7 @@ const ConfirmDialog = ({
               </div>
 
               {/* Title */}
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+              <h3 className="font-display text-lg font-semibold tracking-tight text-gray-900 dark:text-white mb-2">
                 {resolvedTitle}
               </h3>
 

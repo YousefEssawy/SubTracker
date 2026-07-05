@@ -303,7 +303,7 @@ const AboutSection = () => {
                 <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                   <feature.icon className="w-5 h-5 text-primary" />
                 </div>
-                <h3 className="font-semibold text-sm text-gray-900 dark:text-white">
+                <h3 className="font-display font-semibold tracking-tight text-sm text-gray-900 dark:text-white">
                   {feature.title}
                 </h3>
                 <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">
@@ -394,7 +394,7 @@ const HowToSection = () => {
                   {idx + 1}
                 </span>
               </div>
-              <h3 className="font-bold text-gray-900 dark:text-white mb-2">
+              <h3 className="font-display font-bold tracking-tight text-gray-900 dark:text-white mb-2">
                 {step.title}
               </h3>
               <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
@@ -472,7 +472,7 @@ const ComingSoonSection = () => {
             >
               <span className="text-3xl flex-shrink-0">{item.icon}</span>
               <div>
-                <h3 className="font-bold text-gray-900 dark:text-white mb-1">
+                <h3 className="font-display font-bold tracking-tight text-gray-900 dark:text-white mb-1">
                   {item.title}
                 </h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">

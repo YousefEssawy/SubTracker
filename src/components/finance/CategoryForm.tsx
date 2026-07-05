@@ -68,7 +68,7 @@ const CategoryForm = ({
         >
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            <h2 className="font-display text-lg font-semibold tracking-tight text-gray-900 dark:text-gray-100">
               {isEditing
                 ? t("finance.categories.editCategory", "Edit Category")
                 : t("finance.categories.createCategory", "Create Category")}

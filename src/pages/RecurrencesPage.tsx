@@ -208,7 +208,7 @@ const RecurrencesPage = () => {
   return (
     <div className="max-w-2xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+        <h1 className="page-title">
           {t("finance.recurrences.title", "Recurrences")}
         </h1>
         <button
@@ -229,7 +229,7 @@ const RecurrencesPage = () => {
           <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center mb-5">
             <HiOutlineArrowPath className="w-10 h-10 text-primary" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
+          <h3 className="font-display text-lg font-semibold tracking-tight text-gray-800 dark:text-gray-200 mb-2">
             {t("finance.recurrences.noRecurrences", "No recurrences yet")}
           </h3>
           <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xs mb-6">
@@ -251,7 +251,7 @@ const RecurrencesPage = () => {
           {/* Active */}
           {activeRecurrences.length > 0 && (
             <div>
-              <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+              <h2 className="font-display text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
                 {t("finance.recurrences.activeCount", "Active ({{count}})", {
                   count: activeRecurrences.length,
                 })}
@@ -277,7 +277,7 @@ const RecurrencesPage = () => {
           {/* Paused */}
           {pausedRecurrences.length > 0 && (
             <div>
-              <h2 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+              <h2 className="font-display text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
                 {t("finance.recurrences.pausedCount", "Paused ({{count}})", {
                   count: pausedRecurrences.length,
                 })}
@@ -306,7 +306,7 @@ const RecurrencesPage = () => {
       {confirmDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
           <div className="bg-white dark:bg-surface-dark rounded-2xl shadow-xl p-6 max-w-sm w-full">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-2">
+            <h3 className="font-display text-lg font-semibold tracking-tight text-gray-900 dark:text-gray-100 mb-2">
               {t("finance.recurrences.deleteConfirm", "Delete Recurrence?")}
             </h3>
             <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">
