@@ -20,7 +20,7 @@ const Layout = ({ children }: LayoutProps) => {
       <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
       {/* Main Content */}
-      <main className="lg:ms-64 pt-16 min-h-screen">
+      <main className="lg:ms-[280px] pt-24 min-h-screen">
         <div className="page-container">
           <motion.div
             key={location.pathname}

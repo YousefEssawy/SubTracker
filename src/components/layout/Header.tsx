@@ -54,31 +54,31 @@ const Header = ({ onMenuToggle }: HeaderProps) => {
   };
 
   return (
-    <header className="fixed top-0 inset-x-0 h-16 bg-white/80 dark:bg-surface-dark/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-800/50 z-40">
-      <div className="flex items-center justify-between h-full px-4 lg:px-6">
-        <div className="flex items-center gap-3">
+    <header className="fixed top-3 inset-x-3 z-40">
+      <div className="glass-card rounded-full h-14 px-2.5 sm:px-4 lg:px-6 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-3 min-w-0">
           <button
             onClick={onMenuToggle}
-            className="lg:hidden p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="lg:hidden inline-flex h-9 w-9 items-center justify-center rounded-full hover:bg-gray-100/70 dark:hover:bg-gray-800/70 transition-colors shrink-0"
           >
             <HiOutlineBars3 className="w-5 h-5 text-gray-700 dark:text-gray-300" />
           </button>
-          <Link to="/" className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2 shrink-0">
             <img
               src={theme === "light" ? lightLogo : darkLogo}
               alt="SubTracker"
-              className="h-20"
+              className="h-10"
             />
           </Link>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
           {/* Language Toggle */}
           <button
             onClick={() =>
               i18n.changeLanguage(i18n.language === "ar" ? "en" : "ar")
             }
-            className="px-3 py-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 text-sm font-medium text-gray-700 dark:text-gray-300"
+            className="px-3 h-9 rounded-full hover:bg-gray-100/70 dark:hover:bg-gray-800/70 transition-all duration-200 text-sm font-medium text-gray-700 dark:text-gray-300"
             title="Toggle Language"
           >
             {i18n.language === "ar" ? "EN" : "عربي"}
@@ -87,7 +87,7 @@ const Header = ({ onMenuToggle }: HeaderProps) => {
           {/* Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className="p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full hover:bg-gray-100/70 dark:hover:bg-gray-800/70 transition-all duration-200"
             title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
           >
             {theme === "light" ? (
@@ -100,17 +100,18 @@ const Header = ({ onMenuToggle }: HeaderProps) => {
           {!user ? (
             <Link
               to="/login"
-              className="ms-2 px-4 py-2 text-sm font-medium text-white bg-primary hover:bg-primary-dark rounded-xl transition-colors"
+              className="ms-2 px-4 py-2 text-sm font-medium text-white rounded-full transition-colors"
+              style={{ background: "var(--brand-primary-500)" }}
             >
               {t("header.signIn", "Sign In")}
             </Link>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2">
               {/* Notifications */}
               <div ref={notifRef} className="relative">
                 <button
                   onClick={() => setShowNotif(!showNotif)}
-                  className="relative p-2.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
+                  className="relative inline-flex h-9 w-9 items-center justify-center rounded-full hover:bg-gray-100/70 dark:hover:bg-gray-800/70 transition-all duration-200"
                 >
                   <HiOutlineBell className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                   {upcomingRenewals.length > 0 && (
@@ -169,7 +170,7 @@ const Header = ({ onMenuToggle }: HeaderProps) => {
               <div ref={profileRef} className="relative">
                 <button
                   onClick={() => setShowProfile(!showProfile)}
-                  className="flex items-center gap-2 p-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200"
+                  className="flex items-center gap-2 p-1 rounded-full hover:bg-gray-100/70 dark:hover:bg-gray-800/70 transition-all duration-200"
                 >
                   {user?.photoURL && !imageError ? (
                     <img
