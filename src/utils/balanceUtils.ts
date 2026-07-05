@@ -9,7 +9,7 @@ export interface TransactionFilters {
   spaceId?: string;
   currency?: CurrencyCode;
   type?: "Income" | "Expense";
-  dateRange?: { start: string; end: string };
+  dateRange?: { start?: string; end?: string };
   tag?: string;
   pageSize?: number;
   startAfterDoc?: unknown;

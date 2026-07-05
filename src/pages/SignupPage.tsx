@@ -15,6 +15,7 @@ import { useTranslation } from "react-i18next";
 import lightLogo from "@/assets/logo/light-mode.png";
 import darkLogo from "@/assets/logo/dark-mode.png";
 import { useTheme } from "@/contexts/ThemeContext";
+import { formatAuthErrorMessage } from "@/utils/errors";
 
 const SignupPage = () => {
   const { t } = useTranslation();
@@ -43,11 +44,8 @@ const SignupPage = () => {
     try {
       await signUpWithEmail(email, password, name);
       navigate("/");
-    } catch (err: any) {
-      setError(
-        err.message?.replace("Firebase: ", "").replace(/\(auth\/.*\)/, "") ||
-          t("signup.error"),
-      );
+    } catch (err) {
+      setError(formatAuthErrorMessage(err) || t("signup.error"));
     }
     setLoading(false);
   };
@@ -58,11 +56,8 @@ const SignupPage = () => {
     try {
       await signInWithGoogle();
       navigate("/");
-    } catch (err: any) {
-      setError(
-        err.message?.replace("Firebase: ", "").replace(/\(auth\/.*\)/, "") ||
-          t("signup.error"),
-      );
+    } catch (err) {
+      setError(formatAuthErrorMessage(err) || t("signup.error"));
     }
     setLoading(false);
   };

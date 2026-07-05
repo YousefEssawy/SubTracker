@@ -8,6 +8,7 @@ import { useCategories } from "@/contexts/CategoryContext";
 import { getTransaction } from "@/services/transactionService";
 import { uploadAttachment } from "@/services/storageService";
 import { useAuth } from "@/contexts/AuthContext";
+import { getErrorMessage } from "@/utils/errors";
 import { CURRENCIES } from "@/utils/currencies";
 import { toDateInputValue } from "@/utils/dateUtils";
 import TagInput from "@/components/finance/TagInput";
@@ -183,9 +184,9 @@ const TransactionFormPage = () => {
         toast.success(t("finance.transactions.added", "Transaction added!"));
       }
       navigate("/transactions");
-    } catch (err: any) {
+    } catch (err) {
       toast.error(
-        err.message ||
+        getErrorMessage(err) ||
           t("finance.transactions.saveError", "Failed to save transaction."),
       );
     } finally {

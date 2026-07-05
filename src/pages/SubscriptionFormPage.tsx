@@ -18,6 +18,7 @@ import type {
   BillingCycle,
   SubscriptionStatus,
   SubscriptionInput,
+  CategoryId,
 } from "@/models";
 
 const SubscriptionFormPage = () => {
@@ -33,7 +34,7 @@ const SubscriptionFormPage = () => {
     name: "",
     price: "",
     currency: DEFAULT_CURRENCY as CurrencyCode,
-    category: "other",
+    category: "other" as CategoryId,
     billingCycle: "monthly" as BillingCycle,
     customCycleDays: "",
     renewalDate: toDateInputValue(new Date()),
@@ -52,7 +53,7 @@ const SubscriptionFormPage = () => {
               name: sub.name || "",
               price: String(sub.price || ""),
               currency: (sub.currency as CurrencyCode) || DEFAULT_CURRENCY,
-              category: sub.category || "other",
+              category: (sub.category as CategoryId) || "other",
               billingCycle: (sub.billingCycle as BillingCycle) || "monthly",
               customCycleDays: sub.customCycleDays
                 ? String(sub.customCycleDays)
@@ -92,7 +93,7 @@ const SubscriptionFormPage = () => {
         name: form.name,
         price: parseFloat(form.price),
         currency: form.currency,
-        category: form.category as any, // bypassing category ID string mismatch
+        category: form.category,
         billingCycle: form.billingCycle,
         renewalDate: form.renewalDate,
         paymentMethod: form.paymentMethod,

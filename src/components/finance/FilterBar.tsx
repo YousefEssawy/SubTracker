@@ -3,7 +3,8 @@ import { useTranslation } from "react-i18next";
 import { useSpaces } from "@/contexts/SpaceContext";
 import { CURRENCIES } from "@/utils/currencies";
 import { HiOutlineXMark, HiOutlineFunnel } from "react-icons/hi2";
-import type { TransactionType } from "@/models";
+import type { TransactionFilters } from "@/utils/balanceUtils";
+import type { CurrencyCode } from "@/models";
 
 interface TypeButtonProps {
   label: string;
@@ -25,16 +26,7 @@ const TypeButton = ({ label, active, onClick, color }: TypeButtonProps) => (
   </button>
 );
 
-export interface Filters {
-  spaceId?: string;
-  type?: TransactionType;
-  currency?: string;
-  tag?: string;
-  dateRange?: {
-    start?: string;
-    end?: string;
-  };
-}
+type Filters = TransactionFilters;
 
 interface FilterBarProps {
   filters: Filters;
@@ -119,7 +111,10 @@ const FilterBar = ({ filters, setFilters }: FilterBarProps) => {
         <select
           value={filters.currency || ""}
           onChange={(e) =>
-            updateFilter("currency", e.target.value || undefined)
+            updateFilter(
+              "currency",
+              (e.target.value as CurrencyCode) || undefined,
+            )
           }
           className="text-sm px-3 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/40"
         >

@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { useCategories } from "@/contexts/CategoryContext";
 import CategoryForm from "@/components/finance/CategoryForm";
+import { getErrorMessage } from "@/utils/errors";
 import type { Category, CategoryInput } from "@/models";
 
 // ── Type badge ─────────────────────────────────────────────────────────────────
@@ -215,9 +216,9 @@ const CategoriesPage = () => {
         toast.success(t("finance.categories.addCategory", "Category created!"));
       }
       handleCloseForm();
-    } catch (err: any) {
+    } catch (err) {
       toast.error(
-        err.message ||
+        getErrorMessage(err) ||
           t("finance.categories.deleteBlocked", "Failed to save category."),
       );
     } finally {
@@ -234,9 +235,9 @@ const CategoriesPage = () => {
         `"${deletingCategory.name}" ${t("finance.categories.delete", "deleted")}.`,
       );
       setDeletingCategory(null);
-    } catch (err: any) {
+    } catch (err) {
       toast.error(
-        err.message ||
+        getErrorMessage(err) ||
           t("finance.categories.deleteBlocked", "Failed to delete category."),
       );
       setDeletingCategory(null);

@@ -15,6 +15,7 @@ import darkLogo from "@/assets/logo/dark-mode.png";
 
 import { useTheme } from "@/contexts/ThemeContext";
 import { useTranslation } from "react-i18next";
+import { formatAuthErrorMessage } from "@/utils/errors";
 
 const LoginPage = () => {
   const { theme } = useTheme();
@@ -33,11 +34,8 @@ const LoginPage = () => {
     try {
       await signInWithEmail(email, password);
       navigate("/");
-    } catch (err: any) {
-      setError(
-        err.message?.replace("Firebase: ", "").replace(/\(auth\/.*\)/, "") ||
-          t("login.error"),
-      );
+    } catch (err) {
+      setError(formatAuthErrorMessage(err) || t("login.error"));
     }
     setLoading(false);
   };
@@ -48,11 +46,8 @@ const LoginPage = () => {
     try {
       await signInWithGoogle();
       navigate("/");
-    } catch (err: any) {
-      setError(
-        err.message?.replace("Firebase: ", "").replace(/\(auth\/.*\)/, "") ||
-          t("login.error"),
-      );
+    } catch (err) {
+      setError(formatAuthErrorMessage(err) || t("login.error"));
     }
     setLoading(false);
   };

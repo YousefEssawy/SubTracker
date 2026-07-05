@@ -51,7 +51,7 @@ const SubscriptionsPage = () => {
       group.forEach((s) => {
         const monthly = getMonthlyEquivalent(
           s.price,
-          s.billingCycle as any,
+          s.billingCycle,
           s.customCycleDays,
         );
         const cur = (s.currency as CurrencyCode) || "EGP";
@@ -285,7 +285,7 @@ const SubscriptionsPage = () => {
               const cat = getCategoryById(sub.category);
               const monthly = getMonthlyEquivalent(
                 sub.price,
-                sub.billingCycle as any,
+                sub.billingCycle,
                 sub.customCycleDays,
               );
               return (

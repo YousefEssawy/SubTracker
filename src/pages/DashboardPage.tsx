@@ -51,7 +51,7 @@ const CHART_COLORS = [
 const FinancialOverview = () => {
   const { balances } = useTransactions();
   const { t } = useTranslation();
-  const hasTx = Object.keys(balances as object).length > 0;
+  const hasTx = Object.keys(balances).length > 0;
   return (
     <motion.div
       variants={{ hidden: { opacity: 0, y: 12 }, show: { opacity: 1, y: 0 } }}
@@ -69,7 +69,7 @@ const FinancialOverview = () => {
         </Link>
       </div>
       {hasTx ? (
-        <BalanceCard variant="summary" balances={balances as any} />
+        <BalanceCard variant="summary" balances={balances} />
       ) : (
         <p className="text-sm text-gray-400 text-center py-6">
           {t(
@@ -97,7 +97,7 @@ const DashboardPage = () => {
     const totalMonthly = activeSubscriptions.reduce((sum, sub) => {
       const monthly = getMonthlyEquivalent(
         sub.price,
-        sub.billingCycle as any,
+        sub.billingCycle,
         sub.customCycleDays,
       );
       return (
@@ -135,7 +135,7 @@ const DashboardPage = () => {
       const cat = getCategoryById(sub.category);
       const monthly = getMonthlyEquivalent(
         sub.price,
-        sub.billingCycle as any,
+        sub.billingCycle,
         sub.customCycleDays,
       );
       const converted = convertCurrency(

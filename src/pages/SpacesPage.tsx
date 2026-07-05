@@ -10,7 +10,8 @@ import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { useSpaces } from "@/contexts/SpaceContext";
 import SpaceForm from "@/components/finance/SpaceForm";
-import type { Space } from "@/models";
+import type { Space, SpaceInput } from "@/models";
+import { getErrorMessage } from "@/utils/errors";
 
 // ── Confirmation dialog ────────────────────────────────────────────────────────
 const ConfirmDialog = ({
@@ -189,7 +190,7 @@ const SpacesPage = () => {
     setEditingSpace(null);
   };
 
-  const handleSubmit = async (data: any) => {
+  const handleSubmit = async (data: SpaceInput) => {
     setFormLoading(true);
     try {
       if (editingSpace) {
@@ -200,9 +201,10 @@ const SpacesPage = () => {
         toast.success(t("finance.spaces.addSpace", "Space created!"));
       }
       handleCloseForm();
-    } catch (err: any) {
+    } catch (err) {
       toast.error(
-        err.message || t("finance.spaces.deleteError", "Failed to save space."),
+        getErrorMessage(err) ||
+          t("finance.spaces.deleteError", "Failed to save space."),
       );
     } finally {
       setFormLoading(false);
@@ -218,9 +220,9 @@ const SpacesPage = () => {
         `"${deletingSpace.name}" ${t("finance.spaces.delete", "deleted")}.`,
       );
       setDeletingSpace(null);
-    } catch (err: any) {
+    } catch (err) {
       toast.error(
-        err.message ||
+        getErrorMessage(err) ||
           t("finance.spaces.deleteBlocked", "Failed to delete space."),
       );
       setDeletingSpace(null);

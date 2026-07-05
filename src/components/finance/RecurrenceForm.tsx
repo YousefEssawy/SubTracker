@@ -7,7 +7,8 @@ import { useRecurrences } from "@/contexts/RecurrenceContext";
 import { CURRENCIES } from "@/utils/currencies";
 import { toDateInputValue } from "@/utils/dateUtils";
 import { HiOutlineXMark } from "react-icons/hi2";
-import type { TransactionType } from "@/models";
+import type { TransactionType, CurrencyCode, RecurrencePattern } from "@/models";
+import { getErrorMessage } from "@/utils/errors";
 
 const PATTERNS = ["daily", "weekly", "monthly", "yearly"] as const;
 
@@ -25,7 +26,7 @@ const RecurrenceForm = ({ onClose }: RecurrenceFormProps) => {
   const [spaceId, setSpaceId] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [amount, setAmount] = useState("");
-  const [currency, setCurrency] = useState("EGP");
+  const [currency, setCurrency] = useState<CurrencyCode>("EGP");
   const [pattern, setPattern] = useState<(typeof PATTERNS)[number]>("monthly");
   const [interval, setInterval] = useState("1");
   const [startDate, setStartDate] = useState(toDateInputValue(new Date()));
@@ -85,7 +86,7 @@ const RecurrenceForm = ({ onClose }: RecurrenceFormProps) => {
         spaceId,
         categoryId,
         amount: parseFloat(amount),
-        currency: currency as any,
+        currency,
         pattern,
         interval: parseInt(interval, 10),
         startDate,
@@ -96,9 +97,9 @@ const RecurrenceForm = ({ onClose }: RecurrenceFormProps) => {
         t("finance.recurrences.createSuccess", "Recurrence created!"),
       );
       onClose();
-    } catch (err: any) {
+    } catch (err) {
       toast.error(
-        err.message ||
+        getErrorMessage(err) ||
           t("finance.recurrences.createError", "Failed to create recurrence."),
       );
     } finally {
@@ -214,7 +215,7 @@ const RecurrenceForm = ({ onClose }: RecurrenceFormProps) => {
               </label>
               <select
                 value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
+                onChange={(e) => setCurrency(e.target.value as CurrencyCode)}
                 className={inputCls}
               >
                 {CURRENCIES.map((c) => (
@@ -234,7 +235,9 @@ const RecurrenceForm = ({ onClose }: RecurrenceFormProps) => {
               </label>
               <select
                 value={pattern}
-                onChange={(e) => setPattern(e.target.value as any)}
+                onChange={(e) =>
+                  setPattern(e.target.value as RecurrencePattern)
+                }
                 className={inputCls}
               >
                 {PATTERNS.map((p) => (

@@ -81,7 +81,7 @@ const TransactionsPage = () => {
       <BalanceCard variant="contextual" balances={balances} />
 
       {/* Filters */}
-      <FilterBar filters={filters as any} setFilters={setFilters as any} />
+      <FilterBar filters={filters} setFilters={setFilters} />
 
       {/* Loading */}
       {loading ? (
