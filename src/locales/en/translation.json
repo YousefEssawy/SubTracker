@@ -22,7 +22,11 @@
     "recurrences": "Recurrences",
     "finance": "Finance",
     "overview": "Overview",
-    "preferences": "Preferences"
+    "preferences": "Preferences",
+    "money": "Money",
+    "organize": "Organize",
+    "activity": "Activity",
+    "account": "Account"
   },
   "header": {
     "upcomingRenewals": "Upcoming Renewals",
@@ -58,7 +62,23 @@
     "viewAll": "View all",
     "noUpcomingRenewals": "No upcoming renewals",
     "today": "Today",
-    "days": "{{count}} days"
+    "days": "{{count}} days",
+    "greeting": {
+      "morning": "Good morning",
+      "afternoon": "Good afternoon",
+      "evening": "Good evening"
+    },
+    "subtitle": "Here's what's happening with your money.",
+    "monthlyBurnRate": "Monthly burn rate",
+    "perYearValue": "{{value}} / year",
+    "daysValue": "{{count}} days",
+    "monthlyIncome": "Income",
+    "totalIncome": "Total logged income",
+    "monthlyExpense": "Expense",
+    "totalExpense": "Total logged expense",
+    "incomeVsExpense": "Income vs expense",
+    "netThisPeriod": "Net",
+    "spendingTrend": "Spending trend"
   },
   "about": {
     "title": "About SubTracker",
@@ -88,32 +108,47 @@
     "ctaText": "Start by adding your first subscription and see where your money goes every month."
   },
   "login": {
-    "subtitle": "Track all your subscriptions in one place",
+    "subtitle": "Log in to see where your money is going.",
     "welcomeBack": "Welcome back",
     "continueWithGoogle": "Continue with Google",
+    "forgotPassword": "Forgot password?",
     "or": "or",
     "email": "Email",
     "password": "Password",
     "signingIn": "Signing in...",
-    "signIn": "Sign In",
-    "noAccount": "Don't have an account?",
-    "signUp": "Sign up"
+    "signIn": "Log in",
+    "noAccount": "New here?",
+    "signUp": "Create an account",
+    "brand": {
+      "headline": "Calm, clear control over every dollar that leaves your account.",
+      "sub": "Join thousands tracking subscriptions and expenses without the spreadsheet stress.",
+      "stat1": "avg monthly spend",
+      "stat2": "to next renewal"
+    }
   },
   "signup": {
-    "subtitle": "Start tracking your subscriptions today",
-    "createAccount": "Create account",
-    "continueWithGoogle": "Continue with Google",
+    "subtitle": "Free to start. Cancel anytime.",
+    "createAccount": "Create your account",
+    "continueWithGoogle": "Sign up with Google",
     "or": "or",
     "fullName": "Full Name",
     "email": "Email",
     "password": "Password",
+    "passwordHint": "Must be at least 6 characters.",
     "confirmPassword": "Confirm Password",
     "creatingAccount": "Creating account...",
-    "createAccountBtn": "Create Account",
+    "createAccountBtn": "Create account",
     "hasAccount": "Already have an account?",
-    "signIn": "Sign in",
+    "signIn": "Log in",
     "passwordsMismatch": "Passwords do not match",
-    "passwordTooShort": "Password must be at least 6 characters"
+    "passwordTooShort": "Password must be at least 6 characters",
+    "brand": {
+      "headline": "Start tracking in minutes. Feel in control by tonight.",
+      "bullet1": "See your true monthly burn rate",
+      "bullet2": "Never miss a renewal again",
+      "bullet3": "Income vs expense at a glance",
+      "noCard": "No credit card required."
+    }
   },
   "settings": {
     "title": "Settings",
@@ -147,6 +182,10 @@
     "renewingSoon": "Renewing Soon",
     "thisMonth": "This Month",
     "later": "Later",
+    "overdue": "Overdue",
+    "overdueByDays": "Overdue by {{count}}d",
+    "inDays": "in {{count}}d",
+    "activeCount": "{{count}} active",
     "monthlyTotal": "Monthly total",
     "noSubscriptionsYet": "You haven't added any subscriptions yet",
     "noMatchingFilters": "No subscriptions match your filters",
@@ -336,6 +375,7 @@
     },
     "transactions": {
       "title": "Transactions",
+      "subtitle": "Track your income and expenses.",
       "add": "Add",
       "addTransaction": "Add Transaction",
       "addIncome": "Add Income",

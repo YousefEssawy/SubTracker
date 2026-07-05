@@ -22,7 +22,11 @@
     "recurrences": "المتكررة",
     "finance": "المالية",
     "overview": "نظرة عامة",
-    "preferences": "التفضيلات"
+    "preferences": "التفضيلات",
+    "money": "الأموال",
+    "organize": "التنظيم",
+    "activity": "النشاط",
+    "account": "الحساب"
   },
   "header": {
     "upcomingRenewals": "التجديدات القادمة",
@@ -63,7 +67,28 @@
     "days_two": "يومان",
     "days_few": "{{count}} أيام",
     "days_many": "{{count}} يوماً",
-    "days_other": "{{count}} أيام"
+    "days_other": "{{count}} أيام",
+    "greeting": {
+      "morning": "صباح الخير",
+      "afternoon": "مساء الخير",
+      "evening": "مساء الخير"
+    },
+    "subtitle": "إليك ما يحدث مع أموالك.",
+    "monthlyBurnRate": "معدل الصرف الشهري",
+    "perYearValue": "{{value}} / سنة",
+    "daysValue_zero": "٠ أيام",
+    "daysValue_one": "يوم واحد",
+    "daysValue_two": "يومان",
+    "daysValue_few": "{{count}} أيام",
+    "daysValue_many": "{{count}} يوماً",
+    "daysValue_other": "{{count}} أيام",
+    "monthlyIncome": "الدخل",
+    "totalIncome": "إجمالي الدخل المسجل",
+    "monthlyExpense": "المصروف",
+    "totalExpense": "إجمالي المصروف المسجل",
+    "incomeVsExpense": "الدخل مقابل المصروف",
+    "netThisPeriod": "الصافي",
+    "spendingTrend": "اتجاه الإنفاق"
   },
   "about": {
     "title": "حول SubTracker",
@@ -93,32 +118,47 @@
     "ctaText": "ابدأ بإضافة اشتراكك الأول وشاهد أين تذهب أموالك كل شهر."
   },
   "login": {
-    "subtitle": "تتبع جميع اشتراكاتك في مكان واحد",
+    "subtitle": "سجّل الدخول لترى أين تذهب أموالك.",
     "welcomeBack": "مرحباً بعودتك",
     "continueWithGoogle": "المتابعة مع جوجل",
+    "forgotPassword": "نسيت كلمة المرور؟",
     "or": "أو",
     "email": "البريد الإلكتروني",
     "password": "كلمة المرور",
     "signingIn": "جارٍ تسجيل الدخول...",
     "signIn": "تسجيل الدخول",
-    "noAccount": "ليس لديك حساب؟",
-    "signUp": "إنشاء حساب"
+    "noAccount": "جديد هنا؟",
+    "signUp": "أنشئ حساباً",
+    "brand": {
+      "headline": "تحكّم واضح وهادئ في كل جنيه يخرج من حسابك.",
+      "sub": "انضم إلى الآلاف الذين يتتبعون اشتراكاتهم ومصروفاتهم دون عناء الجداول.",
+      "stat1": "متوسط الصرف الشهري",
+      "stat2": "حتى التجديد القادم"
+    }
   },
   "signup": {
-    "subtitle": "ابدأ بتتبع اشتراكاتك اليوم",
-    "createAccount": "إنشاء حساب",
-    "continueWithGoogle": "المتابعة مع جوجل",
+    "subtitle": "مجاني للبدء. ألغِ في أي وقت.",
+    "createAccount": "أنشئ حسابك",
+    "continueWithGoogle": "التسجيل عبر جوجل",
     "or": "أو",
     "fullName": "الاسم الكامل",
     "email": "البريد الإلكتروني",
     "password": "كلمة المرور",
+    "passwordHint": "يجب أن تتكون من 6 أحرف على الأقل.",
     "confirmPassword": "تأكيد كلمة المرور",
     "creatingAccount": "جارٍ إنشاء الحساب...",
     "createAccountBtn": "إنشاء حساب",
     "hasAccount": "لديك حساب بالفعل؟",
     "signIn": "تسجيل الدخول",
     "passwordsMismatch": "كلمات المرور غير متطابقة",
-    "passwordTooShort": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل"
+    "passwordTooShort": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل",
+    "brand": {
+      "headline": "ابدأ التتبع في دقائق. وتحكّم في أموالك بحلول الليلة.",
+      "bullet1": "اعرف معدل صرفك الشهري الحقيقي",
+      "bullet2": "لا تفوّت أي تجديد بعد الآن",
+      "bullet3": "الدخل مقابل المصروف بنظرة واحدة",
+      "noCard": "لا حاجة لبطاقة ائتمان."
+    }
   },
   "settings": {
     "title": "الإعدادات",
@@ -152,6 +192,10 @@
     "renewingSoon": "يتجدد قريباً",
     "thisMonth": "هذا الشهر",
     "later": "لاحقاً",
+    "overdue": "متأخر",
+    "overdueByDays": "متأخر بـ {{count}} يوم",
+    "inDays": "خلال {{count}} يوم",
+    "activeCount": "{{count}} نشط",
     "monthlyTotal": "الإجمالي الشهري",
     "noSubscriptionsYet": "لم تقم بإضافة أي اشتراكات بعد",
     "noMatchingFilters": "لا توجد اشتراكات تطابق الفلاتر",
@@ -337,6 +381,7 @@
     },
     "transactions": {
       "title": "المعاملات",
+      "subtitle": "تابع دخلك ومصروفاتك.",
       "add": "إضافة",
       "addTransaction": "إضافة معاملة",
       "addIncome": "إضافة دخل",

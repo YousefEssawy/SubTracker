@@ -3,7 +3,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { useSubscriptions } from "@/contexts/SubscriptionContext";
 import { logOut } from "@/services/authService";
 import { isRenewingSoon } from "@/utils/dateUtils";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import {
   HiOutlineBars3,
   HiOutlineSun,
@@ -21,12 +21,27 @@ interface HeaderProps {
   onMenuToggle: () => void;
 }
 
+// Route → sidebar i18n key, for the page title shown next to the logo
+const PAGE_TITLE_KEY: Record<string, string> = {
+  "/dashboard": "sidebar.dashboard",
+  "/subscriptions": "sidebar.subscriptions",
+  "/transactions": "sidebar.transactions",
+  "/recurrences": "sidebar.recurrences",
+  "/categories": "sidebar.categories",
+  "/spaces": "sidebar.spaces",
+  "/history": "sidebar.history",
+  "/settings": "sidebar.settings",
+  "/how-to": "sidebar.howToUse",
+  "/about": "sidebar.about",
+};
+
 const Header = ({ onMenuToggle }: HeaderProps) => {
   const { user } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const { activeSubscriptions } = useSubscriptions();
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
   const [showNotif, setShowNotif] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
   const [imageError, setImageError] = useState(false);
@@ -36,6 +51,11 @@ const Header = ({ onMenuToggle }: HeaderProps) => {
   const upcomingRenewals = activeSubscriptions.filter((s) =>
     isRenewingSoon(s.renewalDate, 7),
   );
+
+  const pageTitleKey = Object.keys(PAGE_TITLE_KEY).find((path) =>
+    location.pathname.startsWith(path),
+  );
+  const pageTitle = pageTitleKey ? t(PAGE_TITLE_KEY[pageTitleKey]!) : null;
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
@@ -54,12 +74,12 @@ const Header = ({ onMenuToggle }: HeaderProps) => {
   };
 
   return (
-    <header className="fixed top-3 inset-x-3 z-40">
-      <div className="glass-card rounded-full h-14 px-2.5 sm:px-4 lg:px-6 flex items-center justify-between gap-2">
+    <header className="sticky top-0 z-40 h-16 shrink-0 bg-white dark:bg-surface-dark border-b border-gray-200 dark:border-gray-800">
+      <div className="h-full px-3 sm:px-4 lg:px-6 flex items-center justify-between gap-2">
         <div className="flex items-center gap-3 min-w-0">
           <button
             onClick={onMenuToggle}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full hover:bg-gray-100/70 dark:hover:bg-gray-800/70 transition-colors shrink-0"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-lg hover:bg-gray-100/70 dark:hover:bg-gray-800/70 transition-colors shrink-0"
             aria-label="Toggle menu"
           >
             <HiOutlineBars3 className="w-5 h-5 text-gray-700 dark:text-gray-300" />
@@ -68,9 +88,17 @@ const Header = ({ onMenuToggle }: HeaderProps) => {
             <img
               src={theme === "light" ? lightLogo : darkLogo}
               alt="SubTracker"
-              className="h-10"
+              className="h-8"
             />
           </Link>
+          {pageTitle && (
+            <>
+              <span className="hidden sm:block w-px h-6 bg-gray-200 dark:bg-gray-700 shrink-0" />
+              <span className="hidden sm:block font-display font-semibold text-[15px] text-gray-900 dark:text-white truncate">
+                {pageTitle}
+              </span>
+            </>
+          )}
         </div>
 
         <div className="flex items-center gap-1 sm:gap-2 shrink-0">

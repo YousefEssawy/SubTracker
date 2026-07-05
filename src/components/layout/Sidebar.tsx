@@ -33,32 +33,17 @@ const makeNavItems = (t: TFunction): Record<string, NavItem[]> => ({
       label: t("sidebar.dashboard", "Dashboard"),
       icon: HiOutlineHome,
     },
-    {
-      path: "/subscriptions",
-      label: t("sidebar.subscriptions", "Subscriptions"),
-      icon: HiOutlineCreditCard,
-    },
-    {
-      path: "/history",
-      label: t("sidebar.history", "History"),
-      icon: HiOutlineClock,
-    },
   ],
-  finance: [
+  money: [
     {
       path: "/transactions",
       label: t("sidebar.transactions", "Transactions"),
       icon: HiOutlineBanknotes,
     },
     {
-      path: "/spaces",
-      label: t("sidebar.spaces", "Spaces"),
-      icon: HiOutlineRectangleGroup,
-    },
-    {
-      path: "/categories",
-      label: t("sidebar.categories", "Categories"),
-      icon: HiOutlineTag,
+      path: "/subscriptions",
+      label: t("sidebar.subscriptions", "Subscriptions"),
+      icon: HiOutlineCreditCard,
     },
     {
       path: "/recurrences",
@@ -66,7 +51,26 @@ const makeNavItems = (t: TFunction): Record<string, NavItem[]> => ({
       icon: HiOutlineArrowPath,
     },
   ],
-  preferences: [
+  organize: [
+    {
+      path: "/categories",
+      label: t("sidebar.categories", "Categories"),
+      icon: HiOutlineTag,
+    },
+    {
+      path: "/spaces",
+      label: t("sidebar.spaces", "Spaces"),
+      icon: HiOutlineRectangleGroup,
+    },
+  ],
+  activity: [
+    {
+      path: "/history",
+      label: t("sidebar.history", "History"),
+      icon: HiOutlineClock,
+    },
+  ],
+  account: [
     {
       path: "/settings",
       label: t("sidebar.settings", "Settings"),
@@ -90,18 +94,21 @@ const NavLink = ({
   item,
   onClick,
   isActive,
+  collapsed,
 }: {
   item: NavItem;
   onClick?: () => void;
   isActive: boolean;
+  collapsed?: boolean;
 }) => (
   <Link
     to={item.path}
     onClick={onClick}
-    className={`nav-link ${isActive ? "nav-link-active" : ""}`}
+    className={`nav-link ${isActive ? "nav-link-active" : ""} ${collapsed ? "justify-center px-2" : ""}`}
+    title={collapsed ? item.label : undefined}
   >
     <item.icon className="w-5 h-5 flex-shrink-0" />
-    <span className="truncate">{item.label}</span>
+    {!collapsed && <span className="truncate">{item.label}</span>}
   </Link>
 );
 
@@ -111,19 +118,22 @@ const NavSection = ({
   items,
   onClick,
   pathname,
+  collapsed,
 }: {
   title?: string;
   items: NavItem[];
   onClick?: () => void;
   pathname: string;
+  collapsed?: boolean;
 }) => (
   <div className="mb-2">
-    {title && <p className="nav-section-label">{title}</p>}
+    {title && !collapsed && <p className="nav-section-label">{title}</p>}
     {items.map((item) => (
       <NavLink
         key={item.path}
         item={item}
         onClick={onClick}
+        collapsed={collapsed}
         isActive={
           pathname === item.path ||
           (item.path !== "/dashboard" && pathname.startsWith(item.path))
@@ -137,63 +147,70 @@ const NavSection = ({
 const AddButton = ({
   onClick,
   label,
+  collapsed,
 }: {
   onClick?: () => void;
   label: string;
+  collapsed?: boolean;
 }) => (
-  <div className="p-4 border-t border-gray-200/50 dark:border-gray-800/50">
+  <div
+    className={`border-t border-gray-200/50 dark:border-gray-800/50 ${collapsed ? "p-3 flex justify-center" : "p-4"}`}
+  >
     <Link
       to="/subscriptions/add"
       onClick={onClick}
-      className="flex items-center justify-center gap-2 w-full btn-primary"
+      title={collapsed ? label : undefined}
+      className={
+        collapsed
+          ? "gradient-primary flex items-center justify-center w-11 h-11 rounded-full text-white transition-all duration-200 active:scale-[0.98]"
+          : "flex items-center justify-center gap-2 w-full btn-primary"
+      }
+      style={collapsed ? { boxShadow: "var(--shadow-glow-primary)" } : undefined}
     >
-      <HiOutlinePlusCircle className="w-5 h-5" />
-      {label}
+      <HiOutlinePlusCircle className="w-5 h-5 flex-shrink-0" />
+      {!collapsed && label}
     </Link>
   </div>
 );
 
 // ─── Nav content (overview + finance + preferences sections) ──────────────────
+const SECTION_ORDER = ["overview", "money", "organize", "activity", "account"];
+
 const NavContent = ({
   navItems,
   sectionLabels,
   pathname,
   onClick,
+  collapsed,
 }: {
   navItems: Record<string, NavItem[]>;
   sectionLabels: Record<string, string>;
   pathname: string;
   onClick?: () => void;
+  collapsed?: boolean;
 }) => (
   <>
-    <NavSection
-      title={sectionLabels.overview}
-      items={navItems.overview!}
-      onClick={onClick}
-      pathname={pathname}
-    />
-    <NavSection
-      title={sectionLabels.finance}
-      items={navItems.finance!}
-      onClick={onClick}
-      pathname={pathname}
-    />
-    <NavSection
-      title={sectionLabels.preferences}
-      items={navItems.preferences!}
-      onClick={onClick}
-      pathname={pathname}
-    />
+    {SECTION_ORDER.map((key) => (
+      <NavSection
+        key={key}
+        title={sectionLabels[key]}
+        items={navItems[key]!}
+        onClick={onClick}
+        pathname={pathname}
+        collapsed={collapsed}
+      />
+    ))}
   </>
 );
 
 interface SidebarProps {
-  isOpen: boolean;
+  isDrawerOpen: boolean;
+  isCollapsed: boolean;
   onClose: () => void;
 }
 
 // ─── Sidebar component ────────────────────────────────────────────────────────
-const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
+const Sidebar = ({ isDrawerOpen, isCollapsed, onClose }: SidebarProps) => {
   const location = useLocation();
   const { t, i18n } = useTranslation();
   const isRtl = i18n.language === "ar";
@@ -202,18 +219,18 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const addLabel = t("sidebar.addSubscription", "Add Subscription");
   const sectionLabels = {
     overview: t("sidebar.overview", "Overview"),
-    finance: t("sidebar.finance", "Finance"),
-    preferences: t("sidebar.preferences", "Preferences"),
+    money: t("sidebar.money", "Money"),
+    organize: t("sidebar.organize", "Organize"),
+    activity: t("sidebar.activity", "Activity"),
+    account: t("sidebar.account", "Account"),
   };
 
   return (
     <>
-      {/* Desktop Sidebar — floating glass panel, collapsible via isOpen */}
+      {/* Desktop Sidebar — flush, docked under the header, full height of its row */}
       <aside
-        className={`hidden lg:flex fixed start-3 top-20 bottom-3 w-64 flex-col glass-card z-30 overflow-hidden transition-transform duration-300 ease-standard ${
-          isOpen
-            ? "translate-x-0"
-            : "ltr:-translate-x-[calc(100%+0.75rem)] rtl:translate-x-[calc(100%+0.75rem)]"
+        className={`hidden lg:flex h-full shrink-0 flex-col bg-white dark:bg-surface-dark border-e border-gray-200 dark:border-gray-800 overflow-hidden transition-all duration-300 ease-standard ${
+          isCollapsed ? "w-[72px]" : "w-[248px]"
         }`}
       >
         <nav className="flex-1 py-4 px-3 overflow-y-auto">
@@ -221,15 +238,16 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
             navItems={navItems}
             sectionLabels={sectionLabels}
             pathname={location.pathname}
+            collapsed={isCollapsed}
             onClick={undefined}
           />
         </nav>
-        <AddButton onClick={undefined} label={addLabel} />
+        <AddButton onClick={undefined} label={addLabel} collapsed={isCollapsed} />
       </aside>
 
       {/* Mobile Sidebar — slide-out drawer overlay */}
       <AnimatePresence>
-        {isOpen && (
+        {isDrawerOpen && (
           <>
             {/* Backdrop */}
             <motion.div
@@ -268,11 +286,12 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
                   navItems={navItems}
                   sectionLabels={sectionLabels}
                   pathname={location.pathname}
+                  collapsed={false}
                   onClick={onClose}
                 />
               </nav>
 
-              <AddButton onClick={onClose} label={addLabel} />
+              <AddButton onClick={onClose} label={addLabel} collapsed={false} />
             </motion.aside>
           </>
         )}

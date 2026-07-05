@@ -1,46 +1,57 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useViewport } from "@/contexts/ViewportContext";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
+import BottomTabBar from "./BottomTabBar";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 const Layout = ({ children }: LayoutProps) => {
-  // Desktop starts with the sidebar open; mobile starts closed (drawer).
-  const [sidebarOpen, setSidebarOpen] = useState(() =>
-    typeof window !== "undefined"
-      ? window.matchMedia("(min-width: 1024px)").matches
-      : true,
-  );
+  const { isDesktop } = useViewport();
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const location = useLocation();
 
+  const handleMenuToggle = () => {
+    if (isDesktop) {
+      setSidebarCollapsed((prev) => !prev);
+      return;
+    }
+    setMobileDrawerOpen((prev) => !prev);
+  };
+
   return (
-    <div className="min-h-screen bg-background-light dark:bg-background-dark overflow-x-hidden">
-      <Header onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
+    <div className="h-screen flex flex-col bg-background-light dark:bg-background-dark overflow-hidden">
+      <Header onMenuToggle={handleMenuToggle} />
 
-      {/* Responsive Sidebar — collapsible on desktop, drawer on mobile */}
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex flex-1 min-h-0">
+        {/* Responsive Sidebar — collapsible on desktop, drawer on mobile */}
+        <Sidebar
+          isDrawerOpen={mobileDrawerOpen}
+          isCollapsed={sidebarCollapsed}
+          onClose={() => setMobileDrawerOpen(false)}
+        />
 
-      {/* Main Content */}
-      <main
-        className={`pt-24 min-h-screen transition-[margin] duration-300 ease-standard ${
-          sidebarOpen ? "lg:ms-[280px]" : "lg:ms-0"
-        }`}
-      >
-        <div className="page-container">
-          <motion.div
-            key={location.pathname}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2 }}
-          >
-            {children}
-          </motion.div>
-        </div>
-      </main>
+        {/* Main Content — the only scrolling region; sidebar and header stay put */}
+        <main className="flex-1 min-w-0 overflow-y-auto">
+          <div className="page-container pb-24 lg:pb-6">
+            <motion.div
+              key={location.pathname}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              {children}
+            </motion.div>
+          </div>
+        </main>
+      </div>
+
+      <BottomTabBar />
     </div>
   );
 };
