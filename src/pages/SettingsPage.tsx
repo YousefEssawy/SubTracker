@@ -64,20 +64,38 @@ const SettingsPage = () => {
     );
   }
 
+  const sectionLabel =
+    "text-xs font-semibold uppercase tracking-wide text-gray-400";
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-2xl mx-auto space-y-6 pb-20 lg:pb-6"
+      className="max-w-2xl mx-auto space-y-5 pb-20 lg:pb-6"
     >
-      <h1 className="page-title">{t("settings.title")}</h1>
+      {/* Toolbar */}
+      <div className="flex items-center gap-4 justify-between">
+        <h1 className="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          {t("settings.title")}
+        </h1>
+        <button
+          onClick={handleSave}
+          className="btn-primary flex items-center gap-2 text-sm whitespace-nowrap"
+        >
+          {saved ? (
+            <>
+              <HiOutlineCheck className="w-4 h-4" /> {t("settings.saved")}
+            </>
+          ) : (
+            t("settings.savePreferences")
+          )}
+        </button>
+      </div>
 
       {/* Profile */}
       <div className="glass-card p-6">
-        <h2 className="font-display font-semibold tracking-tight text-lg text-gray-900 dark:text-white mb-4">
-          {t("settings.profile")}
-        </h2>
-        <div className="flex items-center gap-4">
+        <p className={sectionLabel}>{t("settings.profile")}</p>
+        <div className="mt-4 flex items-center gap-4">
           {user?.photoURL ? (
             <img src={user.photoURL} alt="" className="w-16 h-16 rounded-2xl" />
           ) : (
@@ -96,22 +114,20 @@ const SettingsPage = () => {
 
       {/* Appearance */}
       <div className="glass-card p-6">
-        <h2 className="font-display font-semibold tracking-tight text-lg text-gray-900 dark:text-white mb-4">
-          {t("settings.appearance")}
-        </h2>
-        <div className="flex gap-3">
+        <p className={sectionLabel}>{t("settings.appearance")}</p>
+        <div className="mt-4 inline-flex w-full rounded-full bg-gray-100 dark:bg-gray-800 p-1">
           <button
             onClick={() => theme !== "light" && toggleTheme()}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border-2 transition-all
-              ${theme === "light" ? "border-primary bg-primary/5 text-primary" : "border-gray-200 dark:border-gray-700 text-gray-500"}`}
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-full text-sm font-medium transition-all
+              ${theme === "light" ? "bg-white dark:bg-gray-900 text-primary shadow-sm" : "text-gray-500 dark:text-gray-400"}`}
           >
             <HiOutlineSun className="w-5 h-5" />
             {t("settings.light")}
           </button>
           <button
             onClick={() => theme !== "dark" && toggleTheme()}
-            className={`flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border-2 transition-all
-              ${theme === "dark" ? "border-primary bg-primary/5 text-primary" : "border-gray-200 dark:border-gray-700 text-gray-500"}`}
+            className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-full text-sm font-medium transition-all
+              ${theme === "dark" ? "bg-white dark:bg-gray-900 text-primary shadow-sm" : "text-gray-500 dark:text-gray-400"}`}
           >
             <HiOutlineMoon className="w-5 h-5" />
             {t("settings.dark")}
@@ -121,9 +137,7 @@ const SettingsPage = () => {
 
       {/* Preferences */}
       <div className="glass-card p-6 space-y-5">
-        <h2 className="font-display font-semibold tracking-tight text-lg text-gray-900 dark:text-white">
-          {t("settings.preferences")}
-        </h2>
+        <p className={sectionLabel}>{t("settings.preferences")}</p>
         <div>
           <label className="label-text">{t("settings.displayCurrency")}</label>
           <select
@@ -160,18 +174,6 @@ const SettingsPage = () => {
             <option value={7}>{t("settings.daysBefore", { count: 7 })}</option>
           </select>
         </div>
-        <button
-          onClick={handleSave}
-          className="btn-primary flex items-center gap-2"
-        >
-          {saved ? (
-            <>
-              <HiOutlineCheck className="w-4 h-4" /> {t("settings.saved")}
-            </>
-          ) : (
-            t("settings.savePreferences")
-          )}
-        </button>
       </div>
     </motion.div>
   );

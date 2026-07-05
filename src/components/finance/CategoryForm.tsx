@@ -64,7 +64,7 @@ const CategoryForm = ({
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.92, opacity: 0, y: 20 }}
           transition={{ type: "spring", damping: 25, stiffness: 350 }}
-          className="bg-white dark:bg-surface-dark rounded-2xl shadow-2xl w-full max-w-sm p-6"
+          className="bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-gray-800 w-full max-w-sm p-6"
         >
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
@@ -98,8 +98,8 @@ const CategoryForm = ({
                       className={`flex-1 py-2.5 text-sm font-medium transition-colors ${
                         type === opt
                           ? opt === "Income"
-                            ? "bg-emerald-500 text-white"
-                            : "bg-red-500 text-white"
+                            ? "bg-success text-white"
+                            : "bg-danger text-white"
                           : "bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
                       }`}
                     >
@@ -121,8 +121,8 @@ const CategoryForm = ({
                 <span
                   className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
                     category.type === "Income"
-                      ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
-                      : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+                      ? "bg-success/10 text-success"
+                      : "bg-danger/10 text-danger"
                   }`}
                 >
                   {category.type === "Income"

@@ -48,7 +48,7 @@ const TransactionDetailPage = () => {
   }).format(transaction.amount);
 
   return (
-    <div className="max-w-lg mx-auto px-4 py-8">
+    <div className="max-w-xl mx-auto py-2">
       <div className="flex items-center justify-between mb-6">
         <button
           onClick={() => navigate("/transactions")}
@@ -66,7 +66,7 @@ const TransactionDetailPage = () => {
         </button>
       </div>
 
-      <div className="bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-gray-800 p-6 shadow-sm space-y-5">
+      <div className="glass-card rounded-3xl p-6 shadow-sm space-y-5">
         {/* Amount hero */}
         <div className="text-center pb-5 border-b border-gray-100 dark:border-gray-800">
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">

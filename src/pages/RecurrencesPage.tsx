@@ -59,81 +59,73 @@ const RecurrenceCard = ({
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      className="bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-gray-800 p-4 shadow-sm"
+      className="group flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors"
     >
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center gap-3 min-w-0">
-          {space && (
-            <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center text-lg flex-shrink-0"
-              style={{ backgroundColor: space.color + "20" }}
-            >
-              {space.icon}
-            </div>
-          )}
-          <div className="min-w-0">
-            <div className="flex items-center gap-2 mb-0.5">
-              <span
-                className={`text-xs font-semibold px-2 py-0.5 rounded-full ${isIncome ? "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400" : "bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400"}`}
-              >
-                {isIncome
-                  ? t("finance.categories.income", "Income")
-                  : t("finance.categories.expense", "Expense")}
-              </span>
-              <span
-                className={`text-xs font-medium px-2 py-0.5 rounded-full ${isActive ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400" : "bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400"}`}
-              >
-                {isActive
-                  ? t("finance.recurrences.active", "Active")
-                  : t("finance.recurrences.paused", "Paused")}
-              </span>
-            </div>
-            <p className="text-sm font-medium text-gray-800 dark:text-gray-200">
-              {category?.name || "—"}
-            </p>
-            <p className="text-xs text-gray-400 mt-0.5">
-              {patternLabel(recurrence.pattern, recurrence.interval, t)}
-            </p>
-          </div>
-        </div>
-        <div className="text-right flex-shrink-0">
-          <p
-            className={`text-sm font-bold ${isIncome ? "text-emerald-600 dark:text-emerald-400" : "text-red-500 dark:text-red-400"}`}
-          >
-            {formatCurrency(recurrence.amount, recurrence.currency)}
+      <span
+        className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-lg text-white"
+        style={{ backgroundColor: space?.color || "#94A3B8" }}
+      >
+        {space?.icon || "↻"}
+      </span>
+
+      <div className="min-w-0 flex-1">
+        <div className="flex items-center gap-2">
+          <p className="font-semibold text-gray-900 dark:text-white truncate">
+            {category?.name || "—"}
           </p>
-          {recurrence.nextDate && (
-            <p className="text-xs text-gray-400 mt-0.5">
-              {t("finance.recurrences.next", "Next:")}{" "}
-              {formatDate(recurrence.nextDate)}
-            </p>
-          )}
+          <span
+            className={`flex-shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium ${isIncome ? "bg-success/10 text-success" : "bg-danger/10 text-danger"}`}
+          >
+            {isIncome
+              ? t("finance.categories.income", "Income")
+              : t("finance.categories.expense", "Expense")}
+          </span>
         </div>
+        <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">
+          {patternLabel(recurrence.pattern, recurrence.interval, t)}
+          {recurrence.nextDate && (
+            <>
+              {" · "}
+              {t("finance.recurrences.next", "Next:")}{" "}
+              <span className="figure">{formatDate(recurrence.nextDate)}</span>
+            </>
+          )}
+        </p>
       </div>
-      <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
+
+      <div className="text-right flex-shrink-0">
+        <p
+          className={`figure font-semibold ${isIncome ? "text-success" : "text-danger"}`}
+        >
+          {formatCurrency(recurrence.amount, recurrence.currency)}
+        </p>
+      </div>
+
+      {/* Hover actions */}
+      <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
         {isActive ? (
           <button
             onClick={onPause}
-            className="flex items-center gap-1.5 text-xs text-yellow-600 hover:text-yellow-700 transition-colors"
+            className="p-2 rounded-lg text-gray-500 hover:text-warning hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors"
+            title={t("finance.recurrences.pause", "Pause")}
           >
-            <HiOutlinePause className="w-3.5 h-3.5" />
-            {t("finance.recurrences.pause", "Pause")}
+            <HiOutlinePause className="w-4 h-4" />
           </button>
         ) : (
           <button
             onClick={onReactivate}
-            className="flex items-center gap-1.5 text-xs text-green-600 hover:text-green-700 transition-colors"
+            className="p-2 rounded-lg text-gray-500 hover:text-success hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors"
+            title={t("finance.recurrences.reactivate", "Reactivate")}
           >
-            <HiOutlinePlay className="w-3.5 h-3.5" />
-            {t("finance.recurrences.reactivate", "Reactivate")}
+            <HiOutlinePlay className="w-4 h-4" />
           </button>
         )}
         <button
           onClick={onDelete}
-          className="flex items-center gap-1.5 text-xs text-red-500 hover:text-red-600 transition-colors ms-auto"
+          className="p-2 rounded-lg text-gray-500 hover:text-danger hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+          title={t("finance.recurrences.delete", "Delete")}
         >
-          <HiOutlineTrash className="w-3.5 h-3.5" />
-          {t("finance.recurrences.delete", "Delete")}
+          <HiOutlineTrash className="w-4 h-4" />
         </button>
       </div>
     </motion.div>
@@ -206,7 +198,7 @@ const RecurrencesPage = () => {
     activeRecurrences.length === 0 && pausedRecurrences.length === 0;
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
+    <div className="max-w-2xl mx-auto px-4 py-8 pb-20 lg:pb-8">
       <div className="flex items-center justify-between mb-6">
         <h1 className="page-title">
           {t("finance.recurrences.title", "Recurrences")}
@@ -247,16 +239,20 @@ const RecurrencesPage = () => {
           </button>
         </motion.div>
       ) : (
-        <div className="space-y-6">
+        <div className="glass-card p-2 sm:p-3 space-y-4">
           {/* Active */}
           {activeRecurrences.length > 0 && (
             <div>
-              <h2 className="font-display text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
-                {t("finance.recurrences.activeCount", "Active ({{count}})", {
-                  count: activeRecurrences.length,
-                })}
-              </h2>
-              <div className="space-y-3">
+              <div className="flex items-center gap-2 px-4 mb-1">
+                <span className="w-2 h-2 rounded-full bg-success" />
+                <p className="text-sm font-bold text-gray-900 dark:text-white">
+                  {t("finance.recurrences.active", "Active")}
+                </p>
+                <span className="text-xs font-medium text-gray-400">
+                  {activeRecurrences.length}
+                </span>
+              </div>
+              <div className="space-y-1">
                 <AnimatePresence mode="popLayout">
                   {activeRecurrences.map((rec) => (
                     <RecurrenceCard
@@ -277,12 +273,16 @@ const RecurrencesPage = () => {
           {/* Paused */}
           {pausedRecurrences.length > 0 && (
             <div>
-              <h2 className="font-display text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
-                {t("finance.recurrences.pausedCount", "Paused ({{count}})", {
-                  count: pausedRecurrences.length,
-                })}
-              </h2>
-              <div className="space-y-3">
+              <div className="flex items-center gap-2 px-4 mb-1">
+                <span className="w-2 h-2 rounded-full bg-warning" />
+                <p className="text-sm font-bold text-gray-900 dark:text-white">
+                  {t("finance.recurrences.paused", "Paused")}
+                </p>
+                <span className="text-xs font-medium text-gray-400">
+                  {pausedRecurrences.length}
+                </span>
+              </div>
+              <div className="space-y-1">
                 <AnimatePresence mode="popLayout">
                   {pausedRecurrences.map((rec) => (
                     <RecurrenceCard
@@ -304,8 +304,8 @@ const RecurrencesPage = () => {
 
       {/* Confirmation dialog */}
       {confirmDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-          <div className="bg-white dark:bg-surface-dark rounded-2xl shadow-xl p-6 max-w-sm w-full">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+          <div className="bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-gray-800 p-6 max-w-sm w-full">
             <h3 className="font-display text-lg font-semibold tracking-tight text-gray-900 dark:text-gray-100 mb-2">
               {t("finance.recurrences.deleteConfirm", "Delete Recurrence?")}
             </h3>
@@ -324,7 +324,7 @@ const RecurrencesPage = () => {
               </button>
               <button
                 onClick={() => handleDelete(confirmDelete)}
-                className="flex-1 py-2 rounded-xl bg-red-500 text-white text-sm font-medium hover:bg-red-600"
+                className="flex-1 py-2 rounded-xl bg-danger text-white text-sm font-medium hover:brightness-95 transition-all"
               >
                 {t("finance.recurrences.delete", "Delete")}
               </button>

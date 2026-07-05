@@ -13,19 +13,16 @@ import { formatCurrency } from "@/utils/currencies";
 import {
   getMonthlyEquivalent,
   getDaysUntilRenewal,
-  formatDate,
 } from "@/utils/dateUtils";
 import {
-  HiOutlinePlusCircle,
+  HiOutlinePlus,
   HiOutlinePencilSquare,
   HiOutlineTrash,
   HiOutlinePause,
   HiOutlinePlay,
-  HiOutlineFunnel,
   HiOutlineMagnifyingGlass,
 } from "react-icons/hi2";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
-import RenewalDial from "@/components/ui/RenewalDial";
 import { useTranslation } from "react-i18next";
 import { TFunction } from "i18next";
 import type { SubscriptionStatus, CurrencyCode, Subscription } from "@/models";
@@ -34,7 +31,7 @@ interface SubWithDays extends Subscription {
   daysUntil: number;
 }
 
-// ─── Single subscription row — reused across every urgency/status group ──────
+// ─── Single subscription row — flat list item with a colored initial badge ────
 const SubscriptionRow = ({
   sub,
   t,
@@ -52,158 +49,108 @@ const SubscriptionRow = ({
     sub.billingCycle,
     sub.customCycleDays,
   );
-  const getStatusLabel = (status: string) => {
-    switch (status) {
-      case "active":
-        return t("subscriptions.active");
-      case "paused":
-        return t("subscriptions.paused");
-      case "cancelled":
-        return t("subscriptions.cancelled");
-      default:
-        return status;
-    }
-  };
+
+  const daysLabel =
+    sub.daysUntil < 0
+      ? t("subscriptions.overdueByDays", {
+          defaultValue: "Overdue by {{count}}d",
+          count: Math.abs(sub.daysUntil),
+        })
+      : sub.daysUntil === 0
+        ? t("dashboard.today", "Today")
+        : t("subscriptions.inDays", {
+            defaultValue: "in {{count}}d",
+            count: sub.daysUntil,
+          });
+  const daysTone =
+    sub.daysUntil < 0
+      ? "text-danger"
+      : sub.daysUntil <= 7
+        ? "text-warning"
+        : "text-gray-400 dark:text-gray-500";
 
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      className={`glass-card p-4 sm:p-5 hover:shadow-card-hover transition-all duration-300 ${sub.status !== "active" ? "opacity-60" : ""}`}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.97 }}
+      className={`group flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors ${sub.status !== "active" ? "opacity-60" : ""}`}
     >
-      {/* Row 1 + 2: Icon, name/status/details, and price+actions (sm+) */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
-          <RenewalDial
-            icon={cat.icon}
-            iconColor={cat.color}
-            daysUntil={sub.daysUntil}
-            billingCycle={sub.billingCycle}
-            customCycleDays={sub.customCycleDays}
-            size={48}
-          />
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2">
-              <h3 className="font-semibold text-gray-900 dark:text-white truncate">
-                {sub.name}
-              </h3>
-              <span
-                className={`px-2 py-0.5 text-[10px] font-semibold rounded-full uppercase flex-shrink-0
-                ${sub.status === "active" ? "bg-success/10 text-success" : ""}
-                ${sub.status === "paused" ? "bg-warning/10 text-warning" : ""}
-                ${sub.status === "cancelled" ? "bg-danger/10 text-danger" : ""}
-              `}
-              >
-                {getStatusLabel(sub.status)}
-              </span>
-            </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-              {cat.name} ·{" "}
-              {t(`billingCycle.${sub.billingCycle}`, sub.billingCycle)}
-              <br />
-              {t("subscriptions.renews")}{" "}
-              <span className="font-mono">{formatDate(sub.renewalDate)}</span>
-            </p>
-          </div>
-        </div>
-        {/* Price + actions — visible only on sm+ inline */}
-        <div className="hidden sm:flex items-center gap-4 flex-shrink-0 ml-2">
-          <div className="text-right">
-            <p className="figure font-bold text-gray-900 dark:text-white">
-              {formatCurrency(sub.price, sub.currency as CurrencyCode)}
-            </p>
-            <p className="figure text-xs text-gray-400">
-              {formatCurrency(monthly, sub.currency as CurrencyCode)}/
-              {t("common.mo", "mo")}
-            </p>
-          </div>
-          <div className="flex items-center gap-1">
-            <button
-              onClick={() => onToggleStatus(sub)}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 transition-colors"
-              title={
-                sub.status === "active"
-                  ? t("subscriptions.pause")
-                  : t("subscriptions.resume")
-              }
-            >
-              {sub.status === "active" ? (
-                <HiOutlinePause className="w-4 h-4" />
-              ) : (
-                <HiOutlinePlay className="w-4 h-4" />
-              )}
-            </button>
-            <Link
-              to={`/subscriptions/${sub.id}`}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 transition-colors"
-            >
-              <HiOutlinePencilSquare className="w-4 h-4" />
-            </Link>
-            <button
-              onClick={() => onDelete(sub.id)}
-              className="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-gray-500 hover:text-danger transition-colors"
-            >
-              <HiOutlineTrash className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      </div>
-      {/* Row 3: Action buttons — visible only on mobile */}
-      <div className="flex sm:hidden items-center justify-between mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
-        <p className="figure font-semibold text-gray-900 dark:text-white text-sm">
-          {formatCurrency(sub.price, sub.currency as CurrencyCode)}
-          <span className="text-xs text-gray-400 font-normal ml-1">
-            /{sub.billingCycle}
-          </span>
+      <span
+        className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white"
+        style={{ backgroundColor: cat.color }}
+      >
+        {sub.name.charAt(0).toUpperCase()}
+      </span>
+
+      <div className="min-w-0 flex-1">
+        <p className="font-semibold text-gray-900 dark:text-white truncate">
+          {sub.name}
         </p>
-        <div className="flex items-center gap-1">
-          <button
-            onClick={() => onToggleStatus(sub)}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 transition-colors"
-            title={
-              sub.status === "active"
-                ? t("subscriptions.pause")
-                : t("subscriptions.resume")
-            }
-          >
-            {sub.status === "active" ? (
-              <HiOutlinePause className="w-4 h-4" />
-            ) : (
-              <HiOutlinePlay className="w-4 h-4" />
-            )}
-          </button>
-          <Link
-            to={`/subscriptions/${sub.id}`}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 transition-colors"
-          >
-            <HiOutlinePencilSquare className="w-4 h-4" />
-          </Link>
-          <button
-            onClick={() => onDelete(sub.id)}
-            className="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-gray-500 hover:text-danger transition-colors"
-          >
-            <HiOutlineTrash className="w-4 h-4" />
-          </button>
-        </div>
+        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+          {t(`billingCycle.${sub.billingCycle}`, sub.billingCycle)} · {cat.name}
+        </p>
       </div>
+
+      <div className="text-right flex-shrink-0">
+        <p className="figure font-semibold text-gray-900 dark:text-white">
+          {formatCurrency(sub.price, sub.currency as CurrencyCode)}
+        </p>
+        <p className={`text-xs font-medium ${daysTone}`}>{daysLabel}</p>
+      </div>
+
+      {/* Hover actions */}
+      <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+        <button
+          onClick={() => onToggleStatus(sub)}
+          className="p-2 rounded-lg hover:bg-gray-200/70 dark:hover:bg-gray-700 text-gray-500 transition-colors"
+          title={
+            sub.status === "active"
+              ? t("subscriptions.pause")
+              : t("subscriptions.resume")
+          }
+        >
+          {sub.status === "active" ? (
+            <HiOutlinePause className="w-4 h-4" />
+          ) : (
+            <HiOutlinePlay className="w-4 h-4" />
+          )}
+        </button>
+        <Link
+          to={`/subscriptions/${sub.id}`}
+          className="p-2 rounded-lg hover:bg-gray-200/70 dark:hover:bg-gray-700 text-gray-500 transition-colors"
+        >
+          <HiOutlinePencilSquare className="w-4 h-4" />
+        </Link>
+        <button
+          onClick={() => onDelete(sub.id)}
+          className="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-gray-500 hover:text-danger transition-colors"
+        >
+          <HiOutlineTrash className="w-4 h-4" />
+        </button>
+      </div>
+      {/* subtle monthly-equivalent, hidden on hover to make room for actions */}
+      <span className="hidden xl:block group-hover:hidden text-xs text-gray-400 figure w-24 text-right flex-shrink-0">
+        {formatCurrency(monthly, sub.currency as CurrencyCode)}/
+        {t("common.mo", "mo")}
+      </span>
     </motion.div>
   );
 };
 
-// ─── A titled group of rows — the urgency/status buckets the list is sorted into ──
+// ─── Urgency/status group ─────────────────────────────────────────────────────
 const SubscriptionGroup = ({
   label,
+  dotColor,
   items,
-  muted,
   t,
   onToggleStatus,
   onDelete,
 }: {
   label: string;
+  dotColor: string;
   items: SubWithDays[];
-  muted?: boolean;
   t: TFunction;
   onToggleStatus: (sub: Subscription) => void;
   onDelete: (id: string) => void;
@@ -211,24 +158,29 @@ const SubscriptionGroup = ({
   if (items.length === 0) return null;
   return (
     <div>
-      <p
-        className={`px-1 mb-2 text-xs font-semibold uppercase tracking-wider ${muted ? "text-gray-400 dark:text-gray-500" : "text-gray-500 dark:text-gray-400"}`}
-      >
-        {label}
-      </p>
-      <div className="grid gap-3">
-        <AnimatePresence mode="popLayout">
-          {items.map((sub) => (
-            <SubscriptionRow
-              key={sub.id}
-              sub={sub}
-              t={t}
-              onToggleStatus={onToggleStatus}
-              onDelete={onDelete}
-            />
-          ))}
-        </AnimatePresence>
+      <div className="flex items-center gap-2 px-4 mb-1">
+        <span
+          className="w-2 h-2 rounded-full"
+          style={{ backgroundColor: dotColor }}
+        />
+        <p className="text-sm font-bold text-gray-900 dark:text-white">
+          {label}
+        </p>
+        <span className="text-xs font-medium text-gray-400">
+          {items.length}
+        </span>
       </div>
+      <AnimatePresence mode="popLayout">
+        {items.map((sub) => (
+          <SubscriptionRow
+            key={sub.id}
+            sub={sub}
+            t={t}
+            onToggleStatus={onToggleStatus}
+            onDelete={onDelete}
+          />
+        ))}
+      </AnimatePresence>
     </div>
   );
 };
@@ -239,8 +191,6 @@ const SubscriptionsPage = () => {
   const { t } = useTranslation();
   const [search, setSearch] = useState("");
   const [filterCat, setFilterCat] = useState("all");
-  const [filterStatus, setFilterStatus] = useState("all");
-  const [showFilters, setShowFilters] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
@@ -250,22 +200,21 @@ const SubscriptionsPage = () => {
           .toLowerCase()
           .includes(search.toLowerCase());
         const matchCat = filterCat === "all" || sub.category === filterCat;
-        const matchStatus =
-          filterStatus === "all" || sub.status === filterStatus;
-        return matchSearch && matchCat && matchStatus;
+        return matchSearch && matchCat;
       })
-      .map((sub) => ({ ...sub, daysUntil: getDaysUntilRenewal(sub.renewalDate) }));
-  }, [subscriptions, search, filterCat, filterStatus]);
+      .map((sub) => ({
+        ...sub,
+        daysUntil: getDaysUntilRenewal(sub.renewalDate),
+      }));
+  }, [subscriptions, search, filterCat]);
 
-  // Active subs are grouped by how soon they renew — the one ordering that
-  // actually matters for a subscription list. Paused/cancelled don't have a
-  // renewal to be urgent about, so they get their own quiet groups instead.
   const groups = useMemo(() => {
     const active = filtered
       .filter((s) => s.status === "active")
       .sort((a, b) => a.daysUntil - b.daysUntil);
     return {
-      soon: active.filter((s) => s.daysUntil <= 7),
+      overdue: active.filter((s) => s.daysUntil < 0),
+      soon: active.filter((s) => s.daysUntil >= 0 && s.daysUntil <= 7),
       thisMonth: active.filter((s) => s.daysUntil > 7 && s.daysUntil <= 30),
       later: active.filter((s) => s.daysUntil > 30),
       paused: filtered
@@ -277,27 +226,25 @@ const SubscriptionsPage = () => {
     };
   }, [filtered]);
 
-  // Returns { count, totals: { [currency]: monthlyCost } } for a given status
-  const stats = useMemo(() => {
-    const calc = (status: SubscriptionStatus) => {
-      const group = subscriptions.filter((s) => s.status === status);
-      const totals: Record<string, number> = {};
-      group.forEach((s) => {
-        const monthly = getMonthlyEquivalent(
-          s.price,
-          s.billingCycle,
-          s.customCycleDays,
-        );
-        const cur = (s.currency as CurrencyCode) || "EGP";
-        totals[cur] = (totals[cur] || 0) + monthly;
-      });
-      return { count: group.length, totals };
-    };
-    return {
-      active: calc("active"),
-      paused: calc("paused"),
-      cancelled: calc("cancelled"),
-    };
+  const headline = useMemo(() => {
+    const active = subscriptions.filter((s) => s.status === "active");
+    const totals: Record<string, number> = {};
+    active.forEach((s) => {
+      const monthly = getMonthlyEquivalent(
+        s.price,
+        s.billingCycle,
+        s.customCycleDays,
+      );
+      const cur = (s.currency as CurrencyCode) || "EGP";
+      totals[cur] = (totals[cur] || 0) + monthly;
+    });
+    return { count: active.length, totals };
+  }, [subscriptions]);
+
+  // categories present in the user's subscriptions, for the filter chips
+  const usedCategories = useMemo(() => {
+    const ids = new Set(subscriptions.map((s) => s.category));
+    return CATEGORIES.filter((c) => ids.has(c.id));
   }, [subscriptions]);
 
   const handleDelete = async () => {
@@ -306,7 +253,9 @@ const SubscriptionsPage = () => {
         await deleteSubscription(user.uid, deleteTarget);
       } catch (err) {
         console.error(err);
-        toast.error(t("subscriptions.deleteError", "Failed to delete subscription."));
+        toast.error(
+          t("subscriptions.deleteError", "Failed to delete subscription."),
+        );
       }
       setDeleteTarget(null);
     }
@@ -320,7 +269,9 @@ const SubscriptionsPage = () => {
       await updateSubscription(user.uid, sub.id, { status: newStatus });
     } catch (err) {
       console.error(err);
-      toast.error(t("subscriptions.toggleError", "Failed to update subscription."));
+      toast.error(
+        t("subscriptions.toggleError", "Failed to update subscription."),
+      );
     }
   };
 
@@ -332,143 +283,82 @@ const SubscriptionsPage = () => {
     );
   }
 
+  const totalsLabel = Object.entries(headline.totals)
+    .map(([cur, v]) => `${formatCurrency(v, cur as CurrencyCode)}`)
+    .join(" · ");
+
   return (
-    <div className="space-y-6 pb-20 lg:pb-6">
-      <div className="flex items-center justify-between">
-        <h1 className="page-title">{t("subscriptions.title")}</h1>
-        <Link
-          to="/subscriptions/add"
-          className="btn-primary flex items-center gap-2 text-sm"
-        >
-          <HiOutlinePlusCircle className="w-4 h-4" />
-          <span className="hidden sm:inline">{t("subscriptions.addNew")}</span>
-        </Link>
-      </div>
-
-      {/* Hero strip — active count + monthly total is the headline fact;
-          paused/cancelled are supporting counts, not equal-weight cards. */}
-      <motion.div
-        initial={{ opacity: 0, y: -8 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="glass-card p-5 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6"
-      >
-        <div className="flex-1 min-w-0">
-          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
-            {t("subscriptions.active")}
+    <div className="space-y-5 pb-20 lg:pb-6">
+      {/* Toolbar */}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
+        <div>
+          <h1 className="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+            {t("subscriptions.title")}
+          </h1>
+          <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
+            {t("subscriptions.activeCount", {
+              defaultValue: "{{count}} active",
+              count: headline.count,
+            })}
+            {totalsLabel && (
+              <>
+                {" · "}
+                <span className="figure">{totalsLabel}</span> /{" "}
+                {t("common.mo", "mo")}
+              </>
+            )}
           </p>
-          <div className="flex items-baseline gap-3 flex-wrap">
-            <span className="figure text-3xl font-bold text-gray-900 dark:text-white">
-              {stats.active.count}
-            </span>
-            {Object.entries(stats.active.totals).map(([cur, total]) => (
-              <span
-                key={cur}
-                className="figure text-sm text-gray-500 dark:text-gray-400"
-              >
-                {formatCurrency(total, cur as CurrencyCode)}
-                <span className="text-xs text-gray-400">
-                  /{t("common.mo", "mo")}
-                </span>
-              </span>
-            ))}
-          </div>
         </div>
-
-        <div className="hidden sm:block w-px h-10 bg-gray-200 dark:bg-gray-700" />
-
-        <div className="flex items-center gap-4 text-sm">
-          <span className="inline-flex items-center gap-1.5 text-warning">
-            <span className="w-1.5 h-1.5 rounded-full bg-warning" />
-            {t("subscriptions.paused")}
-            <span className="figure font-semibold">{stats.paused.count}</span>
-          </span>
-          <span className="inline-flex items-center gap-1.5 text-danger">
-            <span className="w-1.5 h-1.5 rounded-full bg-danger" />
-            {t("subscriptions.cancelled")}
-            <span className="figure font-semibold">
-              {stats.cancelled.count}
-            </span>
-          </span>
-        </div>
-      </motion.div>
-
-      {/* Search & Filter */}
-      <div className="glass-card p-4">
         <div className="flex items-center gap-3">
-          <div className="relative flex-1">
-            <HiOutlineMagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <div className="relative flex-1 sm:flex-initial">
+            <HiOutlineMagnifyingGlass className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
               type="text"
               placeholder={t("subscriptions.searchPlaceholder")}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="input-field pl-9 text-sm"
+              className="w-full sm:w-56 ps-9 pe-3 py-2 rounded-full text-sm bg-gray-100 dark:bg-gray-800 border border-transparent focus:border-primary/40 focus:bg-white dark:focus:bg-gray-900 outline-none transition-colors placeholder:text-gray-400"
             />
           </div>
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className={`p-2.5 rounded-xl border transition-colors ${showFilters ? "bg-primary/10 border-primary/30 text-primary" : "border-gray-200 dark:border-gray-700 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800"}`}
+          <Link
+            to="/subscriptions/add"
+            className="btn-primary flex items-center gap-2 text-sm whitespace-nowrap"
           >
-            <HiOutlineFunnel className="w-4 h-4" />
-          </button>
+            <HiOutlinePlus className="w-4 h-4" />
+            <span className="hidden sm:inline">
+              {t("subscriptions.addNew")}
+            </span>
+          </Link>
         </div>
-        <AnimatePresence>
-          {showFilters && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="overflow-hidden"
-            >
-              <div className="flex flex-wrap gap-3 mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
-                <div>
-                  <label className="text-xs text-gray-500 mb-1 block">
-                    {t("subscriptions.category")}
-                  </label>
-                  <select
-                    value={filterCat}
-                    onChange={(e) => setFilterCat(e.target.value)}
-                    className="select-field text-sm py-2"
-                  >
-                    <option value="all">
-                      {t("subscriptions.allCategories")}
-                    </option>
-                    {CATEGORIES.map((c) => (
-                      <option key={c.id} value={c.id}>
-                        {c.icon} {c.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="text-xs text-gray-500 mb-1 block">
-                    {t("subscriptions.status")}
-                  </label>
-                  <select
-                    value={filterStatus}
-                    onChange={(e) => setFilterStatus(e.target.value)}
-                    className="select-field text-sm py-2"
-                  >
-                    <option value="all">
-                      {t("subscriptions.allStatuses")}
-                    </option>
-                    <option value="active">{t("subscriptions.active")}</option>
-                    <option value="paused">{t("subscriptions.paused")}</option>
-                    <option value="cancelled">
-                      {t("subscriptions.cancelled")}
-                    </option>
-                  </select>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </div>
 
-      {/* Subscription List — grouped by renewal urgency, not a flat list */}
+      {/* Filter chips */}
+      {usedCategories.length > 0 && (
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 -mx-1 px-1">
+          <button
+            onClick={() => setFilterCat("all")}
+            className={`px-3.5 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${filterCat === "all" ? "bg-primary text-white" : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"}`}
+          >
+            {t("subscriptions.allCategories", "All")}
+          </button>
+          {usedCategories.map((c) => (
+            <button
+              key={c.id}
+              onClick={() => setFilterCat(c.id)}
+              className={`px-3.5 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${filterCat === c.id ? "bg-primary text-white" : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"}`}
+            >
+              {c.name}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* List */}
       {filtered.length === 0 ? (
         <div className="glass-card p-12 text-center">
-          <p className="text-4xl mb-3">📋</p>
+          <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-primary/10 flex items-center justify-center">
+            <HiOutlinePlus className="w-7 h-7 text-primary" />
+          </div>
           <p className="text-gray-500 dark:text-gray-400 mb-4">
             {subscriptions.length === 0
               ? t("subscriptions.noSubscriptionsYet")
@@ -479,52 +369,64 @@ const SubscriptionsPage = () => {
               to="/subscriptions/add"
               className="btn-primary inline-flex items-center gap-2"
             >
-              <HiOutlinePlusCircle className="w-4 h-4" />
+              <HiOutlinePlus className="w-4 h-4" />
               {t("subscriptions.addFirstSubscription")}
             </Link>
           )}
         </div>
       ) : (
-        <div className="space-y-5">
+        <div className="glass-card p-2 sm:p-3 space-y-4">
           <SubscriptionGroup
-            label={t("subscriptions.renewingSoon")}
+            label={t("subscriptions.overdue", "Overdue")}
+            dotColor="#EF4444"
+            items={groups.overdue}
+            t={t}
+            onToggleStatus={handleToggleStatus}
+            onDelete={(id) => setDeleteTarget(id)}
+          />
+          <SubscriptionGroup
+            label={t("subscriptions.renewingSoon", "Due soon")}
+            dotColor="#F59E0B"
             items={groups.soon}
             t={t}
             onToggleStatus={handleToggleStatus}
             onDelete={(id) => setDeleteTarget(id)}
           />
           <SubscriptionGroup
-            label={t("subscriptions.thisMonth")}
+            label={t("subscriptions.thisMonth", "This month")}
+            dotColor="#6366F1"
             items={groups.thisMonth}
             t={t}
             onToggleStatus={handleToggleStatus}
             onDelete={(id) => setDeleteTarget(id)}
           />
           <SubscriptionGroup
-            label={t("subscriptions.later")}
+            label={t("subscriptions.later", "Later")}
+            dotColor="#94A3B8"
             items={groups.later}
             t={t}
             onToggleStatus={handleToggleStatus}
             onDelete={(id) => setDeleteTarget(id)}
           />
           <SubscriptionGroup
-            label={t("subscriptions.paused")}
+            label={t("subscriptions.paused", "Paused")}
+            dotColor="#94A3B8"
             items={groups.paused}
-            muted
             t={t}
             onToggleStatus={handleToggleStatus}
             onDelete={(id) => setDeleteTarget(id)}
           />
           <SubscriptionGroup
-            label={t("subscriptions.cancelled")}
+            label={t("subscriptions.cancelled", "Cancelled")}
+            dotColor="#94A3B8"
             items={groups.cancelled}
-            muted
             t={t}
             onToggleStatus={handleToggleStatus}
             onDelete={(id) => setDeleteTarget(id)}
           />
         </div>
       )}
+
       <ConfirmDialog
         isOpen={!!deleteTarget}
         onClose={() => setDeleteTarget(null)}

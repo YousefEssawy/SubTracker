@@ -128,7 +128,7 @@ const SubscriptionFormPage = () => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto pb-20 lg:pb-6">
+    <div className="max-w-3xl mx-auto pb-20 lg:pb-6">
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
@@ -147,10 +147,7 @@ const SubscriptionFormPage = () => {
             : t("subscriptionForm.addTitle")}
         </h1>
 
-        <form
-          onSubmit={handleSubmit}
-          className="glass-card p-6 sm:p-8 space-y-5"
-        >
+        <form onSubmit={handleSubmit} className="glass-card rounded-3xl p-6 sm:p-8 space-y-5">
           {/* Name */}
           <div>
             <label className="label-text">{t("subscriptionForm.name")}</label>

@@ -111,8 +111,8 @@ const RecurrenceForm = ({ onClose }: RecurrenceFormProps) => {
     "w-full px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary/50 text-sm";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white dark:bg-surface-dark rounded-2xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto p-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+      <div className="bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-gray-800 w-full max-w-md max-h-[90vh] overflow-y-auto p-6">
         <div className="flex items-center justify-between mb-5">
           <h2 className="font-display text-lg font-bold tracking-tight text-gray-900 dark:text-gray-100">
             {t("finance.recurrences.addRecurrence", "Add Recurrence")}
@@ -133,7 +133,7 @@ const RecurrenceForm = ({ onClose }: RecurrenceFormProps) => {
                 key={txType}
                 type="button"
                 onClick={() => handleTypeChange(txType)}
-                className={`flex-1 py-2 text-sm font-medium transition-colors ${type === txType ? (txType === "Income" ? "bg-emerald-500 text-white" : "bg-red-500 text-white") : "bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400"}`}
+                className={`flex-1 py-2 text-sm font-medium transition-colors ${type === txType ? (txType === "Income" ? "bg-success text-white" : "bg-danger text-white") : "bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400"}`}
               >
                 {txType === "Income"
                   ? t("finance.categories.income", "Income")

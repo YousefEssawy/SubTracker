@@ -20,8 +20,8 @@ const TypeBadge = ({ type }: { type: "Income" | "Expense" }) => {
     <span
       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
         type === "Income"
-          ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
-          : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"
+          ? "bg-success/10 text-success"
+          : "bg-danger/10 text-danger"
       }`}
     >
       {type === "Income"
@@ -60,7 +60,7 @@ const ConfirmDialog = ({
         initial={{ scale: 0.92, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.92, opacity: 0 }}
-        className="bg-white dark:bg-surface-dark rounded-2xl shadow-2xl p-6 max-w-sm w-full"
+        className="bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-gray-800 p-6 max-w-sm w-full"
       >
         <h3 className="font-display text-base font-semibold tracking-tight text-gray-900 dark:text-gray-100 mb-2">
           {t("finance.categories.deleteTitle", "Delete Category?")}
@@ -82,7 +82,7 @@ const ConfirmDialog = ({
           <button
             onClick={onConfirm}
             disabled={loading}
-            className="flex-1 py-2.5 text-sm font-medium rounded-xl bg-red-500 hover:bg-red-600 text-white transition-colors disabled:opacity-50"
+            className="flex-1 py-2.5 text-sm font-medium rounded-xl bg-danger hover:brightness-95 text-white transition-all disabled:opacity-50"
           >
             {loading
               ? t("finance.categories.deleting", "Deleting…")
@@ -110,25 +110,32 @@ const CategoryRow = ({ category, onEdit, onDelete }: CategoryRowProps) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ type: "spring", stiffness: 300, damping: 28 }}
-      className="bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-gray-800 px-5 py-4 flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow"
+      className="group flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors"
     >
+      <span
+        className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-base text-white"
+        style={{ backgroundColor: category.color }}
+      >
+        {category.icon || category.name.charAt(0).toUpperCase()}
+      </span>
+
       <div className="flex-1 min-w-0">
-        <p className="font-medium text-gray-900 dark:text-gray-100 truncate">
+        <p className="font-semibold text-gray-900 dark:text-white truncate">
           {category.name}
         </p>
       </div>
       <TypeBadge type={category.type} />
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
         <button
           onClick={() => onEdit(category)}
-          className="p-2 rounded-lg text-gray-400 hover:text-primary hover:bg-primary/10 transition-colors"
+          className="p-2 rounded-lg text-gray-500 hover:text-primary hover:bg-primary/10 transition-colors"
           aria-label={t("finance.categories.editCategory", "Edit Category")}
         >
           <HiOutlinePencil className="w-4 h-4" />
         </button>
         <button
           onClick={() => onDelete(category)}
-          className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+          className="p-2 rounded-lg text-gray-500 hover:text-danger hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
           aria-label={t("finance.categories.deleteTitle", "Delete Category")}
         >
           <HiOutlineTrash className="w-4 h-4" />
@@ -268,7 +275,7 @@ const CategoriesPage = () => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
+    <div className="max-w-2xl mx-auto px-4 py-8 pb-20 lg:pb-8">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
@@ -299,11 +306,7 @@ const CategoriesPage = () => {
               onClick={() => setFilterType(key)}
               className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
                 filterType === key
-                  ? key === "Income"
-                    ? "bg-emerald-500 text-white"
-                    : key === "Expense"
-                      ? "bg-red-500 text-white"
-                      : "bg-primary text-white"
+                  ? "bg-primary text-white"
                   : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
               }`}
             >
@@ -327,7 +330,7 @@ const CategoriesPage = () => {
           )}
         </p>
       ) : (
-        <div className="space-y-3">
+        <div className="glass-card p-2 sm:p-3 space-y-1">
           <AnimatePresence mode="popLayout">
             {displayedCategories.map((cat) => (
               <CategoryRow

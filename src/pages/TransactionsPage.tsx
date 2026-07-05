@@ -62,49 +62,65 @@ const TransactionsPage = () => {
   const hasFilters = Object.values(filters).some((val) => val);
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="page-title">
-          {t("finance.transactions.title", "Transactions")}
-        </h1>
+    <div className="space-y-4 lg:space-y-6">
+      {/* Toolbar */}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
+        <div>
+          <h1 className="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+            {t("finance.transactions.title", "Transactions")}
+          </h1>
+          <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
+            {t("finance.transactions.subtitle", "Track your income and expenses.")}
+          </p>
+        </div>
         <button
           onClick={() => navigate("/transactions/add")}
-          className="btn-primary flex items-center gap-2"
+          className="btn-primary flex items-center gap-2 text-sm whitespace-nowrap self-start sm:self-auto"
         >
           <HiOutlinePlus className="w-4 h-4" />
-          {t("finance.transactions.add", "Add")}
+          <span className="hidden sm:inline">
+            {t("finance.transactions.addTransaction", "Add Transaction")}
+          </span>
+          <span className="sm:hidden">{t("finance.transactions.add", "Add")}</span>
         </button>
       </div>
 
-      {/* Balance header (contextual) */}
-      <BalanceCard variant="contextual" balances={balances} />
-
-      {/* Filters */}
-      <FilterBar filters={filters} setFilters={setFilters} />
-
-      {/* Loading */}
-      {loading ? (
-        <div className="flex items-center justify-center py-16">
-          <div className="w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+      <div className="grid grid-cols-1 xl:grid-cols-[320px_minmax(0,1fr)] gap-4 lg:gap-6 items-start">
+        <div className="space-y-4 xl:sticky xl:top-24">
+          <BalanceCard variant="contextual" balances={balances} />
+          <FilterBar filters={filters} setFilters={setFilters} />
         </div>
-      ) : transactions.length === 0 ? (
-        hasFilters ? (
-          <EmptyFiltered />
-        ) : (
-          <EmptyNoData onAdd={() => navigate("/transactions/add")} />
-        )
-      ) : (
-        <>
-          <div className="space-y-3">
-            <AnimatePresence mode="popLayout">
-              {transactions.map((tx) => (
-                <TransactionListItem key={tx.id} transaction={tx} />
-              ))}
-            </AnimatePresence>
-          </div>
-          <Pagination {...pagination} />
-        </>
+
+        <div className="glass-card p-2 sm:p-3 min-h-[18rem]">
+          {loading ? (
+            <div className="flex items-center justify-center py-16">
+              <div className="w-8 h-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin" />
+            </div>
+          ) : transactions.length === 0 ? (
+            hasFilters ? (
+              <EmptyFiltered />
+            ) : (
+              <EmptyNoData onAdd={() => navigate("/transactions/add")} />
+            )
+          ) : (
+            <>
+              <div className="space-y-0.5">
+                <AnimatePresence mode="popLayout">
+                  {transactions.map((tx) => (
+                    <TransactionListItem key={tx.id} transaction={tx} />
+                  ))}
+                </AnimatePresence>
+              </div>
+              <Pagination {...pagination} />
+            </>
+          )}
+        </div>
+      </div>
+
+      {!loading && transactions.length > 0 && (
+        <div className="lg:hidden">
+          <div className="h-2" />
+        </div>
       )}
     </div>
   );

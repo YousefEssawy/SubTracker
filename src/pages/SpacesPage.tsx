@@ -38,7 +38,7 @@ const ConfirmDialog = ({
         initial={{ scale: 0.92, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.92, opacity: 0 }}
-        className="bg-white dark:bg-surface-dark rounded-2xl shadow-2xl p-6 max-w-sm w-full"
+        className="bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-gray-800 p-6 max-w-sm w-full"
       >
         <h3 className="font-display text-base font-semibold tracking-tight text-gray-900 dark:text-gray-100 mb-2">
           {t("finance.spaces.deleteTitle", "Delete Space?")}
@@ -60,7 +60,7 @@ const ConfirmDialog = ({
           <button
             onClick={onConfirm}
             disabled={loading}
-            className="flex-1 py-2.5 text-sm font-medium rounded-xl bg-red-500 hover:bg-red-600 text-white transition-colors disabled:opacity-50"
+            className="flex-1 py-2.5 text-sm font-medium rounded-xl bg-danger hover:brightness-95 text-white transition-all disabled:opacity-50"
           >
             {loading
               ? t("finance.spaces.deleting", "Deleting…")
@@ -90,45 +90,44 @@ const SpaceCard = ({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ type: "spring", stiffness: 300, damping: 28 }}
-      className="bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-gray-800 p-5 flex items-center gap-4 shadow-sm hover:shadow-md transition-shadow"
+      className="group flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors"
     >
       {/* Icon */}
-      <div
-        className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0"
-        style={{
-          backgroundColor: space.color + "22",
-          border: `1.5px solid ${space.color}`,
-        }}
+      <span
+        className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-lg text-white"
+        style={{ backgroundColor: space.color }}
       >
         {space.icon}
-      </div>
+      </span>
 
       {/* Name + color dot */}
       <div className="flex-1 min-w-0">
-        <p className="font-medium text-gray-900 dark:text-gray-100 truncate">
+        <p className="font-semibold text-gray-900 dark:text-white truncate">
           {space.name}
         </p>
         <div className="flex items-center gap-1.5 mt-0.5">
-          <div
+          <span
             className="w-2.5 h-2.5 rounded-full"
             style={{ backgroundColor: space.color }}
           />
-          <span className="text-xs text-gray-400">{space.color}</span>
+          <span className="figure text-xs text-gray-500 dark:text-gray-400">
+            {space.color}
+          </span>
         </div>
       </div>
 
       {/* Actions */}
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
         <button
           onClick={() => onEdit(space)}
-          className="p-2 rounded-lg text-gray-400 hover:text-primary hover:bg-primary/10 transition-colors"
+          className="p-2 rounded-lg text-gray-500 hover:text-primary hover:bg-primary/10 transition-colors"
           aria-label={t("finance.spaces.editSpace", "Edit Space")}
         >
           <HiOutlinePencil className="w-4 h-4" />
         </button>
         <button
           onClick={() => onDelete(space)}
-          className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+          className="p-2 rounded-lg text-gray-500 hover:text-danger hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
           aria-label={t("finance.spaces.deleteTitle", "Delete Space")}
         >
           <HiOutlineTrash className="w-4 h-4" />
@@ -240,7 +239,7 @@ const SpacesPage = () => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
+    <div className="max-w-2xl mx-auto px-4 py-8 pb-20 lg:pb-8">
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
@@ -266,7 +265,7 @@ const SpacesPage = () => {
       {spaces.length === 0 ? (
         <EmptyState onAdd={handleAdd} />
       ) : (
-        <div className="space-y-3">
+        <div className="glass-card p-2 sm:p-3 space-y-1">
           <AnimatePresence mode="popLayout">
             {spaces.map((space) => (
               <SpaceCard

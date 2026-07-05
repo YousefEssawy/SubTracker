@@ -53,7 +53,7 @@ const CurrencyBlock = ({ currency, data, compact }: CurrencyBlockProps) => {
           {currency}
         </span>
         <span
-          className={`text-sm font-bold ${isPositive ? "text-emerald-600 dark:text-emerald-400" : "text-red-500 dark:text-red-400"}`}
+          className={`figure text-sm font-bold ${isPositive ? "text-success" : "text-danger"}`}
         >
           {isPositive ? "+" : "-"}
           {symbol} {fmt(data.balance)}
@@ -66,7 +66,7 @@ const CurrencyBlock = ({ currency, data, compact }: CurrencyBlockProps) => {
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-gray-800 p-5 shadow-sm"
+      className="glass-card p-5"
     >
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -76,26 +76,26 @@ const CurrencyBlock = ({ currency, data, compact }: CurrencyBlockProps) => {
           </span>
         </div>
         <span
-          className={`text-base font-bold ${isPositive ? "text-emerald-600 dark:text-emerald-400" : "text-red-500 dark:text-red-400"}`}
+          className={`figure text-base font-bold ${isPositive ? "text-success" : "text-danger"}`}
         >
           {isPositive ? "+" : "-"}
           {symbol} {fmt(data.balance)}
         </span>
       </div>
       <div className="grid grid-cols-2 gap-3">
-        <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl p-3">
-          <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium mb-0.5">
+        <div className="bg-success/10 rounded-xl p-3">
+          <p className="text-xs text-success font-medium mb-0.5">
             {t("finance.balance.income", "Income")}
           </p>
-          <p className="text-sm font-semibold text-emerald-700 dark:text-emerald-300">
+          <p className="figure text-sm font-semibold text-success">
             {symbol} {fmt(data.income)}
           </p>
         </div>
-        <div className="bg-red-50 dark:bg-red-900/20 rounded-xl p-3">
-          <p className="text-xs text-red-500 dark:text-red-400 font-medium mb-0.5">
+        <div className="bg-danger/10 rounded-xl p-3">
+          <p className="text-xs text-danger font-medium mb-0.5">
             {t("finance.balance.expenses", "Expense")}
           </p>
-          <p className="text-sm font-semibold text-red-600 dark:text-red-300">
+          <p className="figure text-sm font-semibold text-danger">
             {symbol} {fmt(data.expense)}
           </p>
         </div>
@@ -119,7 +119,7 @@ const BalanceCard = ({
   if (currencies.length === 0) {
     if (variant === "contextual") return null;
     return (
-      <div className="bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-gray-800 p-5 mb-5 text-center">
+      <div className="glass-card p-5 mb-5 text-center">
         <p className="text-sm text-gray-400">
           {t("finance.balance.noData", "No financial data yet.")}
         </p>
@@ -129,7 +129,7 @@ const BalanceCard = ({
 
   if (variant === "contextual") {
     return (
-      <div className="bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-gray-800 px-5 py-4 mb-4 shadow-sm">
+      <div className="glass-card px-5 py-4 mb-4">
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
           {t("finance.balance.title", "Balance")}
         </p>

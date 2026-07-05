@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSpaces } from "@/contexts/SpaceContext";
+import { useViewport } from "@/contexts/ViewportContext";
 import { CURRENCIES } from "@/utils/currencies";
 import { HiOutlineXMark, HiOutlineFunnel } from "react-icons/hi2";
 import type { TransactionFilters } from "@/utils/balanceUtils";
@@ -16,10 +17,10 @@ interface TypeButtonProps {
 const TypeButton = ({ label, active, onClick, color }: TypeButtonProps) => (
   <button
     onClick={onClick}
-    className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
+    className={`rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors ${
       active
         ? `${color} text-white`
-        : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
+        : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
     }`}
   >
     {label}
@@ -35,6 +36,7 @@ interface FilterBarProps {
 
 const FilterBar = ({ filters, setFilters }: FilterBarProps) => {
   const { spaces } = useSpaces();
+  const { isMobile } = useViewport();
   const { t } = useTranslation();
   const [showMore, setShowMore] = useState(false);
 
@@ -64,27 +66,100 @@ const FilterBar = ({ filters, setFilters }: FilterBarProps) => {
 
   const clearAll = () => setFilters({});
 
+  const expandedFilters = (
+    <>
+      <div className="flex flex-wrap gap-3 mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+        <div>
+          <label className="text-xs text-gray-500 mb-1 block">
+            {t("finance.transactions.space", "Space")}
+          </label>
+          <select
+            value={filters.spaceId || ""}
+            onChange={(e) => updateFilter("spaceId", e.target.value || undefined)}
+            className="select-field text-sm py-2"
+          >
+            <option value="">
+              {t("finance.filters.allSpaces", "All Spaces")}
+            </option>
+            {spaces.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.icon} {s.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="text-xs text-gray-500 mb-1 block">
+            {t("finance.transactions.currency", "Currency")}
+          </label>
+          <select
+            value={filters.currency || ""}
+            onChange={(e) =>
+              updateFilter(
+                "currency",
+                (e.target.value as CurrencyCode) || undefined,
+              )
+            }
+            className="select-field text-sm py-2"
+          >
+            <option value="">
+              {t("finance.filters.allCurrencies", "All Currencies")}
+            </option>
+            {CURRENCIES.map((c) => (
+              <option key={c.code} value={c.code}>
+                {c.symbol} {c.code}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div className="flex flex-wrap items-end gap-3 mt-3">
+        <div className="flex-1 min-w-[140px]">
+          <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+            {t("finance.filters.tag", "Tag")}
+          </label>
+          <input
+            type="text"
+            value={filters.tag || ""}
+            onChange={(e) => updateFilter("tag", e.target.value || undefined)}
+            placeholder={t("finance.filters.tagPlaceholder", "Filter by tag…")}
+            className="input-field text-sm py-2"
+          />
+        </div>
+
+        <div className="min-w-[140px]">
+          <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+            {t("finance.filters.from", "From")}
+          </label>
+          <input
+            type="date"
+            value={filters.dateRange?.start || ""}
+            onChange={(e) => updateDateRange("start", e.target.value)}
+            className="input-field text-sm py-2"
+          />
+        </div>
+        <div className="min-w-[140px]">
+          <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+            {t("finance.filters.to", "To")}
+          </label>
+          <input
+            type="date"
+            value={filters.dateRange?.end || ""}
+            onChange={(e) => updateDateRange("end", e.target.value)}
+            className="input-field text-sm py-2"
+          />
+        </div>
+      </div>
+    </>
+  );
+
   return (
-    <div className="bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-gray-800 p-4 mb-4">
+    <div className="glass-card p-4 mb-4">
       {/* Primary row */}
       <div className="flex flex-wrap items-center gap-3">
         <HiOutlineFunnel className="w-4 h-4 text-gray-400 flex-shrink-0" />
-
-        {/* Space dropdown */}
-        <select
-          value={filters.spaceId || ""}
-          onChange={(e) => updateFilter("spaceId", e.target.value || undefined)}
-          className="text-sm px-3 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/40"
-        >
-          <option value="">
-            {t("finance.filters.allSpaces", "All Spaces")}
-          </option>
-          {spaces.map((s) => (
-            <option key={s.id} value={s.id}>
-              {s.icon} {s.name}
-            </option>
-          ))}
-        </select>
 
         {/* Type toggle */}
         <div className="flex gap-1.5">
@@ -98,35 +173,15 @@ const FilterBar = ({ filters, setFilters }: FilterBarProps) => {
             label={t("finance.categories.income", "Income")}
             active={filters.type === "Income"}
             onClick={() => updateFilter("type", "Income")}
-            color="bg-emerald-500"
+            color="bg-success"
           />
           <TypeButton
             label={t("finance.categories.expense", "Expense")}
             active={filters.type === "Expense"}
             onClick={() => updateFilter("type", "Expense")}
-            color="bg-red-500"
+            color="bg-danger"
           />
         </div>
-
-        <select
-          value={filters.currency || ""}
-          onChange={(e) =>
-            updateFilter(
-              "currency",
-              (e.target.value as CurrencyCode) || undefined,
-            )
-          }
-          className="text-sm px-3 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/40"
-        >
-          <option value="">
-            {t("finance.filters.allCurrencies", "All Currencies")}
-          </option>
-          {CURRENCIES.map((c) => (
-            <option key={c.code} value={c.code}>
-              {c.symbol} {c.code}
-            </option>
-          ))}
-        </select>
 
         {/* Toggle more filters */}
         <button
@@ -150,50 +205,30 @@ const FilterBar = ({ filters, setFilters }: FilterBarProps) => {
         )}
       </div>
 
-      {/* Expanded filters: tag + date range */}
-      {showMore && (
-        <div className="flex flex-wrap items-end gap-3 mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
-          {/* Tag filter */}
-          <div className="flex-1 min-w-[140px]">
-            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
-              {t("finance.filters.tag", "Tag")}
-            </label>
-            <input
-              type="text"
-              value={filters.tag || ""}
-              onChange={(e) => updateFilter("tag", e.target.value || undefined)}
-              placeholder={t(
-                "finance.filters.tagPlaceholder",
-                "Filter by tag…",
-              )}
-              className="w-full text-sm px-3 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/40"
-            />
-          </div>
+      {!isMobile && showMore && expandedFilters}
 
-          {/* Date range */}
-          <div className="min-w-[140px]">
-            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
-              {t("finance.filters.from", "From")}
-            </label>
-            <input
-              type="date"
-              value={filters.dateRange?.start || ""}
-              onChange={(e) => updateDateRange("start", e.target.value)}
-              className="text-sm px-3 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/40"
-            />
+      {/* Mobile filters as sheet */}
+      {isMobile && showMore && (
+        <>
+          <div
+            className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
+            onClick={() => setShowMore(false)}
+          />
+          <div className="sheet-panel">
+            <div className="flex items-center justify-between mb-2">
+              <p className="font-display text-base font-semibold text-gray-900 dark:text-white">
+                {t("finance.filters.more", "More Filters")}
+              </p>
+              <button
+                onClick={() => setShowMore(false)}
+                className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                <HiOutlineXMark className="h-5 w-5" />
+              </button>
+            </div>
+            {expandedFilters}
           </div>
-          <div className="min-w-[140px]">
-            <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
-              {t("finance.filters.to", "To")}
-            </label>
-            <input
-              type="date"
-              value={filters.dateRange?.end || ""}
-              onChange={(e) => updateDateRange("end", e.target.value)}
-              className="text-sm px-3 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/40"
-            />
-          </div>
-        </div>
+        </>
       )}
 
       {/* Active filter chips */}

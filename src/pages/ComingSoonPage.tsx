@@ -77,7 +77,7 @@ const ComingSoonPage = () => {
           <motion.div
             key={index}
             variants={itemVariants}
-            className="card p-8 group hover:-translate-y-2 transition-transform duration-300"
+            className="glass-card p-8 group hover:-translate-y-2 transition-transform duration-300"
           >
             <div
               className={`p-4 rounded-2xl w-16 h-16 flex items-center justify-center mb-6 ${feature.color}`}
@@ -96,7 +96,7 @@ const ComingSoonPage = () => {
         {/* Decorative coming soon block */}
         <motion.div
           variants={itemVariants}
-          className="md:col-span-2 card p-8 border-2 border-dashed border-primary/30 bg-primary/5 flex flex-col items-center justify-center text-center min-h-[200px]"
+          className="md:col-span-2 rounded-2xl p-8 border-2 border-dashed border-primary/30 bg-primary/5 flex flex-col items-center justify-center text-center min-h-[200px]"
         >
           <HiOutlinePlus className="w-12 h-12 text-primary/40 mb-4" />
           <h3 className="font-display text-xl font-semibold tracking-tight text-gray-500 dark:text-gray-400">

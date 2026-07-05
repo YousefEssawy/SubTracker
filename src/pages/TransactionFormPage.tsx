@@ -209,7 +209,7 @@ const TransactionFormPage = () => {
   }
 
   return (
-    <div className="max-w-lg mx-auto px-4 py-8">
+    <div className="max-w-2xl mx-auto py-2">
       {/* Back */}
       <button
         onClick={() => navigate("/transactions")}
@@ -227,7 +227,7 @@ const TransactionFormPage = () => {
             : t("finance.transactions.addExpense", "Add Expense")}
       </h1>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} className="glass-card rounded-3xl p-5 sm:p-7 space-y-5">
         {/* Type toggle */}
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">

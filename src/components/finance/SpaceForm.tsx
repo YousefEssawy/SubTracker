@@ -62,7 +62,7 @@ const SpaceForm = ({
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.92, opacity: 0, y: 20 }}
           transition={{ type: "spring", damping: 25, stiffness: 350 }}
-          className="bg-white dark:bg-surface-dark rounded-2xl shadow-2xl w-full max-w-md p-6"
+          className="bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-gray-800 w-full max-w-md p-6"
         >
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
