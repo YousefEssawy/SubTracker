@@ -1,0 +1,44 @@
+/**
+ * SubTracker — Typography tokens
+ * English/numbers: Inter. Arabic (html[lang="ar"] / html[dir="rtl"]): Cairo.
+ * Display/headline accents: Space Grotesk (falls back to Cairo/Inter).
+ * Tabular figures (amounts): IBM Plex Mono via the .figure utility class.
+ */
+
+:root {
+  --font-latin: 'Inter', system-ui, sans-serif;
+  --font-arabic: 'Cairo', 'Inter', system-ui, sans-serif;
+  --font-display: 'Space Grotesk', 'Cairo', 'Inter', system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+
+  /* Type scale */
+  --text-display: 2.5rem;    /* 40px — big dashboard numbers */
+  --text-h1: 1.875rem;       /* 30px */
+  --text-h2: 1.5rem;         /* 24px */
+  --text-h3: 1.25rem;        /* 20px */
+  --text-h4: 1.125rem;       /* 18px */
+  --text-body: 1rem;         /* 16px */
+  --text-body-sm: 0.875rem;  /* 14px */
+  --text-caption: 0.75rem;   /* 12px */
+
+  /* Line-height — Arabic body text always uses relaxed */
+  --leading-tight: 1.2;
+  --leading-snug: 1.35;
+  --leading-normal: 1.5;   /* English body */
+  --leading-relaxed: 1.65; /* Arabic body */
+}
+
+body {
+  font-family: var(--font-latin);
+}
+
+html[lang="ar"] body,
+html[dir="rtl"] body {
+  font-family: var(--font-arabic);
+  line-height: var(--leading-relaxed);
+}
+
+.figure {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}

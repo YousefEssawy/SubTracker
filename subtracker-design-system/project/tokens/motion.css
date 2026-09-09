@@ -1,0 +1,22 @@
+/**
+ * SubTracker — Motion tokens
+ * See design_system/motion-spec.md in the source repo for full interaction
+ * choreography (count-ups, dial fills, list stagger, sheets, sidebar, etc).
+ */
+:root {
+  --duration-fast: 140ms; /* @kind other */
+  --duration-base: 220ms; /* @kind other */
+  --duration-slow: 380ms; /* @kind other */
+
+  --ease-standard: cubic-bezier(0.34, 1.56, 0.64, 1); /* @kind other */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1); /* @kind other */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}

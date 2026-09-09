@@ -1,3 +1,3 @@
-const { processRecurrences } = require("./recurrenceProcessor");
+import { processRecurrences } from "./recurrenceProcessor.js";
 
-exports.dailyRecurrenceProcessor = processRecurrences;
+export const dailyRecurrenceProcessor = processRecurrences;

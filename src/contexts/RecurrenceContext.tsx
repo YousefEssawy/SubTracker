@@ -22,6 +22,7 @@ interface RecurrenceContextValue {
   loading: boolean;
   activeRecurrences: Recurrence[];
   pausedRecurrences: Recurrence[];
+  completedRecurrences: Recurrence[];
   addRecurrence: (data: RecurrenceInput) => Promise<Recurrence>;
   pauseRecurrence: (id: string) => Promise<void>;
   reactivateRecurrence: (
@@ -61,14 +62,16 @@ export const RecurrenceProvider = ({ children }: { children: ReactNode }) => {
     return () => unsub();
   }, [user]);
 
-  // Note: legacy recurrenceService used isActive boolean; new typed model uses status union.
-  // The toRecurrence mapper converts both formats correctly.
   const activeRecurrences = useMemo(
     () => recurrences.filter((r) => r.status === "active"),
     [recurrences],
   );
   const pausedRecurrences = useMemo(
     () => recurrences.filter((r) => r.status === "paused"),
+    [recurrences],
+  );
+  const completedRecurrences = useMemo(
+    () => recurrences.filter((r) => r.status === "completed"),
     [recurrences],
   );
 
@@ -103,6 +106,7 @@ export const RecurrenceProvider = ({ children }: { children: ReactNode }) => {
         loading,
         activeRecurrences,
         pausedRecurrences,
+        completedRecurrences,
         addRecurrence,
         pauseRecurrence,
         reactivateRecurrence,

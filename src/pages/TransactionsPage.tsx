@@ -7,6 +7,7 @@ import TransactionListItem from "@/components/finance/TransactionListItem";
 import FilterBar from "@/components/finance/FilterBar";
 import Pagination from "@/components/ui/Pagination";
 import BalanceCard from "@/components/finance/BalanceCard";
+import Button from "@/components/core/Button";
 
 const EmptyNoData = ({ onAdd }: { onAdd: () => void }) => {
   const { t } = useTranslation();
@@ -28,10 +29,10 @@ const EmptyNoData = ({ onAdd }: { onAdd: () => void }) => {
           "Record your first income or expense transaction to get started.",
         )}
       </p>
-      <button onClick={onAdd} className="btn-primary flex items-center gap-2">
+      <Button onClick={onAdd} className="flex items-center gap-2">
         <HiOutlinePlus className="w-4 h-4" />
         {t("finance.transactions.addTransaction", "Add Transaction")}
-      </button>
+      </Button>
     </motion.div>
   );
 };
@@ -73,16 +74,16 @@ const TransactionsPage = () => {
             {t("finance.transactions.subtitle", "Track your income and expenses.")}
           </p>
         </div>
-        <button
+        <Button
           onClick={() => navigate("/transactions/add")}
-          className="btn-primary flex items-center gap-2 text-sm whitespace-nowrap self-start sm:self-auto"
+          className="flex items-center gap-2 text-sm whitespace-nowrap self-start sm:self-auto"
         >
           <HiOutlinePlus className="w-4 h-4" />
           <span className="hidden sm:inline">
             {t("finance.transactions.addTransaction", "Add Transaction")}
           </span>
           <span className="sm:hidden">{t("finance.transactions.add", "Add")}</span>
-        </button>
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-[320px_minmax(0,1fr)] gap-4 lg:gap-6 items-start">

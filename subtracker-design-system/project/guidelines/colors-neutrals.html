@@ -1,0 +1,32 @@
+<!-- @dsCard group="Colors" viewport="700x180" name="Neutrals (Ink) & Surfaces" subtitle="Slate text/border scale, light + dark surfaces" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; padding: 20px 24px; font-family: var(--font-latin); background: var(--bg-page); }
+  .row { display: flex; gap: 6px; margin-bottom: 12px; }
+  .sw { flex: 1; border-radius: var(--radius-sm); overflow: hidden; box-shadow: var(--shadow-card); }
+  .sw .fill { height: 34px; }
+  .sw .label { background: var(--surface-card); padding: 4px 6px; font-size: 10px; color: var(--text-secondary); font-family: var(--font-mono); }
+  .surfaces { display: flex; gap: 10px; }
+  .surf { flex: 1; border-radius: var(--radius-md); padding: 12px; font-size: 11px; font-family: var(--font-mono); }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="sw"><div class="fill" style="background:var(--ink-900)"></div><div class="label">900</div></div>
+    <div class="sw"><div class="fill" style="background:var(--ink-700)"></div><div class="label">700</div></div>
+    <div class="sw"><div class="fill" style="background:var(--ink-500)"></div><div class="label">500</div></div>
+    <div class="sw"><div class="fill" style="background:var(--ink-300)"></div><div class="label">300</div></div>
+    <div class="sw"><div class="fill" style="background:var(--ink-200)"></div><div class="label">200</div></div>
+    <div class="sw"><div class="fill" style="background:var(--ink-100)"></div><div class="label">100</div></div>
+    <div class="sw"><div class="fill" style="background:var(--ink-050); border:1px solid #eee"></div><div class="label">050</div></div>
+  </div>
+  <div class="surfaces">
+    <div class="surf" style="background:var(--bg-page); color:var(--text-primary); border:1px solid var(--border-default)">bg-page (light)</div>
+    <div class="surf" style="background:var(--ink-900); color:#F1F5F9">bg-page (dark) #0F172A</div>
+  </div>
+</body>
+</html>

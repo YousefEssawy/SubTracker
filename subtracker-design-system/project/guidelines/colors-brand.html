@@ -1,0 +1,37 @@
+<!-- @dsCard group="Colors" viewport="700x210" name="Brand Scales" subtitle="Indigo primary, Pink accent — full 050-900 ramps" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; padding: 20px 24px; font-family: var(--font-latin); background: var(--bg-page); }
+  .row { display: flex; gap: 8px; margin-bottom: 14px; }
+  .sw { flex: 1; border-radius: var(--radius-sm); overflow: hidden; box-shadow: var(--shadow-card); }
+  .sw .fill { height: 44px; }
+  .sw .label { background: var(--surface-card); padding: 5px 8px; font-size: 10.5px; color: var(--text-secondary); font-family: var(--font-mono); }
+  .grouplabel { font-size: 11px; font-weight: 600; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+</style>
+</head>
+<body>
+  <div class="grouplabel">Primary (Indigo)</div>
+  <div class="row">
+    <div class="sw"><div class="fill" style="background:var(--brand-primary-900)"></div><div class="label">900</div></div>
+    <div class="sw"><div class="fill" style="background:var(--brand-primary-700)"></div><div class="label">700</div></div>
+    <div class="sw"><div class="fill" style="background:var(--brand-primary-600)"></div><div class="label">600</div></div>
+    <div class="sw"><div class="fill" style="background:var(--brand-primary-500)"></div><div class="label">500</div></div>
+    <div class="sw"><div class="fill" style="background:var(--brand-primary-400)"></div><div class="label">400</div></div>
+    <div class="sw"><div class="fill" style="background:var(--brand-primary-100)"></div><div class="label">100</div></div>
+    <div class="sw"><div class="fill" style="background:var(--brand-primary-050)"></div><div class="label">050</div></div>
+  </div>
+  <div class="grouplabel">Accent (Pink)</div>
+  <div class="row">
+    <div class="sw"><div class="fill" style="background:var(--brand-accent-700)"></div><div class="label">700</div></div>
+    <div class="sw"><div class="fill" style="background:var(--brand-accent-600)"></div><div class="label">600</div></div>
+    <div class="sw"><div class="fill" style="background:var(--brand-accent-500)"></div><div class="label">500</div></div>
+    <div class="sw"><div class="fill" style="background:var(--brand-accent-400)"></div><div class="label">400</div></div>
+    <div class="sw"><div class="fill" style="background:var(--brand-accent-100)"></div><div class="label">100</div></div>
+    <div class="sw"><div class="fill" style="background:var(--brand-accent-050)"></div><div class="label">050</div></div>
+  </div>
+</body>
+</html>

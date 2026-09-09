@@ -20,6 +20,9 @@ import type {
   SubscriptionInput,
   CategoryId,
 } from "@/models";
+import Button from "@/components/core/Button";
+import Input from "@/components/core/Input";
+import Select from "@/components/core/Select";
 
 const SubscriptionFormPage = () => {
   const { id } = useParams();
@@ -149,160 +152,117 @@ const SubscriptionFormPage = () => {
 
         <form onSubmit={handleSubmit} className="glass-card rounded-3xl p-6 sm:p-8 space-y-5">
           {/* Name */}
-          <div>
-            <label className="label-text">{t("subscriptionForm.name")}</label>
-            <input
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              placeholder={t("subscriptionForm.namePlaceholder")}
-              className="input-field"
-              required
-            />
-          </div>
+          <Input
+            label={t("subscriptionForm.name")}
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            placeholder={t("subscriptionForm.namePlaceholder")}
+            required
+          />
 
           {/* Price & Currency */}
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="label-text">
-                {t("subscriptionForm.price")}
-              </label>
-              <input
-                name="price"
-                type="number"
-                step="0.01"
-                min="0"
-                value={form.price}
-                onChange={handleChange}
-                placeholder="199.00"
-                className="input-field"
-                required
-              />
-            </div>
-            <div>
-              <label className="label-text">
-                {t("subscriptionForm.currency")}
-              </label>
-              <select
-                name="currency"
-                value={form.currency}
-                onChange={handleChange}
-                className="select-field"
-              >
-                {CURRENCIES.map((c) => (
-                  <option key={c.code} value={c.code}>
-                    {c.symbol} {c.code}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <Input
+              label={t("subscriptionForm.price")}
+              name="price"
+              type="number"
+              step="0.01"
+              min="0"
+              value={form.price}
+              onChange={handleChange}
+              placeholder="199.00"
+              required
+            />
+            <Select
+              label={t("subscriptionForm.currency")}
+              name="currency"
+              value={form.currency}
+              onChange={handleChange}
+            >
+              {CURRENCIES.map((c) => (
+                <option key={c.code} value={c.code}>
+                  {c.symbol} {c.code}
+                </option>
+              ))}
+            </Select>
           </div>
 
           {/* Category */}
-          <div>
-            <label className="label-text">
-              {t("subscriptionForm.category")}
-            </label>
-            <select
-              name="category"
-              value={form.category}
-              onChange={handleChange}
-              className="select-field"
-            >
-              {CATEGORIES.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.icon} {c.name}
-                </option>
-              ))}
-            </select>
-          </div>
+          <Select
+            label={t("subscriptionForm.category")}
+            name="category"
+            value={form.category}
+            onChange={handleChange}
+          >
+            {CATEGORIES.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.icon} {c.name}
+              </option>
+            ))}
+          </Select>
 
           {/* Billing Cycle */}
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="label-text">
-                {t("subscriptionForm.billingCycle")}
-              </label>
-              <select
-                name="billingCycle"
-                value={form.billingCycle}
-                onChange={handleChange}
-                className="select-field"
-              >
-                {BILLING_CYCLES.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <Select
+              label={t("subscriptionForm.billingCycle")}
+              name="billingCycle"
+              value={form.billingCycle}
+              onChange={handleChange}
+            >
+              {BILLING_CYCLES.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                </option>
+              ))}
+            </Select>
             {form.billingCycle === "custom" && (
-              <div>
-                <label className="label-text">
-                  {t("subscriptionForm.cycleDays")}
-                </label>
-                <input
-                  name="customCycleDays"
-                  type="number"
-                  min="1"
-                  value={form.customCycleDays}
-                  onChange={handleChange}
-                  placeholder={t("subscriptionForm.cycleDaysPlaceholder")}
-                  className="input-field"
-                  required
-                />
-              </div>
+              <Input
+                label={t("subscriptionForm.cycleDays")}
+                name="customCycleDays"
+                type="number"
+                min="1"
+                value={form.customCycleDays}
+                onChange={handleChange}
+                placeholder={t("subscriptionForm.cycleDaysPlaceholder")}
+                required
+              />
             )}
           </div>
 
           {/* Renewal Date */}
-          <div>
-            <label className="label-text">
-              {t("subscriptionForm.renewalDate")}
-            </label>
-            <input
-              name="renewalDate"
-              type="date"
-              value={form.renewalDate}
-              onChange={handleChange}
-              className="input-field"
-              required
-            />
-          </div>
+          <Input
+            label={t("subscriptionForm.renewalDate")}
+            name="renewalDate"
+            type="date"
+            value={form.renewalDate}
+            onChange={handleChange}
+            required
+          />
 
           {/* Payment Method */}
-          <div>
-            <label className="label-text">
-              {t("subscriptionForm.paymentMethod")}
-            </label>
-            <input
-              name="paymentMethod"
-              value={form.paymentMethod}
-              onChange={handleChange}
-              placeholder={t("subscriptionForm.paymentMethodPlaceholder")}
-              className="input-field"
-            />
-          </div>
+          <Input
+            label={t("subscriptionForm.paymentMethod")}
+            name="paymentMethod"
+            value={form.paymentMethod}
+            onChange={handleChange}
+            placeholder={t("subscriptionForm.paymentMethodPlaceholder")}
+          />
 
           {/* Status (only for edit) */}
           {isEdit && (
-            <div>
-              <label className="label-text">
-                {t("subscriptionForm.status")}
-              </label>
-              <select
-                name="status"
-                value={form.status}
-                onChange={handleChange}
-                className="select-field"
-              >
-                <option value="active">{t("subscriptionForm.active")}</option>
-                <option value="paused">{t("subscriptionForm.paused")}</option>
-                <option value="cancelled">
-                  {t("subscriptionForm.cancelled")}
-                </option>
-              </select>
-            </div>
+            <Select
+              label={t("subscriptionForm.status")}
+              name="status"
+              value={form.status}
+              onChange={handleChange}
+            >
+              <option value="active">{t("subscriptionForm.active")}</option>
+              <option value="paused">{t("subscriptionForm.paused")}</option>
+              <option value="cancelled">
+                {t("subscriptionForm.cancelled")}
+              </option>
+            </Select>
           )}
 
           {/* Notes */}
@@ -320,24 +280,25 @@ const SubscriptionFormPage = () => {
 
           {/* Actions */}
           <div className="flex gap-3 pt-2">
-            <button
+            <Button
               type="submit"
               disabled={loading}
-              className="btn-primary flex-1 py-3 disabled:opacity-50"
+              className="flex-1 py-3 disabled:opacity-50"
             >
               {loading
                 ? t("subscriptionForm.saving")
                 : isEdit
                   ? t("subscriptionForm.updateSubscription")
                   : t("subscriptionForm.addSubscription")}
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
+              variant="secondary"
               onClick={() => navigate(-1)}
-              className="btn-secondary px-6"
+              className="px-6"
             >
               {t("subscriptionForm.cancelBtn")}
-            </button>
+            </Button>
           </div>
         </form>
       </motion.div>

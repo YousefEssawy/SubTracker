@@ -6,7 +6,9 @@ import tseslint from "typescript-eslint";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
-  globalIgnores(["dist", "functions"]),
+  // subtracker-design-system is a generated design-system export (reference
+  // sources + guideline pages), not app code — it is not built or linted.
+  globalIgnores(["dist", "subtracker-design-system"]),
   {
     files: ["**/*.{js,jsx}"],
     extends: [
@@ -25,6 +27,31 @@ export default defineConfig([
     },
     rules: {
       "no-unused-vars": ["error", { varsIgnorePattern: "^[A-Z_]" }],
+    },
+  },
+  {
+    files: ["**/*.test.{js,jsx}"],
+    languageOptions: {
+      globals: {
+        ...globals.vitest,
+      },
+    },
+  },
+  {
+    files: ["scripts/**/*.js"],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+  {
+    files: ["functions/**/*.js"],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+      sourceType: "module",
     },
   },
   {
