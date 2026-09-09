@@ -15,5 +15,9 @@ export default defineConfig({
     globals: true,
     include: ["tests/emulator/**/*.test.ts"],
     testTimeout: 20000,
+    // Emulator tests share a single live Firestore emulator instance and a shared
+    // test environment singleton. Test files must run sequentially so that one
+    // file's beforeEach clearAllData() does not wipe documents seeded by another.
+    fileParallelism: false,
   },
 });

@@ -23,6 +23,10 @@ import {
   toDateInputValue,
 } from "@/utils/dateUtils";
 
+// Shared document builder lives in functions/ so firebase-tools includes it in the deploy archive.
+// A frontend import reaching into functions/ avoids build steps and duplicated code.
+import { buildRecurrenceDocument } from "../../functions/shared/recurrenceDocument.js";
+
 const colRef = (userId: string) =>
   collection(db, "users", userId, "recurrences");
 
@@ -59,28 +63,14 @@ const getCanonicalRecurrenceUpdates = (
   return updates;
 };
 
+export { buildRecurrenceDocument };
+
 export const addRecurrence = async (
   userId: string,
   data: RecurrenceInput,
 ): Promise<Recurrence> => {
-  const nextExec = calculateNextExecutionDate(
-    data.startDate,
-    data.pattern,
-    data.interval,
-  );
-  const nextDate = toDateInputValue(nextExec);
   const docData = {
-    type: data.type,
-    spaceId: data.spaceId,
-    categoryId: data.categoryId,
-    amount: Math.round(data.amount * 100) / 100,
-    currency: data.currency,
-    pattern: data.pattern,
-    interval: data.interval ?? 1,
-    startDate: data.startDate,
-    endDate: data.endDate ?? null,
-    nextDate,
-    status: data.status ?? "active",
+    ...buildRecurrenceDocument(data),
     createdAt: serverTimestamp(),
   };
   const ref = await addDoc(colRef(userId), docData);
