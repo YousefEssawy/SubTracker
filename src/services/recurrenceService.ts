@@ -18,14 +18,17 @@ import type {
   RecurrenceUpdate,
 } from "@/models/recurrence";
 import { toRecurrence } from "@/models/mappers";
-import {
-  calculateNextExecutionDate,
-  toDateInputValue,
-} from "@/utils/dateUtils";
+import { advanceDate } from "../../functions/shared/recurrenceDates.js";
 
 // Shared document builder lives in functions/ so firebase-tools includes it in the deploy archive.
 // A frontend import reaching into functions/ avoids build steps and duplicated code.
 import { buildRecurrenceDocument } from "../../functions/shared/recurrenceDocument.js";
+
+const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
+
+// Bounds the advance loop to prevent infinite spins on corrupted or ancient data.
+// Matches the rationale of the Cloud Function processor's backlog cap.
+const MAX_ADVANCE_ITERATIONS = 500;
 
 const colRef = (userId: string) =>
   collection(db, "users", userId, "recurrences");
@@ -115,16 +118,45 @@ export const reactivateRecurrence = async (
     if (normalized.status === "completed") {
       throw new Error("Cannot reactivate a completed recurrence");
     }
+
+    const anchor = normalized.nextDate;
+    if (typeof anchor !== "string" || !DATE_REGEX.test(anchor)) {
+      throw new Error(
+        `Cannot reactivate recurrence: invalid or missing anchor date "${anchor}". Expected YYYY-MM-DD.`,
+      );
+    }
+    const parsedAnchor = new Date(anchor + "T00:00:00Z");
+    if (
+      Number.isNaN(parsedAnchor.getTime()) ||
+      parsedAnchor.toISOString().slice(0, 10) !== anchor
+    ) {
+      throw new Error(
+        `Cannot reactivate recurrence: invalid anchor date "${anchor}". Expected YYYY-MM-DD.`,
+      );
+    }
+
     const effectivePattern = (
       pattern || normalized.pattern
     ).toLowerCase() as RecurrencePattern;
     const effectiveInterval = interval || normalized.interval;
-    const nextExec = calculateNextExecutionDate(
-      new Date(),
-      effectivePattern,
-      effectiveInterval,
-    );
-    const nextDate = toDateInputValue(nextExec);
+
+    const today = new Date().toISOString().slice(0, 10);
+    let cursor = anchor;
+    let iterations = 0;
+
+    // Skipped periods elapsed while paused are deliberately not back-filled or billed.
+    // Advancing past them until strictly in the future preserves the recurrence's own period day.
+    while (cursor <= today) {
+      if (iterations >= MAX_ADVANCE_ITERATIONS) {
+        throw new Error(
+          `Cannot reactivate recurrence: anchor is too far in the past (exceeded ${MAX_ADVANCE_ITERATIONS} iterations).`,
+        );
+      }
+      cursor = advanceDate(cursor, effectivePattern, effectiveInterval);
+      iterations++;
+    }
+
+    const nextDate = cursor;
     const updates = getCanonicalRecurrenceUpdates(snap.id, raw, {
       status: "active",
       nextDate,
