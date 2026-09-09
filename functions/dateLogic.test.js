@@ -1,4 +1,4 @@
-const { advanceDate } = require("./dateLogic");
+import { advanceDate } from "./dateLogic.js";
 
 describe("advanceDate", () => {
   it("advances weekly by 7 * interval days", () => {

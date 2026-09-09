@@ -1,7 +1,7 @@
-const { onSchedule } = require("firebase-functions/v2/scheduler");
-const { getFirestore, FieldValue } = require("firebase-admin/firestore");
-const { initializeApp } = require("firebase-admin/app");
-const { advanceDate } = require("./dateLogic");
+import { onSchedule } from "firebase-functions/v2/scheduler";
+import { getFirestore, FieldValue } from "firebase-admin/firestore";
+import { initializeApp } from "firebase-admin/app";
+import { advanceDate } from "./dateLogic.js";
 
 initializeApp();
 const db = getFirestore();
@@ -86,4 +86,4 @@ const processRecurrences = onSchedule("every day 00:00", async () => {
   console.log("Daily recurrence processing complete.");
 });
 
-module.exports = { processRecurrences };
+export { processRecurrences };

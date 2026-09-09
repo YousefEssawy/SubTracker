@@ -37,4 +37,4 @@ function advanceDate(dateStr, pattern, interval) {
   }
 }
 
-module.exports = { addMonthsClamped, advanceDate };
+export { addMonthsClamped, advanceDate };
