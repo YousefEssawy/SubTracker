@@ -30,6 +30,14 @@ export default defineConfig([
     },
   },
   {
+    files: ["**/*.test.{js,jsx}"],
+    languageOptions: {
+      globals: {
+        ...globals.vitest,
+      },
+    },
+  },
+  {
     files: ["**/*.{ts,tsx}"],
     extends: [
       ...tseslint.configs.recommended,

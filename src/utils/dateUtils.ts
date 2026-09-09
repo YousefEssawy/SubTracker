@@ -12,6 +12,7 @@ import i18n from "@/i18n";
 import type { BillingCycle } from "@/models/subscription";
 import type { RecurrencePattern } from "@/models/recurrence";
 import type { DateString } from "@/models/common";
+import { advanceDate } from "../../shared/recurrenceDates.js";
 
 /** A billing cycle constant entry used by forms */
 export interface BillingCycleOption {
@@ -148,8 +149,9 @@ export const getYearlyEquivalent = (
 // ── Recurrence helpers ─────────────────────────────────────────────────────
 
 /**
- * Advances a date by the given recurrence pattern and interval.
- * Note: pattern strings here are capitalised ("Weekly") to match legacy recurrence data.
+ * Advances a date by delegating to the shared UTC module with month-end clamping.
+ * Accepts lowercase Recurrence Patterns, lowercases input for legacy tolerance,
+ * and throws on any unrecognised pattern or invalid interval/date.
  */
 export const calculateNextExecutionDate = (
   currentDate: Date | DateString,
@@ -158,19 +160,9 @@ export const calculateNextExecutionDate = (
 ): Date => {
   const d =
     typeof currentDate === "string" ? parseISO(currentDate) : currentDate;
-  const normalised = pattern.toLowerCase();
-  switch (normalised) {
-    case "weekly":
-      return addDays(d, 7 * interval);
-    case "monthly":
-      return addMonths(d, interval);
-    case "yearly":
-      return addYears(d, interval);
-    case "daily":
-      return addDays(d, interval);
-    default:
-      return addMonths(d, interval);
-  }
+  const dateStr = format(d, "yyyy-MM-dd");
+  const nextDateStr = advanceDate(dateStr, pattern.toLowerCase(), interval);
+  return parseISO(nextDateStr);
 };
 
 /** Counts how many recurrence occurrences have passed between startDate and now. */

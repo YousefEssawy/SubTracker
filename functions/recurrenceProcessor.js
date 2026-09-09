@@ -1,7 +1,7 @@
 import { onSchedule } from "firebase-functions/v2/scheduler";
 import { getFirestore, FieldValue } from "firebase-admin/firestore";
 import { initializeApp } from "firebase-admin/app";
-import { advanceDate } from "./dateLogic.js";
+import { advanceDate } from "../shared/recurrenceDates.js";
 
 initializeApp();
 const db = getFirestore();
