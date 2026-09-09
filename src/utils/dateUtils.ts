@@ -12,7 +12,9 @@ import i18n from "@/i18n";
 import type { BillingCycle } from "@/models/subscription";
 import type { RecurrencePattern } from "@/models/recurrence";
 import type { DateString } from "@/models/common";
-import { advanceDate } from "../../shared/recurrenceDates.js";
+// Shared date module lives in functions/ so firebase-tools includes it in the deploy archive.
+// A frontend import reaching into functions/ avoids build steps and duplicated code.
+import { advanceDate } from "../../functions/shared/recurrenceDates.js";
 
 /** A billing cycle constant entry used by forms */
 export interface BillingCycleOption {

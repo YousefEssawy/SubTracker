@@ -1,4 +1,10 @@
 /**
+ * Shared date calculation module imported by both the Cloud Function and the frontend.
+ * Located in functions/ because firebase.json packages only the functions directory.
+ * Must stay dependency-free because it runs in both a browser bundle and a Node function.
+ */
+
+/**
  * Add `months` calendar months to `d`, clamping to the last valid day of the
  * target month instead of overflowing into the following month (e.g. Jan 31
  * + 1 month -> Feb 28/29, not Mar 3).
