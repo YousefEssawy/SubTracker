@@ -38,6 +38,14 @@ export default defineConfig([
     },
   },
   {
+    files: ["scripts/**/*.js"],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+    },
+  },
+  {
     files: ["**/*.{ts,tsx}"],
     extends: [
       ...tseslint.configs.recommended,
