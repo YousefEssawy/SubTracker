@@ -64,15 +64,46 @@ const asTransactionType = (v: unknown): TransactionType => {
   return v === "Income" || v === "Expense" ? v : "Expense";
 };
 
-const asRecurrenceStatus = (v: unknown): RecurrenceStatus => {
-  return v === "active" || v === "paused" ? v : "active";
+const asRecurrenceStatus = (
+  status: unknown,
+  isActive?: unknown,
+): RecurrenceStatus => {
+  if (status === "active" || status === "paused") {
+    return status;
+  }
+  if (typeof isActive === "boolean") {
+    return isActive ? "active" : "paused";
+  }
+  return "active";
 };
 
 const asRecurrencePattern = (v: unknown): RecurrencePattern => {
   const allowed: RecurrencePattern[] = ["daily", "weekly", "monthly", "yearly"];
-  return allowed.includes(v as RecurrencePattern)
-    ? (v as RecurrencePattern)
+  const normalized = typeof v === "string" ? v.toLowerCase() : "";
+  return allowed.includes(normalized as RecurrencePattern)
+    ? (normalized as RecurrencePattern)
     : "monthly";
+};
+
+const asRecurrenceNextDate = (
+  nextDate: unknown,
+  nextExecutionDate?: unknown,
+  fallback = "",
+): DateString => {
+  if (typeof nextDate === "string" && nextDate.length > 0) {
+    return nextDate as DateString;
+  }
+  if (typeof nextExecutionDate === "string" && nextExecutionDate.length > 0) {
+    return nextExecutionDate as DateString;
+  }
+  return fallback as DateString;
+};
+
+const isLegacyRecurrenceDoc = (data: DocumentData): boolean => {
+  const hasStatus = data["status"] === "active" || data["status"] === "paused";
+  const hasNextDate =
+    typeof data["nextDate"] === "string" && data["nextDate"].length > 0;
+  return !(hasStatus && hasNextDate);
 };
 
 const asAttachmentMeta = (v: unknown): AttachmentMeta | null => {
@@ -179,8 +210,9 @@ export function toRecurrence(id: string, data: DocumentData): Recurrence {
     interval: asNumber(data["interval"], 1),
     startDate: asString(data["startDate"]) as DateString,
     endDate: asNullableString(data["endDate"]) as DateString | null,
-    nextDate: asString(data["nextDate"]) as DateString,
-    status: asRecurrenceStatus(data["status"]),
+    nextDate: asRecurrenceNextDate(data["nextDate"], data["nextExecutionDate"]),
+    status: asRecurrenceStatus(data["status"], data["isActive"]),
+    isLegacySchema: isLegacyRecurrenceDoc(data),
     createdAt: asISOString(data["createdAt"]),
   };
 }

@@ -61,8 +61,6 @@ export const RecurrenceProvider = ({ children }: { children: ReactNode }) => {
     return () => unsub();
   }, [user]);
 
-  // Note: legacy recurrenceService used isActive boolean; new typed model uses status union.
-  // The toRecurrence mapper converts both formats correctly.
   const activeRecurrences = useMemo(
     () => recurrences.filter((r) => r.status === "active"),
     [recurrences],

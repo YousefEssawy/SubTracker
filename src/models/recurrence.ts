@@ -32,14 +32,22 @@ export interface Recurrence {
   /** The next scheduled generation date in YYYY-MM-DD format */
   nextDate: DateString;
   status: RecurrenceStatus;
+  /**
+   * True when the document was written by the pre-migration client and
+   * has been normalised on read.
+   */
+  isLegacySchema: boolean;
   createdAt: ISOString;
 }
 
 /**
  * Payload for creating a new recurrence rule.
- * Server-generated fields (id, createdAt, nextDate) are excluded.
+ * Server-generated fields (id, createdAt, nextDate, isLegacySchema) are excluded.
  */
-export type RecurrenceInput = Omit<Recurrence, "id" | "createdAt" | "nextDate">;
+export type RecurrenceInput = Omit<
+  Recurrence,
+  "id" | "createdAt" | "nextDate" | "isLegacySchema"
+>;
 
 /** Payload for updating an existing recurrence rule. All fields optional. */
 export type RecurrenceUpdate = Partial<RecurrenceInput>;

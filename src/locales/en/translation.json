@@ -446,7 +446,9 @@
       "deleteSuccess": "Recurrence deleted. Existing transactions preserved.",
       "deleteError": "Failed to delete.",
       "createSuccess": "Recurrence created!",
-      "createError": "Failed to create recurrence."
+      "createError": "Failed to create recurrence.",
+      "legacyBadge": "Needs attention",
+      "legacyNotice": "This rule predates a schema change and should be checked."
     },
     "balance": {
       "title": "Balance",

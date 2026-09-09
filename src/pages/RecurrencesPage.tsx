@@ -6,6 +6,7 @@ import {
   HiOutlineTrash,
   HiOutlinePause,
   HiOutlinePlay,
+  HiOutlineExclamationTriangle,
 } from "react-icons/hi2";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
@@ -81,6 +82,13 @@ const RecurrenceCard = ({
               ? t("finance.categories.income", "Income")
               : t("finance.categories.expense", "Expense")}
           </span>
+          {recurrence.isLegacySchema && (
+            <span
+              className="flex-shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-300/50 dark:border-amber-700/50"
+            >
+              {t("finance.recurrences.legacyBadge", "Needs attention")}
+            </span>
+          )}
         </div>
         <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">
           {patternLabel(recurrence.pattern, recurrence.interval, t)}
@@ -92,6 +100,17 @@ const RecurrenceCard = ({
             </>
           )}
         </p>
+        {recurrence.isLegacySchema && (
+          <p className="text-xs font-medium text-amber-700 dark:text-amber-400 mt-1 flex items-center gap-1">
+            <HiOutlineExclamationTriangle className="w-3.5 h-3.5 flex-shrink-0" />
+            <span>
+              {t(
+                "finance.recurrences.legacyNotice",
+                "This rule predates a schema change and should be checked.",
+              )}
+            </span>
+          </p>
+        )}
       </div>
 
       <div className="text-right flex-shrink-0">
