@@ -69,3 +69,73 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  emulator-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install functions dependencies
+        run: npm ci
+        working-directory: functions
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "21"
+
+      - name: Run emulator tests
+        run: npm run test:emulator:ci
+
+  deploy-firebase:
+    needs: [build-and-deploy, emulator-tests]
+    # Gated off until an operator completes the following prerequisites:
+    # 1. Export the live production Firestore indexes (e.g. `firebase firestore:indexes`)
+    #    and merge them into firestore.indexes.json.
+    # 2. Add the FIREBASE_SERVICE_ACCOUNT secret to repository secrets.
+    if: false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install functions dependencies
+        run: npm ci
+        working-directory: functions
+
+      - name: Add node_modules bin to PATH
+        run: echo "$GITHUB_WORKSPACE/node_modules/.bin" >> "$GITHUB_PATH"
+
+      - name: Authenticate with Firebase Service Account
+        run: |
+          echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}" > /tmp/firebase-service-account.json
+          echo "GOOGLE_APPLICATION_CREDENTIALS=/tmp/firebase-service-account.json" >> "$GITHUB_ENV"
+
+      - name: Deploy rules, storage, and functions
+        run: firebase deploy --only firestore:rules,storage,functions
+
+      # Step B: This deploy is a declarative override which deletes any index or
+      # fieldOverrides entry absent from firestore.indexes.json. The file currently
+      # declares an empty set, so deploying it as-is would drop every production index.
+      - name: Deploy Firestore indexes
+        run: firebase deploy --only firestore:indexes

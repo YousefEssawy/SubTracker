@@ -8,7 +8,7 @@ import { defineConfig, globalIgnores } from "eslint/config";
 export default defineConfig([
   // subtracker-design-system is a generated design-system export (reference
   // sources + guideline pages), not app code — it is not built or linted.
-  globalIgnores(["dist", "functions", "subtracker-design-system"]),
+  globalIgnores(["dist", "subtracker-design-system"]),
   {
     files: ["**/*.{js,jsx}"],
     extends: [
@@ -43,6 +43,15 @@ export default defineConfig([
       globals: {
         ...globals.node,
       },
+    },
+  },
+  {
+    files: ["functions/**/*.js"],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+      },
+      sourceType: "module",
     },
   },
   {

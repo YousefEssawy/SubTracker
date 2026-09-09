@@ -27,3 +27,7 @@ The emulator suite requires a live Java emulator process (`firebase-tools`) and 
 
 ### 1. One-shot execution (CI mode)
 Starts the emulators, executes the emulator test suite, and shuts down the emulators automatically:
+
+## CI Environment
+
+CI runs the emulator test suite automatically on every push and workflow dispatch via the `emulator-tests` job (`npm run test:emulator:ci`). The CI workflow provisions its own JDK using `actions/setup-java`, so the local Java `PATH` caveat does not apply in the CI environment.
