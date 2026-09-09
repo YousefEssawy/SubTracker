@@ -12,6 +12,7 @@ import { useSpaces } from "@/contexts/SpaceContext";
 import SpaceForm from "@/components/finance/SpaceForm";
 import type { Space, SpaceInput } from "@/models";
 import { getErrorMessage } from "@/utils/errors";
+import Button from "@/components/core/Button";
 
 // ── Confirmation dialog ────────────────────────────────────────────────────────
 const ConfirmDialog = ({
@@ -158,10 +159,10 @@ const EmptyState = ({ onAdd }: { onAdd: () => void }) => {
           "Spaces help you organise your finances by context — work, home, travel, and more.",
         )}
       </p>
-      <button onClick={onAdd} className="btn-primary flex items-center gap-2">
+      <Button onClick={onAdd} className="flex items-center gap-2">
         <HiOutlinePlus className="w-4 h-4" />
         {t("finance.spaces.createFirst", "Create your first space")}
-      </button>
+      </Button>
     </motion.div>
   );
 };
@@ -252,13 +253,10 @@ const SpacesPage = () => {
             })}
           </p>
         </div>
-        <button
-          onClick={handleAdd}
-          className="btn-primary flex items-center gap-2"
-        >
+        <Button onClick={handleAdd} className="flex items-center gap-2">
           <HiOutlinePlus className="w-4 h-4" />
           {t("finance.spaces.addSpace", "Add Space")}
-        </button>
+        </Button>
       </div>
 
       {/* List */}

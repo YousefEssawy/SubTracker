@@ -8,6 +8,7 @@ import { useSpaces } from "@/contexts/SpaceContext";
 import { useCategories } from "@/contexts/CategoryContext";
 import { formatDate } from "@/utils/dateUtils";
 import type { Transaction } from "@/models";
+import Card from "@/components/core/Card";
 
 const TransactionDetailPage = () => {
   const { id } = useParams();
@@ -66,7 +67,7 @@ const TransactionDetailPage = () => {
         </button>
       </div>
 
-      <div className="glass-card rounded-3xl p-6 shadow-sm space-y-5">
+      <Card className="rounded-3xl shadow-sm space-y-5" padding="24px">
         {/* Amount hero */}
         <div className="text-center pb-5 border-b border-gray-100 dark:border-gray-800">
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
@@ -148,7 +149,7 @@ const TransactionDetailPage = () => {
             </p>
           </div>
         )}
-      </div>
+      </Card>
     </div>
   );
 };

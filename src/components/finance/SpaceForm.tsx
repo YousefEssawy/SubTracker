@@ -8,6 +8,7 @@ import {
   DEFAULT_SPACE_COLOR,
   DEFAULT_SPACE_ICON,
 } from "@/utils/spaceDefaults";
+import Button from "@/components/core/Button";
 import type { Space, SpaceInput } from "@/models";
 
 interface SpaceFormProps {
@@ -176,17 +177,17 @@ const SpaceForm = ({
               >
                 {t("finance.spaces.cancel", "Cancel")}
               </button>
-              <button
+              <Button
                 type="submit"
                 disabled={loading}
-                className="flex-1 py-2.5 rounded-xl btn-primary text-sm font-medium disabled:opacity-50"
+                className="flex-1 py-2.5 rounded-xl text-sm font-medium disabled:opacity-50"
               >
                 {loading
                   ? t("finance.spaces.saving", "Saving…")
                   : isEditing
                     ? t("finance.spaces.saveChanges", "Save Changes")
                     : t("finance.spaces.createSpace", "Create Space")}
-              </button>
+              </Button>
             </div>
           </form>
         </motion.div>

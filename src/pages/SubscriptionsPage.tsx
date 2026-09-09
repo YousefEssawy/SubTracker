@@ -24,6 +24,7 @@ import {
 } from "react-icons/hi2";
 import ConfirmDialog from "@/components/ui/ConfirmDialog";
 import { useTranslation } from "react-i18next";
+import Card from "@/components/core/Card";
 import { TFunction } from "i18next";
 import type { SubscriptionStatus, CurrencyCode, Subscription } from "@/models";
 
@@ -355,7 +356,7 @@ const SubscriptionsPage = () => {
 
       {/* List */}
       {filtered.length === 0 ? (
-        <div className="glass-card p-12 text-center">
+        <Card className="text-center" padding="48px">
           <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-primary/10 flex items-center justify-center">
             <HiOutlinePlus className="w-7 h-7 text-primary" />
           </div>
@@ -373,7 +374,7 @@ const SubscriptionsPage = () => {
               {t("subscriptions.addFirstSubscription")}
             </Link>
           )}
-        </div>
+        </Card>
       ) : (
         <div className="glass-card p-2 sm:p-3 space-y-4">
           <SubscriptionGroup

@@ -15,6 +15,7 @@ import { useCategories } from "@/contexts/CategoryContext";
 import { formatDate } from "@/utils/dateUtils";
 import { formatCurrency } from "@/utils/currencies";
 import RecurrenceForm from "@/components/finance/RecurrenceForm";
+import Button from "@/components/core/Button";
 import type { Recurrence, Space, Category } from "@/models";
 import type { TFunction } from "i18next";
 
@@ -203,13 +204,10 @@ const RecurrencesPage = () => {
         <h1 className="page-title">
           {t("finance.recurrences.title", "Recurrences")}
         </h1>
-        <button
-          onClick={() => setShowForm(true)}
-          className="btn-primary flex items-center gap-2"
-        >
+        <Button onClick={() => setShowForm(true)} className="flex items-center gap-2">
           <HiOutlinePlus className="w-4 h-4" />
           {t("finance.recurrences.add", "Add")}
-        </button>
+        </Button>
       </div>
 
       {isEmpty ? (
@@ -230,13 +228,10 @@ const RecurrencesPage = () => {
               "Set up recurring transactions to automate your income and expense tracking.",
             )}
           </p>
-          <button
-            onClick={() => setShowForm(true)}
-            className="btn-primary flex items-center gap-2"
-          >
+          <Button onClick={() => setShowForm(true)} className="flex items-center gap-2">
             <HiOutlinePlus className="w-4 h-4" />
             {t("finance.recurrences.createRecurrence", "Create Recurrence")}
-          </button>
+          </Button>
         </motion.div>
       ) : (
         <div className="glass-card p-2 sm:p-3 space-y-4">

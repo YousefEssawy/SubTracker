@@ -11,6 +11,7 @@ import {
 import AuthShell from "@/components/layout/AuthShell";
 import { useTranslation } from "react-i18next";
 import { formatAuthErrorMessage } from "@/utils/errors";
+import Button from "@/components/core/Button";
 
 const LoginPage = () => {
   const { t } = useTranslation();
@@ -106,13 +107,9 @@ const LoginPage = () => {
             </button>
           </div>
         </div>
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full btn-primary py-3 disabled:opacity-50"
-        >
+        <Button type="submit" disabled={loading} className="w-full py-3 disabled:opacity-50">
           {loading ? t("login.signingIn") : t("login.signIn")}
-        </button>
+        </Button>
       </form>
 
       <button

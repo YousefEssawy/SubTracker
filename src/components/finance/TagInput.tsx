@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { HiOutlineXMark } from "react-icons/hi2";
+import Badge from "@/components/core/Badge";
 
 interface TagInputProps {
   tags?: string[];
@@ -71,19 +71,9 @@ const TagInput = ({
       {/* Tag chips */}
       <div className="flex flex-wrap gap-2 mb-2">
         {tags.map((tag) => (
-          <span
-            key={tag}
-            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary"
-          >
+          <Badge key={tag} tone="primary" onRemove={() => removeTag(tag)}>
             #{tag}
-            <button
-              type="button"
-              onClick={() => removeTag(tag)}
-              className="hover:text-red-500 transition-colors"
-            >
-              <HiOutlineXMark className="w-3 h-3" />
-            </button>
-          </span>
+          </Badge>
         ))}
       </div>
 

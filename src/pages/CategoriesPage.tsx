@@ -12,6 +12,7 @@ import { useCategories } from "@/contexts/CategoryContext";
 import CategoryForm from "@/components/finance/CategoryForm";
 import { getErrorMessage } from "@/utils/errors";
 import type { Category, CategoryInput } from "@/models";
+import Button from "@/components/core/Button";
 
 // ── Type badge ─────────────────────────────────────────────────────────────────
 const TypeBadge = ({ type }: { type: "Income" | "Expense" }) => {
@@ -166,10 +167,10 @@ const EmptyState = ({ onAdd }: { onAdd: () => void }) => {
           "Create Income and Expense categories to classify your transactions.",
         )}
       </p>
-      <button onClick={onAdd} className="btn-primary flex items-center gap-2">
+      <Button onClick={onAdd} className="flex items-center gap-2">
         <HiOutlinePlus className="w-4 h-4" />
         {t("finance.categories.createFirst", "Create your first category")}
-      </button>
+      </Button>
     </motion.div>
   );
 };
@@ -288,13 +289,10 @@ const CategoriesPage = () => {
             {t("finance.categories.expense", "expense")}
           </p>
         </div>
-        <button
-          onClick={handleAdd}
-          className="btn-primary flex items-center gap-2"
-        >
+        <Button onClick={handleAdd} className="flex items-center gap-2">
           <HiOutlinePlus className="w-4 h-4" />
           {t("finance.categories.addCategory", "Add Category")}
-        </button>
+        </Button>
       </div>
 
       {/* Type filter tabs */}

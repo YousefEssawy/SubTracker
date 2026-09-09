@@ -7,6 +7,7 @@ import { useRecurrences } from "@/contexts/RecurrenceContext";
 import { CURRENCIES } from "@/utils/currencies";
 import { toDateInputValue } from "@/utils/dateUtils";
 import { HiOutlineXMark } from "react-icons/hi2";
+import Button from "@/components/core/Button";
 import type { TransactionType, CurrencyCode, RecurrencePattern } from "@/models";
 import { getErrorMessage } from "@/utils/errors";
 
@@ -296,15 +297,15 @@ const RecurrenceForm = ({ onClose }: RecurrenceFormProps) => {
             </div>
           </div>
 
-          <button
+          <Button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 rounded-xl btn-primary font-medium disabled:opacity-50 mt-2"
+            className="w-full py-2.5 rounded-xl font-medium disabled:opacity-50 mt-2"
           >
             {loading
               ? t("finance.recurrences.creating", "Creating…")
               : t("finance.recurrences.createRecurrence", "Create Recurrence")}
-          </button>
+          </Button>
         </form>
       </div>
     </div>

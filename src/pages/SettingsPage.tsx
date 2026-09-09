@@ -8,6 +8,9 @@ import { CURRENCIES, DEFAULT_CURRENCY } from "@/utils/currencies";
 import { HiOutlineSun, HiOutlineMoon, HiOutlineCheck } from "react-icons/hi2";
 import { useTranslation } from "react-i18next";
 import type { CurrencyCode } from "@/models";
+import Button from "@/components/core/Button";
+import Card from "@/components/core/Card";
+import Select from "@/components/core/Select";
 
 const SettingsPage = () => {
   const { user } = useAuth();
@@ -78,10 +81,7 @@ const SettingsPage = () => {
         <h1 className="font-display text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
           {t("settings.title")}
         </h1>
-        <button
-          onClick={handleSave}
-          className="btn-primary flex items-center gap-2 text-sm whitespace-nowrap"
-        >
+        <Button onClick={handleSave} className="flex items-center gap-2 text-sm whitespace-nowrap">
           {saved ? (
             <>
               <HiOutlineCheck className="w-4 h-4" /> {t("settings.saved")}
@@ -89,11 +89,11 @@ const SettingsPage = () => {
           ) : (
             t("settings.savePreferences")
           )}
-        </button>
+        </Button>
       </div>
 
       {/* Profile */}
-      <div className="glass-card p-6">
+      <Card padding="24px">
         <p className={sectionLabel}>{t("settings.profile")}</p>
         <div className="mt-4 flex items-center gap-4">
           {user?.photoURL ? (
@@ -110,10 +110,10 @@ const SettingsPage = () => {
             <p className="text-sm text-gray-500">{user?.email}</p>
           </div>
         </div>
-      </div>
+      </Card>
 
       {/* Appearance */}
-      <div className="glass-card p-6">
+      <Card padding="24px">
         <p className={sectionLabel}>{t("settings.appearance")}</p>
         <div className="mt-4 inline-flex w-full rounded-full bg-gray-100 dark:bg-gray-800 p-1">
           <button
@@ -133,48 +133,42 @@ const SettingsPage = () => {
             {t("settings.dark")}
           </button>
         </div>
-      </div>
+      </Card>
 
       {/* Preferences */}
-      <div className="glass-card p-6 space-y-5">
+      <Card className="space-y-5" padding="24px">
         <p className={sectionLabel}>{t("settings.preferences")}</p>
-        <div>
-          <label className="label-text">{t("settings.displayCurrency")}</label>
-          <select
-            value={settings.preferredCurrency}
-            onChange={(e) =>
-              setSettings((prev) => ({
-                ...prev,
-                preferredCurrency: e.target.value as CurrencyCode,
-              }))
-            }
-            className="select-field"
-          >
-            {CURRENCIES.map((c) => (
-              <option key={c.code} value={c.code}>
-                {c.symbol} {c.code} - {c.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <label className="label-text">{t("settings.reminderDays")}</label>
-          <select
-            value={settings.reminderDays}
-            onChange={(e) =>
-              setSettings((prev) => ({
-                ...prev,
-                reminderDays: parseInt(e.target.value),
-              }))
-            }
-            className="select-field"
-          >
-            <option value={1}>{t("settings.dayBefore", { count: 1 })}</option>
-            <option value={3}>{t("settings.daysBefore", { count: 3 })}</option>
-            <option value={7}>{t("settings.daysBefore", { count: 7 })}</option>
-          </select>
-        </div>
-      </div>
+        <Select
+          label={t("settings.displayCurrency")}
+          value={settings.preferredCurrency}
+          onChange={(e) =>
+            setSettings((prev) => ({
+              ...prev,
+              preferredCurrency: e.target.value as CurrencyCode,
+            }))
+          }
+        >
+          {CURRENCIES.map((c) => (
+            <option key={c.code} value={c.code}>
+              {c.symbol} {c.code} - {c.name}
+            </option>
+          ))}
+        </Select>
+        <Select
+          label={t("settings.reminderDays")}
+          value={settings.reminderDays}
+          onChange={(e) =>
+            setSettings((prev) => ({
+              ...prev,
+              reminderDays: parseInt(e.target.value),
+            }))
+          }
+        >
+          <option value={1}>{t("settings.dayBefore", { count: 1 })}</option>
+          <option value={3}>{t("settings.daysBefore", { count: 3 })}</option>
+          <option value={7}>{t("settings.daysBefore", { count: 7 })}</option>
+        </Select>
+      </Card>
     </motion.div>
   );
 };
