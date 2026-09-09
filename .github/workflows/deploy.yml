@@ -3,6 +3,8 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [production]
+  pull_request:
+    branches: [production]
   workflow_dispatch:
 
 permissions:
@@ -11,7 +13,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: "pages"
+  group: "pages-${{ github.event_name }}-${{ github.ref }}"
   cancel-in-progress: true
 
 jobs:
@@ -62,11 +64,13 @@ jobs:
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
       - name: Deploy to GitHub Pages
+        if: github.event_name != 'pull_request'
         id: deployment
         uses: actions/deploy-pages@v4
 
@@ -100,10 +104,15 @@ jobs:
 
   deploy-firebase:
     needs: [build-and-deploy, emulator-tests]
-    # Gated off until an operator completes the following prerequisites:
-    # 1. Export the live production Firestore indexes (e.g. `firebase firestore:indexes`)
-    #    and merge them into firestore.indexes.json.
-    # 2. Add the FIREBASE_SERVICE_ACCOUNT secret to repository secrets.
+    # Gated off until an operator completes the remaining prerequisite:
+    # 1. [SATISFIED 2026-09-09] Export live production Firestore indexes (`firebase firestore:indexes --project subtraker-3dca8`
+    #    verified: `{ "indexes": [], "fieldOverrides": [] }` — production has no composite indexes or overrides,
+    #    so firestore.indexes.json matches production exactly and index deploy would delete nothing).
+    #    NOTE: Production currently has no composite indexes, yet transaction queries combine equality filters
+    #    with orderBy on a different field, causing failed-precondition errors in production today (tracked defect).
+    #    WARNING: `firebase deploy --only firestore:indexes` is a declarative override; this becomes relevant
+    #    again the moment an operator adds an index through the Firebase console.
+    # 2. Add the FIREBASE_SERVICE_ACCOUNT secret to repository secrets (sole remaining blocker).
     if: false
     runs-on: ubuntu-latest
     steps:
