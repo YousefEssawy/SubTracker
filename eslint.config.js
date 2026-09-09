@@ -6,7 +6,9 @@ import tseslint from "typescript-eslint";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
-  globalIgnores(["dist", "functions"]),
+  // subtracker-design-system is a generated design-system export (reference
+  // sources + guideline pages), not app code — it is not built or linted.
+  globalIgnores(["dist", "functions", "subtracker-design-system"]),
   {
     files: ["**/*.{js,jsx}"],
     extends: [

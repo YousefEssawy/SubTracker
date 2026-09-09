@@ -1,0 +1,66 @@
+<!-- @dsCard group="Components" viewport="700x900" name="Finance Components" subtitle="BalanceCard, TransactionListItem, TagInput, FileUpload, FilterBar, forms — from src/components/finance" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  body { margin: 0; padding: 20px 24px; background: var(--bg-page); font-family: var(--font-latin); }
+  .lbl { font-size: 10.5px; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: .06em; margin: 22px 0 8px; font-family: var(--font-mono); }
+  .lbl:first-child { margin-top: 0; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { BalanceCard, TransactionListItem, TagInput, FileUpload, FilterBar, SpaceForm, CategoryForm, RecurrenceForm } = window.SubTrackerDesignSystem_ae138e;
+
+function Demo() {
+  const [tags, setTags] = React.useState(["streaming", "shared"]);
+  const [file, setFile] = React.useState(null);
+  const [filters, setFilters] = React.useState({ type: "Expense" });
+  const [showSpaceForm, setShowSpaceForm] = React.useState(false);
+  const [showCategoryForm, setShowCategoryForm] = React.useState(false);
+  const [showRecurrenceForm, setShowRecurrenceForm] = React.useState(false);
+  const spaces = [{ id: "1", name: "Household", icon: "🏠" }, { id: "2", name: "Personal", icon: "💼" }];
+
+  return (
+    <div>
+      <div className="lbl">BalanceCard</div>
+      <BalanceCard variant="summary" balances={{ EGP: { balance: 2355, income: 4230, expense: 1875 } }} />
+
+      <div className="lbl">TransactionListItem</div>
+      <div className="glass-card" style={{ padding: 8 }}>
+        <TransactionListItem transaction={{ type: "Expense", amount: 250, currency: "EGP", transactionDate: "Jul 3" }} category={{ name: "Streaming", icon: "🎬", color: "#EF4444" }} space={{ name: "Household" }} />
+        <TransactionListItem transaction={{ type: "Income", amount: 8500, currency: "EGP", transactionDate: "Jul 1" }} category={{ name: "Salary", icon: "💰", color: "#10B981" }} space={{ name: "Personal" }} />
+      </div>
+
+      <div className="lbl">TagInput</div>
+      <TagInput tags={tags} onChange={setTags} />
+
+      <div className="lbl">FileUpload</div>
+      <FileUpload file={file} onFileSelect={setFile} onRemove={() => setFile(null)} />
+
+      <div className="lbl">FilterBar</div>
+      <FilterBar spaces={spaces} filters={filters} setFilters={setFilters} />
+
+      <div className="lbl">Modals — SpaceForm / CategoryForm / RecurrenceForm</div>
+      <div style={{ display: "flex", gap: 10 }}>
+        <button className="btn-secondary" onClick={() => setShowSpaceForm(true)}>Open SpaceForm</button>
+        <button className="btn-secondary" onClick={() => setShowCategoryForm(true)}>Open CategoryForm</button>
+        <button className="btn-secondary" onClick={() => setShowRecurrenceForm(true)}>Open RecurrenceForm</button>
+      </div>
+      {showSpaceForm && <SpaceForm onClose={() => setShowSpaceForm(false)} onSubmit={() => setShowSpaceForm(false)} />}
+      {showCategoryForm && <CategoryForm onClose={() => setShowCategoryForm(false)} onSubmit={() => setShowCategoryForm(false)} />}
+      {showRecurrenceForm && <RecurrenceForm spaces={spaces} categories={[{id:'1',name:'Rent'}]} onClose={() => setShowRecurrenceForm(false)} onSubmit={() => setShowRecurrenceForm(false)} />}
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+</script>
+</body>
+</html>

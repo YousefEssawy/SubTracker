@@ -1,0 +1,146 @@
+<!-- @dsCard group="SubTracker App" viewport="1280x760" name="App Shell" subtitle="Login → Dashboard → Subscriptions → Transactions → Settings, click-through" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>SubTracker — UI Kit</title>
+<link rel="stylesheet" href="../../styles.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  html, body { margin: 0; height: 100%; background: var(--bg-page); font-family: var(--font-latin); }
+  #root { height: 100%; }
+  a { color: var(--link-color); }
+  a:hover { color: var(--link-hover); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="demoData.js"></script>
+<script type="text/babel" src="LoginScreen.jsx"></script>
+<script type="text/babel" src="DashboardScreen.jsx"></script>
+<script type="text/babel" src="SubscriptionsScreen.jsx"></script>
+<script type="text/babel" src="TransactionsScreen.jsx"></script>
+<script type="text/babel" src="SettingsScreen.jsx"></script>
+<script type="text/babel">
+const { Header, Sidebar, BottomTabBar } = window.SubTrackerDesignSystem_ae138e;
+
+const NAV = [
+  { path: "dashboard", label: "Dashboard" },
+  { path: "subscriptions", label: "Subscriptions" },
+  { path: "transactions", label: "Transactions" },
+  { path: "settings", label: "Settings" },
+];
+
+function App() {
+  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [screen, setScreen] = React.useState("dashboard");
+  const [theme, setTheme] = React.useState("light");
+  const [lang, setLang] = React.useState("en");
+
+  React.useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+  }, [theme]);
+  React.useEffect(() => {
+    document.documentElement.setAttribute("lang", lang);
+    document.documentElement.setAttribute("dir", lang === "ar" ? "rtl" : "ltr");
+  }, [lang]);
+
+  if (!loggedIn) {
+    return <LoginScreen onLogin={() => setLoggedIn(true)} />;
+  }
+
+  const pageTitle = NAV.find((n) => n.path === screen)?.label;
+  const Screen = { dashboard: DashboardScreen, subscriptions: SubscriptionsScreen, transactions: TransactionsScreen, settings: SettingsScreen }[screen];
+
+  return (
+    <div style={{ height: "100vh", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+      <Header
+        pageTitle={pageTitle}
+        theme={theme}
+        onToggleTheme={() => setTheme(theme === "light" ? "dark" : "light")}
+        logoSrc={theme === "light" ? "../../assets/logo/light-mode.png" : "../../assets/logo/dark-mode.png"}
+      />
+      <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
+        <div className="ds-desktop-only">
+          <SidebarNav screen={screen} setScreen={setScreen} />
+        </div>
+        <main style={{ flex: 1, minWidth: 0, overflowY: "auto" }}>
+          <div style={{ maxWidth: "1200px", margin: "0 auto", padding: "24px 24px 100px" }}>
+            <Screen theme={theme} onToggleTheme={() => setTheme(theme === "light" ? "dark" : "light")} />
+          </div>
+        </main>
+      </div>
+      <BottomTabBarNav screen={screen} setScreen={setScreen} />
+    </div>
+  );
+}
+
+// Thin wrappers so Sidebar/BottomTabBar's demo nav actually switches screens
+function SidebarNav({ screen, setScreen }) {
+  const { Icon } = window.SubTrackerDesignSystem_ae138e;
+  const items = [
+    { path: "dashboard", label: "Dashboard", icon: "home" },
+    { path: "subscriptions", label: "Subscriptions", icon: "credit-card" },
+    { path: "transactions", label: "Transactions", icon: "banknotes" },
+    { path: "settings", label: "Settings", icon: "cog-6-tooth" },
+  ];
+  return (
+    <aside style={{ display: "flex", flexDirection: "column", height: "100%", flexShrink: 0, width: 248, background: "var(--surface-card)", borderInlineEnd: "1px solid var(--border-default)" }}>
+      <nav style={{ flex: 1, padding: "16px 12px" }}>
+        {items.map((item) => {
+          const active = item.path === screen;
+          return (
+            <a key={item.path} href="#" onClick={(e) => { e.preventDefault(); setScreen(item.path); }}
+              style={{ display: "flex", alignItems: "center", gap: 12, borderRadius: "var(--radius-pill)", padding: "0.6rem 1rem", marginBottom: 2, fontSize: 14, fontWeight: active ? 600 : 500, textDecoration: "none",
+                color: active ? "var(--brand-primary-600)" : "var(--text-secondary)", background: active ? "var(--brand-primary-050)" : "transparent" }}>
+              <Icon name={item.icon} size={20} />
+              <span>{item.label}</span>
+            </a>
+          );
+        })}
+      </nav>
+      <div style={{ borderTop: "1px solid var(--border-subtle)", padding: 16 }}>
+        <button className="btn-primary" style={{ width: "100%" }}>+ Add Subscription</button>
+      </div>
+    </aside>
+  );
+}
+
+function BottomTabBarNav({ screen, setScreen }) {
+  const { Icon } = window.SubTrackerDesignSystem_ae138e;
+  const tabs = [
+    { path: "dashboard", label: "Dashboard", icon: "home" },
+    { path: "subscriptions", label: "Subscriptions", icon: "credit-card" },
+    { path: "transactions", label: "Transactions", icon: "banknotes" },
+    { path: "settings", label: "Settings", icon: "cog-6-tooth" },
+  ];
+  return (
+    <nav className="ds-mobile-only" style={{ position: "fixed", insetInline: 12, bottom: 12, zIndex: 40, borderRadius: "var(--radius-pill)", border: "1px solid var(--glass-border)", background: "var(--glass-fill)", backdropFilter: "blur(var(--glass-blur))", boxShadow: "var(--shadow-glass)", padding: 6 }}>
+      <div style={{ display: "flex", gap: 4 }}>
+        {tabs.map((tab) => {
+          const active = tab.path === screen;
+          return (
+            <a key={tab.path} href="#" onClick={(e) => { e.preventDefault(); setScreen(tab.path); }}
+              style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 2, borderRadius: "var(--radius-pill)", padding: "8px 6px", textDecoration: "none", fontSize: 10, fontWeight: 600,
+                color: active ? "var(--brand-primary-600)" : "var(--text-secondary)", background: active ? "var(--brand-primary-050)" : "transparent" }}>
+              <Icon name={tab.icon} size={20} />
+              <span>{tab.label}</span>
+            </a>
+          );
+        })}
+      </div>
+    </nav>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+<style>
+  @media (max-width: 1023px) { .ds-desktop-only { display: none; } }
+  @media (min-width: 1024px) { .ds-mobile-only { display: none; } }
+</style>
+</body>
+</html>

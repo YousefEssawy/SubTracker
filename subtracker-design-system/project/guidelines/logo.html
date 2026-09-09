@@ -1,0 +1,25 @@
+<!-- @dsCard group="Brand" viewport="700x220" name="Logo" subtitle="Light-bg wordmark, dark-bg wordmark, icon-only mark" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; padding: 20px 24px; font-family: var(--font-latin); background: var(--bg-page); }
+  .row { display: flex; gap: 14px; }
+  .swatch { flex: 1; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; padding: 16px; }
+  .swatch img { max-height: 46px; max-width: 100%; }
+  .light { background: #fff; border: 1px solid var(--border-default); }
+  .dark { background: var(--ink-900); }
+  .icon { background: #fff; border: 1px solid var(--border-default); }
+  .icon img { max-height: 60px; }
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="swatch light"><img src="../assets/logo/light-mode.png" alt="SubTracker logo" /></div>
+    <div class="swatch dark"><img src="../assets/logo/dark-mode.png" alt="SubTracker logo dark mode" /></div>
+    <div class="swatch icon"><img src="../assets/logo/icon-only.png" alt="SubTracker icon mark" /></div>
+  </div>
+</body>
+</html>

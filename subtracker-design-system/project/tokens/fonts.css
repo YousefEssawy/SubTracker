@@ -1,0 +1,11 @@
+/**
+ * SubTracker — Webfonts
+ * The source app loads these four families from Google Fonts via a single
+ * @import in globals.scss (not self-hosted binaries). We mirror that exact
+ * approach rather than substitute — Inter, Cairo, Space Grotesk and IBM
+ * Plex Mono are all real families already, so no substitution was needed.
+ * If you prefer self-hosted files for production, download these four
+ * families from fonts.google.com and replace this @import with local
+ * @font-face rules.
+ */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
