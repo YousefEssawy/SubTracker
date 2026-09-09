@@ -4,6 +4,7 @@ import { useSpaces } from "@/contexts/SpaceContext";
 import { useViewport } from "@/contexts/ViewportContext";
 import { CURRENCIES } from "@/utils/currencies";
 import { HiOutlineXMark, HiOutlineFunnel } from "react-icons/hi2";
+import Card from "@/components/core/Card";
 import type { TransactionFilters } from "@/utils/balanceUtils";
 import type { CurrencyCode } from "@/models";
 
@@ -156,7 +157,7 @@ const FilterBar = ({ filters, setFilters }: FilterBarProps) => {
   );
 
   return (
-    <div className="glass-card p-4 mb-4">
+    <Card className="mb-4" padding="16px">
       {/* Primary row */}
       <div className="flex flex-wrap items-center gap-3">
         <HiOutlineFunnel className="w-4 h-4 text-gray-400 flex-shrink-0" />
@@ -303,7 +304,7 @@ const FilterBar = ({ filters, setFilters }: FilterBarProps) => {
           )}
         </div>
       )}
-    </div>
+    </Card>
   );
 };
 

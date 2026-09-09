@@ -9,6 +9,7 @@ import {
 } from "react-icons/hi2";
 import { useTranslation } from "react-i18next";
 import type { Payment } from "@/models";
+import Card from "@/components/core/Card";
 
 const HistoryPage = () => {
   const { payments, loading } = useSubscriptions();
@@ -72,7 +73,7 @@ const HistoryPage = () => {
 
       {/* Timeline */}
       {filtered.length === 0 ? (
-        <div className="glass-card p-12 text-center">
+        <Card className="text-center" padding="48px">
           <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-primary/10 flex items-center justify-center">
             <HiOutlineCreditCard className="w-7 h-7 text-primary" />
           </div>
@@ -84,7 +85,7 @@ const HistoryPage = () => {
           <p className="text-xs text-gray-400 mt-2">
             {t("history.autoLogNote")}
           </p>
-        </div>
+        </Card>
       ) : (
         <div className="glass-card p-2 sm:p-3 space-y-4">
           {groups.map(([date, items]) => (

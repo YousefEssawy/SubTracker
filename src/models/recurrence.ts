@@ -1,8 +1,13 @@
 import type { CurrencyCode, ISOString, DateString } from "./common";
 import type { TransactionType } from "./transaction";
 
-/** Whether the recurrence rule is active or paused */
-export type RecurrenceStatus = "active" | "paused";
+/**
+ * Whether the recurrence rule is active, paused, or completed.
+ * - "active": currently in effect and generating transactions on schedule.
+ * - "paused": suspended by user choice or safety stop; always reversible.
+ * - "completed": has run past its end date and will never generate again; terminal.
+ */
+export type RecurrenceStatus = "active" | "paused" | "completed";
 
 /**
  * The base frequency unit for a recurrence rule.
@@ -32,14 +37,27 @@ export interface Recurrence {
   /** The next scheduled generation date in YYYY-MM-DD format */
   nextDate: DateString;
   status: RecurrenceStatus;
+  /**
+   * True when generation was halted because the backlog exceeded the per-run cap.
+   * Paused until inspected; never set by user input.
+   */
+  backlogTruncated?: boolean;
+  /**
+   * True when the document was written by the pre-migration client and
+   * has been normalised on read.
+   */
+  isLegacySchema: boolean;
   createdAt: ISOString;
 }
 
 /**
  * Payload for creating a new recurrence rule.
- * Server-generated fields (id, createdAt, nextDate) are excluded.
+ * Server-generated fields (id, createdAt, nextDate, isLegacySchema, backlogTruncated) are excluded.
  */
-export type RecurrenceInput = Omit<Recurrence, "id" | "createdAt" | "nextDate">;
+export type RecurrenceInput = Omit<
+  Recurrence,
+  "id" | "createdAt" | "nextDate" | "isLegacySchema" | "backlogTruncated"
+>;
 
 /** Payload for updating an existing recurrence rule. All fields optional. */
 export type RecurrenceUpdate = Partial<RecurrenceInput>;

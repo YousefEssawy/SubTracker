@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HiOutlineXMark } from "react-icons/hi2";
 import { useTranslation } from "react-i18next";
+import Button from "@/components/core/Button";
 import type { Category, CategoryInput } from "@/models";
 
 interface CategoryFormProps {
@@ -174,17 +175,17 @@ const CategoryForm = ({
               >
                 {t("finance.categories.cancel", "Cancel")}
               </button>
-              <button
+              <Button
                 type="submit"
                 disabled={loading}
-                className="flex-1 py-2.5 rounded-xl btn-primary text-sm font-medium disabled:opacity-50"
+                className="flex-1 py-2.5 rounded-xl text-sm font-medium disabled:opacity-50"
               >
                 {loading
                   ? t("finance.categories.saving", "Saving…")
                   : isEditing
                     ? t("finance.categories.saveChanges", "Save Changes")
                     : t("finance.categories.createCategory", "Create Category")}
-              </button>
+              </Button>
             </div>
           </form>
         </motion.div>

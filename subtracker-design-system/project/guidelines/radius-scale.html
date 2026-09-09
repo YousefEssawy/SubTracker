@@ -1,0 +1,22 @@
+<!-- @dsCard group="Brand" viewport="700x180" name="Radius Scale" subtitle="sm 8 · md 12 · lg 16 · xl 24 · pill" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link rel="stylesheet" href="../styles.css" />
+<style>
+  body { margin: 0; padding: 20px 24px; font-family: var(--font-latin); background: var(--bg-page); }
+  .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .box { background: var(--brand-primary-500); height: 78px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 8px; color: #fff; font-size: 11px; font-family: var(--font-mono); }
+</style>
+</head>
+<body>
+  <div class="grid">
+    <div class="box" style="border-radius:var(--radius-sm)">sm 8px</div>
+    <div class="box" style="border-radius:var(--radius-md)">md 12px</div>
+    <div class="box" style="border-radius:var(--radius-lg)">lg 16px</div>
+    <div class="box" style="border-radius:var(--radius-xl)">xl 24px</div>
+    <div class="box" style="border-radius:var(--radius-pill)">pill</div>
+  </div>
+</body>
+</html>

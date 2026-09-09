@@ -12,6 +12,7 @@ import {
 import AuthShell from "@/components/layout/AuthShell";
 import { useTranslation } from "react-i18next";
 import { formatAuthErrorMessage } from "@/utils/errors";
+import Button from "@/components/core/Button";
 
 const SignupPage = () => {
   const { t } = useTranslation();
@@ -140,13 +141,9 @@ const SignupPage = () => {
             />
           </div>
         </div>
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full btn-primary py-3 disabled:opacity-50"
-        >
+        <Button type="submit" disabled={loading} className="w-full py-3 disabled:opacity-50">
           {loading ? t("signup.creatingAccount") : t("signup.createAccountBtn")}
-        </button>
+        </Button>
       </form>
 
       <button

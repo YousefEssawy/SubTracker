@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { HiOutlineBanknotes } from "react-icons/hi2";
 import { useTranslation } from "react-i18next";
+import Card from "@/components/core/Card";
 import type { BalanceMap, CurrencyBalance } from "@/models";
 
 const currencySymbolMap: Record<string, string> = {
@@ -119,17 +120,17 @@ const BalanceCard = ({
   if (currencies.length === 0) {
     if (variant === "contextual") return null;
     return (
-      <div className="glass-card p-5 mb-5 text-center">
+      <Card className="mb-5 text-center">
         <p className="text-sm text-gray-400">
           {t("finance.balance.noData", "No financial data yet.")}
         </p>
-      </div>
+      </Card>
     );
   }
 
   if (variant === "contextual") {
     return (
-      <div className="glass-card px-5 py-4 mb-4">
+      <Card className="mb-4" padding="16px 20px">
         <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2">
           {t("finance.balance.title", "Balance")}
         </p>
@@ -145,7 +146,7 @@ const BalanceCard = ({
             ),
           )}
         </AnimatePresence>
-      </div>
+      </Card>
     );
   }
 

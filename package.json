@@ -12,7 +12,9 @@
     "extract": "i18next",
     "typecheck": "tsc --project tsconfig.app.json --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:emulator": "vitest run --config vitest.emulator.config.ts",
+    "test:emulator:ci": "firebase emulators:exec --project subtracker-test \"npm run test:emulator\""
   },
   "dependencies": {
     "date-fns": "^4.1.0",
@@ -30,6 +32,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@firebase/rules-unit-testing": "^5.0.2",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^14.6.1",
@@ -40,6 +43,7 @@
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
+    "firebase-tools": "^15.29.0",
     "globals": "^16.5.0",
     "i18next-parser": "^9.0.2",
     "jsdom": "^29.1.1",

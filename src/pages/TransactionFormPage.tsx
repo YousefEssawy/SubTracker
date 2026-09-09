@@ -14,6 +14,7 @@ import { toDateInputValue } from "@/utils/dateUtils";
 import TagInput from "@/components/finance/TagInput";
 import FileUpload from "@/components/finance/FileUpload";
 import { useTranslation } from "react-i18next";
+import Button from "@/components/core/Button";
 import type { AttachmentMeta, TransactionInput, CurrencyCode } from "@/models";
 
 interface ValidationErrors {
@@ -417,10 +418,10 @@ const TransactionFormPage = () => {
         </div>
 
         {/* Submit */}
-        <button
+        <Button
           type="submit"
           disabled={loading}
-          className="w-full py-3 rounded-xl btn-primary font-medium disabled:opacity-50 mt-2"
+          className="w-full py-3 rounded-xl font-medium disabled:opacity-50 mt-2"
         >
           {loading
             ? t("finance.transactions.saving", "Saving…")
@@ -429,7 +430,7 @@ const TransactionFormPage = () => {
               : type === "Income"
                 ? t("finance.transactions.addIncome", "Add Income")
                 : t("finance.transactions.addExpense", "Add Expense")}
-        </button>
+        </Button>
       </form>
     </div>
   );
