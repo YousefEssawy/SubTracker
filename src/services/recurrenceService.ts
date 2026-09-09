@@ -112,6 +112,9 @@ export const reactivateRecurrence = async (
     }
     const raw = snap.data();
     const normalized = toRecurrence(snap.id, raw);
+    if (normalized.status === "completed") {
+      throw new Error("Cannot reactivate a completed recurrence");
+    }
     const effectivePattern = (
       pattern || normalized.pattern
     ).toLowerCase() as RecurrencePattern;

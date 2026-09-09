@@ -36,6 +36,31 @@ describe("toRecurrence", () => {
     expect(result.isLegacySchema).toBe(false);
   });
 
+  it("maps a stored 'completed' status to 'completed' with isLegacySchema === false", () => {
+    const completedDoc: DocumentData = {
+      spaceId: "space-123",
+      categoryId: "cat-456",
+      type: "Expense",
+      amount: 30,
+      currency: "USD",
+      pattern: "monthly",
+      interval: 1,
+      startDate: "2025-01-01",
+      endDate: "2025-02-15",
+      nextDate: "2025-02-01",
+      status: "completed",
+      createdAt: "2025-01-01T12:00:00.000Z",
+    };
+
+    const result = toRecurrence("rec-completed", completedDoc);
+
+    expect(result.id).toBe("rec-completed");
+    expect(result.status).toBe("completed");
+    expect(result.nextDate).toBe("2025-02-01");
+    expect(result.endDate).toBe("2025-02-15");
+    expect(result.isLegacySchema).toBe(false);
+  });
+
   it("normalises a legacy active document with isLegacySchema === true", () => {
     const legacyActiveDoc: DocumentData = {
       spaceId: "space-789",
@@ -81,6 +106,31 @@ describe("toRecurrence", () => {
     expect(result.status).toBe("paused");
     expect(result.nextDate).toBe("2025-04-15");
     expect(result.pattern).toBe("weekly");
+    expect(result.isLegacySchema).toBe(true);
+  });
+
+  it("maps a legacy document with isActive: false to 'paused' and never to 'completed'", () => {
+    const legacyPausedWithEndDate: DocumentData = {
+      spaceId: "space-1",
+      categoryId: "cat-1",
+      type: "Expense",
+      amount: 25,
+      currency: "USD",
+      isActive: false,
+      nextExecutionDate: "2025-04-15",
+      pattern: "Weekly",
+      interval: 1,
+      startDate: "2025-01-01",
+      endDate: "2025-02-01",
+    };
+
+    const result = toRecurrence(
+      "rec-legacy-paused-never-completed",
+      legacyPausedWithEndDate,
+    );
+
+    expect(result.status).toBe("paused");
+    expect(result.status).not.toBe("completed");
     expect(result.isLegacySchema).toBe(true);
   });
 

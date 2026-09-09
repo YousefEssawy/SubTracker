@@ -448,7 +448,8 @@
       "createSuccess": "Recurrence created!",
       "createError": "Failed to create recurrence.",
       "legacyBadge": "Needs attention",
-      "legacyNotice": "This rule predates a schema change and should be checked."
+      "legacyNotice": "This rule predates a schema change and should be checked.",
+      "completed": "Completed"
     },
     "balance": {
       "title": "Balance",

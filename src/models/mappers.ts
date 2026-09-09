@@ -68,7 +68,7 @@ const asRecurrenceStatus = (
   status: unknown,
   isActive?: unknown,
 ): RecurrenceStatus => {
-  if (status === "active" || status === "paused") {
+  if (status === "active" || status === "paused" || status === "completed") {
     return status;
   }
   if (typeof isActive === "boolean") {
@@ -100,7 +100,10 @@ const asRecurrenceNextDate = (
 };
 
 const isLegacyRecurrenceDoc = (data: DocumentData): boolean => {
-  const hasStatus = data["status"] === "active" || data["status"] === "paused";
+  const hasStatus =
+    data["status"] === "active" ||
+    data["status"] === "paused" ||
+    data["status"] === "completed";
   const hasNextDate =
     typeof data["nextDate"] === "string" && data["nextDate"].length > 0;
   return !(hasStatus && hasNextDate);

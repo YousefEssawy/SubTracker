@@ -22,6 +22,7 @@ interface RecurrenceContextValue {
   loading: boolean;
   activeRecurrences: Recurrence[];
   pausedRecurrences: Recurrence[];
+  completedRecurrences: Recurrence[];
   addRecurrence: (data: RecurrenceInput) => Promise<Recurrence>;
   pauseRecurrence: (id: string) => Promise<void>;
   reactivateRecurrence: (
@@ -69,6 +70,10 @@ export const RecurrenceProvider = ({ children }: { children: ReactNode }) => {
     () => recurrences.filter((r) => r.status === "paused"),
     [recurrences],
   );
+  const completedRecurrences = useMemo(
+    () => recurrences.filter((r) => r.status === "completed"),
+    [recurrences],
+  );
 
   const addRecurrence = async (data: RecurrenceInput): Promise<Recurrence> => {
     if (!user) throw new Error("Not authenticated");
@@ -101,6 +106,7 @@ export const RecurrenceProvider = ({ children }: { children: ReactNode }) => {
         loading,
         activeRecurrences,
         pausedRecurrences,
+        completedRecurrences,
         addRecurrence,
         pauseRecurrence,
         reactivateRecurrence,

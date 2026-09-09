@@ -255,7 +255,7 @@ describe("Recurrence Processor — emulator integration", () => {
     expect(recSnap.data()?.nextDate).toBe("2026-02-15");
   });
 
-  it("pauses the recurrence when the advanced date exceeds endDate", async () => {
+  it("completes the recurrence when the advanced date exceeds endDate and generates final transaction", async () => {
     const userId = "alice";
     const recurrenceInput = {
       type: "Expense" as const,
@@ -291,6 +291,46 @@ describe("Recurrence Processor — emulator integration", () => {
       .firestore()
       .doc(`users/${userId}/recurrences/rec_end_date`)
       .get();
-    expect(recSnap.data()?.status).toBe("paused");
+    expect(recSnap.data()?.status).toBe("completed");
+  });
+
+  it("does not pick up or generate transactions for a recurrence already status: 'completed'", async () => {
+    const userId = "alice";
+    const recurrenceInput = {
+      type: "Expense" as const,
+      spaceId: "space_personal",
+      categoryId: "cat_utilities",
+      amount: 40,
+      currency: "USD" as const,
+      pattern: "monthly" as const,
+      interval: 1,
+      startDate: "2026-01-01",
+      endDate: "2026-02-01",
+      status: "completed" as const,
+    };
+
+    const built = buildRecurrenceDocument(recurrenceInput);
+    // built.nextDate is "2026-02-01", status is "completed"
+    await seedDocument(`users/${userId}/recurrences/rec_already_completed`, {
+      ...built,
+      createdAt: "2026-01-01T00:00:00.000Z",
+    });
+
+    // Run processor on or past the recurrence's nextDate
+    await processDueRecurrences(db, "2026-02-15");
+
+    const alice = authedAs(userId);
+    const txSnap = await alice
+      .firestore()
+      .collection(`users/${userId}/transactions`)
+      .get();
+    expect(txSnap.docs.length).toBe(0);
+
+    const recSnap = await alice
+      .firestore()
+      .doc(`users/${userId}/recurrences/rec_already_completed`)
+      .get();
+    expect(recSnap.data()?.status).toBe("completed");
+    expect(recSnap.data()?.nextDate).toBe(built.nextDate);
   });
 });

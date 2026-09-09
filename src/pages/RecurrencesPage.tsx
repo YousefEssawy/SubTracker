@@ -55,13 +55,15 @@ const RecurrenceCard = ({
   const { t } = useTranslation();
   const isIncome = recurrence.type === "Income";
   const isActive = recurrence.status === "active";
+  const isPaused = recurrence.status === "paused";
+  const isCompleted = recurrence.status === "completed";
   return (
     <motion.div
       layout
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      className="group flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors"
+      className={`group flex items-center gap-4 px-4 py-3 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors ${isCompleted ? "opacity-75" : ""}`}
     >
       <span
         className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-lg text-white"
@@ -82,6 +84,13 @@ const RecurrenceCard = ({
               ? t("finance.categories.income", "Income")
               : t("finance.categories.expense", "Expense")}
           </span>
+          {isCompleted && (
+            <span
+              className="flex-shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium bg-gray-500/10 text-gray-600 dark:text-gray-400"
+            >
+              {t("finance.recurrences.completed", "Completed")}
+            </span>
+          )}
           {recurrence.isLegacySchema && (
             <span
               className="flex-shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium bg-amber-500/15 text-amber-700 dark:text-amber-300 border border-amber-300/50 dark:border-amber-700/50"
@@ -92,11 +101,18 @@ const RecurrenceCard = ({
         </div>
         <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">
           {patternLabel(recurrence.pattern, recurrence.interval, t)}
-          {recurrence.nextDate && (
+          {!isCompleted && recurrence.nextDate && (
             <>
               {" · "}
               {t("finance.recurrences.next", "Next:")}{" "}
               <span className="figure">{formatDate(recurrence.nextDate)}</span>
+            </>
+          )}
+          {isCompleted && recurrence.endDate && (
+            <>
+              {" · "}
+              {t("finance.recurrences.endDate", "End Date")}:{" "}
+              <span className="figure">{formatDate(recurrence.endDate)}</span>
             </>
           )}
         </p>
@@ -123,7 +139,7 @@ const RecurrenceCard = ({
 
       {/* Hover actions */}
       <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
-        {isActive ? (
+        {isActive && (
           <button
             onClick={onPause}
             className="p-2 rounded-lg text-gray-500 hover:text-warning hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors"
@@ -131,7 +147,8 @@ const RecurrenceCard = ({
           >
             <HiOutlinePause className="w-4 h-4" />
           </button>
-        ) : (
+        )}
+        {isPaused && (
           <button
             onClick={onReactivate}
             className="p-2 rounded-lg text-gray-500 hover:text-success hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors"
@@ -157,6 +174,7 @@ const RecurrencesPage = () => {
   const {
     activeRecurrences,
     pausedRecurrences,
+    completedRecurrences,
     loading,
     pauseRecurrence,
     reactivateRecurrence,
@@ -215,7 +233,9 @@ const RecurrencesPage = () => {
   }
 
   const isEmpty =
-    activeRecurrences.length === 0 && pausedRecurrences.length === 0;
+    activeRecurrences.length === 0 &&
+    pausedRecurrences.length === 0 &&
+    completedRecurrences.length === 0;
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-8 pb-20 lg:pb-8">
@@ -299,6 +319,36 @@ const RecurrencesPage = () => {
               <div className="space-y-1">
                 <AnimatePresence mode="popLayout">
                   {pausedRecurrences.map((rec) => (
+                    <RecurrenceCard
+                      key={rec.id}
+                      recurrence={rec}
+                      space={getSpaceById(rec.spaceId)}
+                      category={getCategoryById(rec.categoryId)}
+                      onPause={() => handlePause(rec.id)}
+                      onReactivate={() => handleReactivate(rec)}
+                      onDelete={() => setConfirmDelete(rec.id)}
+                    />
+                  ))}
+                </AnimatePresence>
+              </div>
+            </div>
+          )}
+
+          {/* Completed */}
+          {completedRecurrences.length > 0 && (
+            <div>
+              <div className="flex items-center gap-2 px-4 mb-1">
+                <span className="w-2 h-2 rounded-full bg-gray-400 dark:bg-gray-500" />
+                <p className="text-sm font-bold text-gray-900 dark:text-white">
+                  {t("finance.recurrences.completed", "Completed")}
+                </p>
+                <span className="text-xs font-medium text-gray-400">
+                  {completedRecurrences.length}
+                </span>
+              </div>
+              <div className="space-y-1">
+                <AnimatePresence mode="popLayout">
+                  {completedRecurrences.map((rec) => (
                     <RecurrenceCard
                       key={rec.id}
                       recurrence={rec}

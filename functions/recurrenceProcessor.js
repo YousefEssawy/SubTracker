@@ -73,10 +73,8 @@ async function processDueRecurrences(
         });
 
         if (rec.endDate && nextDate > rec.endDate) {
-          // Ticket #7 replaces this with a dedicated "completed" terminal state;
-          // "paused" is a placeholder that keeps the canonical field in use, not the final answer.
           tx.update(recDoc.ref, {
-            status: "paused",
+            status: "completed",
             updatedAt: FieldValue.serverTimestamp(),
           });
         } else {

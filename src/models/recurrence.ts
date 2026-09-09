@@ -1,8 +1,13 @@
 import type { CurrencyCode, ISOString, DateString } from "./common";
 import type { TransactionType } from "./transaction";
 
-/** Whether the recurrence rule is active or paused */
-export type RecurrenceStatus = "active" | "paused";
+/**
+ * Whether the recurrence rule is active, paused, or completed.
+ * - "active": currently in effect and generating transactions on schedule.
+ * - "paused": suspended by user choice or safety stop; always reversible.
+ * - "completed": has run past its end date and will never generate again; terminal.
+ */
+export type RecurrenceStatus = "active" | "paused" | "completed";
 
 /**
  * The base frequency unit for a recurrence rule.
