@@ -26,3 +26,11 @@ lint_report.txt
 *.njsproj
 *.sln
 *.sw?
+
+# Firebase emulator artefacts
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+.firebase/
+*emulator-export*
+*emulator-data*

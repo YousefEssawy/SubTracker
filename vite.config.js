@@ -3,6 +3,7 @@ import react from "@vitejs/plugin-react";
 import path from "path";
 import process from "node:process";
 import { fileURLToPath } from "url";
+import { configDefaults } from "vitest/config";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -28,5 +29,6 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./src/test/setup.ts"],
+    exclude: [...configDefaults.exclude, "**/dist/**", "tests/emulator/**"],
   },
 });
