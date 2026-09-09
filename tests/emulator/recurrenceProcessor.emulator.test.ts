@@ -333,4 +333,201 @@ describe("Recurrence Processor — emulator integration", () => {
     expect(recSnap.data()?.status).toBe("completed");
     expect(recSnap.data()?.nextDate).toBe(built.nextDate);
   });
+
+  it("processes a recurrence three periods overdue, producing exactly three transactions in one run", async () => {
+    const userId = "alice";
+    const recId = "rec_three_periods_overdue";
+
+    const recurrenceInput = {
+      type: "Expense" as const,
+      spaceId: "space_personal",
+      categoryId: "cat_utilities",
+      amount: 50,
+      currency: "USD" as const,
+      pattern: "monthly" as const,
+      interval: 1,
+      startDate: "2025-12-01",
+      endDate: null,
+      status: "active" as const,
+    };
+
+    const built = buildRecurrenceDocument(recurrenceInput);
+    // built.nextDate is "2026-01-01"
+    expect(built.nextDate).toBe("2026-01-01");
+
+    await seedDocument(`users/${userId}/recurrences/${recId}`, {
+      ...built,
+      createdAt: "2025-12-01T00:00:00.000Z",
+    });
+
+    // Run processor on "2026-03-01":
+    // Three periods overdue: 2026-01-01, 2026-02-01, 2026-03-01
+    const today = "2026-03-01";
+    await processDueRecurrences(db, today);
+
+    const alice = authedAs(userId);
+    const txSnap = await alice
+      .firestore()
+      .collection(`users/${userId}/transactions`)
+      .get();
+
+    expect(txSnap.docs.length).toBe(3);
+
+    // Recurrence nextDate must advance to 2026-04-01 and remain active
+    const recSnap = await alice
+      .firestore()
+      .doc(`users/${userId}/recurrences/${recId}`)
+      .get();
+    expect(recSnap.exists).toBe(true);
+    expect(recSnap.data()?.nextDate).toBe("2026-04-01");
+    expect(recSnap.data()?.status).toBe("active");
+  });
+
+  it("dates each transaction to its own occurrence in order when catching up a backlog", async () => {
+    const userId = "alice";
+    const recId = "rec_per_period_dating";
+
+    const recurrenceInput = {
+      type: "Expense" as const,
+      spaceId: "space_personal",
+      categoryId: "cat_utilities",
+      amount: 75,
+      currency: "USD" as const,
+      pattern: "monthly" as const,
+      interval: 1,
+      startDate: "2025-12-01",
+      endDate: null,
+      status: "active" as const,
+    };
+
+    const built = buildRecurrenceDocument(recurrenceInput);
+    // built.nextDate is "2026-01-01"
+    await seedDocument(`users/${userId}/recurrences/${recId}`, {
+      ...built,
+      createdAt: "2025-12-01T00:00:00.000Z",
+    });
+
+    const today = "2026-03-01";
+    await processDueRecurrences(db, today);
+
+    const alice = authedAs(userId);
+    const txSnap = await alice
+      .firestore()
+      .collection(`users/${userId}/transactions`)
+      .orderBy("transactionDate", "asc")
+      .get();
+
+    expect(txSnap.docs.length).toBe(3);
+
+    const txDates = txSnap.docs.map((d) => d.data().transactionDate);
+    expect(txDates).toEqual(["2026-01-01", "2026-02-01", "2026-03-01"]);
+    expect(new Set(txDates).size).toBe(3);
+  });
+
+  it("stops at the 499 cap, leaves recurrence paused with backlogTruncated, and ignores on subsequent runs", async () => {
+    const userId = "alice";
+    const recId = "rec_backlog_cap_exceeded";
+
+    const recurrenceInput = {
+      type: "Expense" as const,
+      spaceId: "space_personal",
+      categoryId: "cat_utilities",
+      amount: 10,
+      currency: "USD" as const,
+      pattern: "daily" as const,
+      interval: 1,
+      startDate: "2024-01-01",
+      endDate: null,
+      status: "active" as const,
+    };
+
+    const built = buildRecurrenceDocument(recurrenceInput);
+    // built.nextDate is "2024-01-02"
+    await seedDocument(`users/${userId}/recurrences/${recId}`, {
+      ...built,
+      createdAt: "2024-01-01T00:00:00.000Z",
+    });
+
+    // 2024-01-02 to 2025-06-01 is 516 overdue daily periods (exceeds cap of 499)
+    const today = "2025-06-01";
+    await processDueRecurrences(db, today);
+
+    const alice = authedAs(userId);
+    const txSnap = await alice
+      .firestore()
+      .collection(`users/${userId}/transactions`)
+      .get();
+
+    // Stops exactly at the cap of 499 transactions
+    expect(txSnap.docs.length).toBe(499);
+
+    // Left in status: "paused" with backlogTruncated: true
+    const recSnap = await alice
+      .firestore()
+      .doc(`users/${userId}/recurrences/${recId}`)
+      .get();
+    expect(recSnap.exists).toBe(true);
+    expect(recSnap.data()?.status).toBe("paused");
+    expect(recSnap.data()?.backlogTruncated).toBe(true);
+
+    // Second run produces no further transactions
+    await processDueRecurrences(db, today);
+
+    const txSnapAfterSecondRun = await alice
+      .firestore()
+      .collection(`users/${userId}/transactions`)
+      .get();
+    expect(txSnapAfterSecondRun.docs.length).toBe(499);
+  });
+
+  it("stops at endDate mid-backlog, emits no occurrences beyond endDate, and is left completed", async () => {
+    const userId = "alice";
+    const recId = "rec_mid_backlog_end_date";
+
+    const recurrenceInput = {
+      type: "Expense" as const,
+      spaceId: "space_personal",
+      categoryId: "cat_utilities",
+      amount: 40,
+      currency: "USD" as const,
+      pattern: "monthly" as const,
+      interval: 1,
+      startDate: "2026-01-01",
+      endDate: "2026-03-15", // Next occurrences on 2026-02-01 and 2026-03-01 are within endDate, next after (2026-04-01) exceeds it
+      status: "active" as const,
+    };
+
+    const built = buildRecurrenceDocument(recurrenceInput);
+    // built.nextDate is "2026-02-01"
+    await seedDocument(`users/${userId}/recurrences/${recId}`, {
+      ...built,
+      createdAt: "2026-01-01T00:00:00.000Z",
+    });
+
+    // Run processor on "2026-05-01" (overdue by 4 months if unconstrained)
+    const today = "2026-05-01";
+    await processDueRecurrences(db, today);
+
+    const alice = authedAs(userId);
+    const txSnap = await alice
+      .firestore()
+      .collection(`users/${userId}/transactions`)
+      .orderBy("transactionDate", "asc")
+      .get();
+
+    // Only occurrences within endDate (2026-02-01 and 2026-03-01) are emitted
+    expect(txSnap.docs.length).toBe(2);
+    expect(txSnap.docs.map((d) => d.data().transactionDate)).toEqual([
+      "2026-02-01",
+      "2026-03-01",
+    ]);
+
+    // Recurrence is left in "completed" state
+    const recSnap = await alice
+      .firestore()
+      .doc(`users/${userId}/recurrences/${recId}`)
+      .get();
+    expect(recSnap.exists).toBe(true);
+    expect(recSnap.data()?.status).toBe("completed");
+  });
 });

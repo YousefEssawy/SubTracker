@@ -27,6 +27,9 @@ const asStringArray = (v: unknown): string[] =>
 const asISOString = (v: unknown): ISOString =>
   typeof v === "string" ? v : new Date().toISOString();
 
+const asOptionalBoolean = (v: unknown): boolean | undefined =>
+  typeof v === "boolean" ? v : undefined;
+
 const asCurrencyCode = (v: unknown): CurrencyCode => {
   const allowed: CurrencyCode[] = ["EGP", "USD", "EUR", "GBP", "SAR", "AED"];
   return allowed.includes(v as CurrencyCode) ? (v as CurrencyCode) : "EGP";
@@ -202,6 +205,7 @@ export function toCategory(id: string, data: DocumentData): Category {
  * Maps a raw Firestore document to a typed Recurrence.
  */
 export function toRecurrence(id: string, data: DocumentData): Recurrence {
+  const backlogTruncated = asOptionalBoolean(data["backlogTruncated"]);
   return {
     id,
     spaceId: asString(data["spaceId"]),
@@ -215,6 +219,7 @@ export function toRecurrence(id: string, data: DocumentData): Recurrence {
     endDate: asNullableString(data["endDate"]) as DateString | null,
     nextDate: asRecurrenceNextDate(data["nextDate"], data["nextExecutionDate"]),
     status: asRecurrenceStatus(data["status"], data["isActive"]),
+    ...(backlogTruncated !== undefined ? { backlogTruncated } : {}),
     isLegacySchema: isLegacyRecurrenceDoc(data),
     createdAt: asISOString(data["createdAt"]),
   };

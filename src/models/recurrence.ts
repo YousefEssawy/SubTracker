@@ -38,6 +38,11 @@ export interface Recurrence {
   nextDate: DateString;
   status: RecurrenceStatus;
   /**
+   * True when generation was halted because the backlog exceeded the per-run cap.
+   * Paused until inspected; never set by user input.
+   */
+  backlogTruncated?: boolean;
+  /**
    * True when the document was written by the pre-migration client and
    * has been normalised on read.
    */
@@ -47,11 +52,11 @@ export interface Recurrence {
 
 /**
  * Payload for creating a new recurrence rule.
- * Server-generated fields (id, createdAt, nextDate, isLegacySchema) are excluded.
+ * Server-generated fields (id, createdAt, nextDate, isLegacySchema, backlogTruncated) are excluded.
  */
 export type RecurrenceInput = Omit<
   Recurrence,
-  "id" | "createdAt" | "nextDate" | "isLegacySchema"
+  "id" | "createdAt" | "nextDate" | "isLegacySchema" | "backlogTruncated"
 >;
 
 /** Payload for updating an existing recurrence rule. All fields optional. */

@@ -172,4 +172,50 @@ describe("toRecurrence", () => {
     expect(result.pattern).toBe("yearly");
     expect(result.isLegacySchema).toBe(false);
   });
+
+  it("maps backlogTruncated when present on a paused document", () => {
+    const truncatedDoc: DocumentData = {
+      spaceId: "space-123",
+      categoryId: "cat-456",
+      type: "Expense",
+      amount: 50,
+      currency: "USD",
+      pattern: "daily",
+      interval: 1,
+      startDate: "2024-01-01",
+      endDate: null,
+      nextDate: "2025-05-15",
+      status: "paused",
+      backlogTruncated: true,
+      createdAt: "2024-01-01T00:00:00.000Z",
+    };
+
+    const result = toRecurrence("rec-truncated", truncatedDoc);
+
+    expect(result.id).toBe("rec-truncated");
+    expect(result.status).toBe("paused");
+    expect(result.backlogTruncated).toBe(true);
+    expect(result.isLegacySchema).toBe(false);
+  });
+
+  it("leaves backlogTruncated undefined when omitted", () => {
+    const normalDoc: DocumentData = {
+      spaceId: "space-123",
+      categoryId: "cat-456",
+      type: "Expense",
+      amount: 50,
+      currency: "USD",
+      pattern: "daily",
+      interval: 1,
+      startDate: "2024-01-01",
+      endDate: null,
+      nextDate: "2025-05-15",
+      status: "active",
+      createdAt: "2024-01-01T00:00:00.000Z",
+    };
+
+    const result = toRecurrence("rec-normal", normalDoc);
+
+    expect(result.backlogTruncated).toBeUndefined();
+  });
 });
